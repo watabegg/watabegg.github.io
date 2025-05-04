@@ -1,11 +1,45 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import InstagramIcon from '../components/icons/Instagram.astro';
+import TwitterIcon from '../components/icons/Twitter.astro';
+import GithubIcon from '../components/icons/Github.astro';
+import GmailIcon from '../components/icons/Gmail.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const socialLinks = [
+  { name: 'Instagram', href: 'https://www.instagram.com/watabegg', IconComponent: InstagramIcon },
+  { name: 'Twitter', href: 'https://twitter.com/watabegg', IconComponent: TwitterIcon },
+  { name: 'GitHub', href: 'https://github.com/watabegg', IconComponent: GithubIcon },
+  { name: 'Gmail', href: 'mailto:watabegg@gmail.com', IconComponent: GmailIcon }, 
+];
 ---
+{/* Pass isFullScreen prop to Layout */}
+<Layout title="Home - MySite" isFullScreen={true}>
+  {/* Use h-full to make this div fill the height of the <main> container */}
+  <div class="flex h-full flex-col items-center justify-center text-center text-white bg-gradient-to-br from-blue-900 to-purple-900">
+    <h1 class="text-6xl font-bold mb-4 animate-target">Welcome!</h1>
+    <p class="text-xl mb-8 animate-target">This is my personal website.</p>
 
-<Layout>
-	<Welcome />
+    <div class="flex space-x-6">
+      {socialLinks.map(link => (
+        <a href={link.href} target="_blank" rel="noopener noreferrer" class="text-white hover:text-gray-400 transition duration-300 animate-target" aria-label={link.name}>
+          <link.IconComponent class="w-8 h-8" />
+        </a>
+      ))}
+    </div>
+
+    <script>
+      import { gsap } from "gsap";
+
+      // Ensure GSAP runs after Astro's view transitions (if enabled) or page load
+      document.addEventListener("astro:page-load", () => {
+        gsap.from(".animate-target", {
+          duration: 1,
+          opacity: 0,
+          y: 50, // Move up 50px
+          stagger: 0.2, // Delay between each element animation
+          ease: "power3.out",
+        });
+      });
+    </script>
+  </div>
 </Layout>

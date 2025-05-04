@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch all blog posts, sorted by publish date descending
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+<Layout title="Blog - MySite">
+  {/* Use base-content for title */}
+  <h1 class="text-4xl font-bold mb-8 text-center text-base-content">Blog</h1>
+  <div class="space-y-10 max-w-3xl mx-auto"> {/* Increased spacing, centered content */}
+    {posts.map(post => (
+      // Use base-100 for card background
+      <article class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        {/* Use base-content for heading */}
+        <h2 class="text-2xl font-semibold mb-2 text-base-content">
+          {/* Use primary for link hover */}
+          <a href={`/blog/${post.slug}`} class="hover:text-primary-700">
+            {post.data.title}
+          </a>
+        </h2>
+        {/* Use base-content with opacity for metadata */}
+        <p class="text-sm text-base-content opacity-60 mb-3">
+          作成者: {post.data.author} | 公開日: {post.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} {/* Formatted date */}
+        </p>
+        {/* Use base-content with opacity for description */}
+        <p class="text-base-content opacity-80 mb-4">{post.data.description}</p>
+        {post.data.tags && (
+          <div class="flex flex-wrap gap-2 mb-4">
+            {post.data.tags.map(tag => (
+              // Use primary colors for tags
+              <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {/* Use primary colors for link */}
+        <a href={`/blog/${post.slug}`} class="text-primary-600 hover:text-primary-800 font-medium">
+          続きを読む &rarr;
+        </a>
+      </article>
+    ))}
+  </div>
+</Layout>

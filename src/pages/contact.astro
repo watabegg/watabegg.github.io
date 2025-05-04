@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Contact - MySite">
+  {/* Use base-content for title and text */}
+  <h1 class="text-4xl font-bold mb-8 text-center text-base-content">Contact Me</h1>
+  <div class="max-w-xl mx-auto bg-base-100 p-6 rounded-lg shadow-md">
+    <p class="mb-6 text-base-content opacity-90">
+      お問い合わせは、以下のいずれかの方法でご連絡ください。
+    </p>
+    <ul class="list-disc list-inside space-y-3 text-base-content opacity-90">
+      <li>
+        {/* Use primary for links */}
+        Email: <a href="mailto:watabegg@example.com" class="text-primary-600 hover:text-primary-800 hover:underline">watabegg@example.com</a> (メールアドレスは適宜変更してください)
+      </li>
+      <li>
+        Twitter: <a href="https://twitter.com/watabegg" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-800 hover:underline">@watabegg</a>
+    </li>
+    {/* Add other contact methods if desired */}
+  </ul>
+</Layout>

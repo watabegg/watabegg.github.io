@@ -1,0 +1,101 @@
+---
+const links = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Product', href: '/product' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contact', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+{/* Use base-100 for background, primary for text */}
+<header class="bg-base-100 shadow-md sticky top-0 z-50">
+  <nav class="container mx-auto flex justify-between items-center p-4">
+    {/* Site Title */}
+    <a href="/" class="text-2xl font-bold text-primary-700 hover:text-primary-900">MySite</a>
+
+    {/* Desktop Navigation (Hidden on small screens) */}
+    <ul class="hidden md:flex space-x-6">
+      {links.map(link => {
+        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+        return (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                "pb-1 hover:text-primary-700 transition-colors duration-200", // Use primary hover
+                { "text-primary-700 border-b-2 border-primary-700 font-semibold": isActive }, // Use primary active
+                { "text-base-content opacity-75": !isActive } // Use base text for inactive
+              ]}
+            >
+              {link.name}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+
+    {/* Hamburger Button (Visible on small screens) */}
+    <button id="menu-btn" class="block md:hidden focus:outline-none">
+      {/* Use base text color for icon */}
+      <svg class="w-6 h-6 text-base-content" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+        <path d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
+    </button>
+  </nav>
+
+  {/* Mobile Menu (Hidden by default) */}
+  {/* Use base-100 for background */}
+  <div id="mobile-menu" class="hidden md:hidden bg-base-100 shadow-lg absolute top-full left-0 w-full">
+    <ul class="flex flex-col items-center py-4">
+      {links.map(link => {
+        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+        return (
+          <li class="w-full text-center">
+            <a
+              href={link.href}
+              class:list={[
+                "block py-2 px-4 w-full hover:bg-primary-50 transition-colors duration-200", // Use primary hover bg
+                 { "text-primary-700 font-semibold": isActive }, // Use primary active text
+                 { "text-base-content": !isActive } // Use base text for inactive
+              ]}
+            >
+              {link.name}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</header>
+
+<script>
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+    // Optional: Change hamburger icon to 'X' when open
+    const icon = menuBtn.querySelector('svg path');
+    if (icon) {
+      if (!mobileMenu?.classList.contains('hidden')) {
+        // Change to 'X' icon path data
+        icon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+      } else {
+        // Change back to hamburger icon path data
+        icon.setAttribute('d', 'M4 6h16M4 12h16m-7 6h7');
+      }
+    }
+  });
+
+  // Close menu when clicking a link (optional, good for SPAs but okay here too)
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+       // Reset icon to hamburger
+       const icon = menuBtn?.querySelector('svg path');
+       icon?.setAttribute('d', 'M4 6h16M4 12h16m-7 6h7');
+    });
+  });
+</script>

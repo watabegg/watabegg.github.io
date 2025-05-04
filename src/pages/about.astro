@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="About Me - MySite">
+  <div class="prose lg:prose-xl max-w-none"> {/* Using Tailwind Typography for basic styling */}
+    <h1>About Me</h1>
+
+    <section>
+      <h2>経歴</h2>
+      <p>ここにあなたの職務経歴や学歴などを記述します。</p>
+      <ul>
+        <li>20XX年 - YYYY年: 株式会社ZZZ - ソフトウェアエンジニア</li>
+        <li>20WW年 - XXXX年: △△大学 - 〇〇学部卒業</li>
+        {/* Add more items as needed */}
+      </ul>
+    </section>
+
+    <section>
+      <h2>自己PR</h2>
+      <p>ここに就職活動向けの自己PRを記述します。</p>
+      <p>
+        例：Web 技術への強い関心を持ち、特にフロントエンド開発に情熱を注いでいます。
+        Astro や Tailwind CSS、GSAP などのモダンな技術スタックを用いた開発経験があります。
+        チームでの協調性を大切にし、常に新しい技術を学び続ける意欲があります。
+        貴社でこれまでの経験と学習意欲を活かし、貢献したいと考えております。
+      </p>
+      {/* Add more paragraphs or details */}
+    </section>
+  </div>
+</Layout>

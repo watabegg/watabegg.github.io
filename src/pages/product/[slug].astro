@@ -1,0 +1,55 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// Generate static paths for all products
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+type Props = {
+  entry: CollectionEntry<'products'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+<Layout title={entry.data.title}>
+  <article class="prose lg:prose-xl max-w-none">
+    {entry.data.imageUrl && (
+      <img src={entry.data.imageUrl} alt={`Image for ${entry.data.title}`} class="w-full max-h-96 object-cover rounded-lg mb-6" />
+    )}
+    <h1>{entry.data.title}</h1>
+    <p class="text-sm text-gray-500 mb-4">
+      Published on: {entry.data.publishDate.toLocaleDateString('ja-JP')}
+    </p>
+    {entry.data.tags && (
+      <div class="flex flex-wrap gap-2 mb-6">
+        {entry.data.tags.map(tag => (
+          <span class="bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+    <Content /> {/* Renders the Markdown content */}
+  </article>
+</Layout>
+
+<style>
+  /* Basic styling for placeholder images */
+  img {
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 0.8rem;
+  }
+  img::before {
+    content: 'Image';
+  }
+</style>
