@@ -1,6 +1,7 @@
 ---
+// Use the new ContentLayout
 import { type CollectionEntry, getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import ContentLayout from '../../layouts/ContentLayout.astro';
 
 // Generate static paths for all products
 export async function getStaticPaths() {
@@ -17,37 +18,13 @@ type Props = {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
-<Layout title={entry.data.title}>
-  {/* Remove max-w-none to respect Layout's container */}
-  <article class="prose lg:prose-xl">
-    {/* Adjust image styling for consistency */}
-    {entry.data.imageUrl && (
-      <img src={entry.data.imageUrl} alt={`Image for ${entry.data.title}`} class="w-full h-auto max-h-[400px] object-cover rounded-md mb-8 shadow-md" />
-    )}
-    {/* Use theme colors for heading */}
-    <h1 class="text-4xl font-bold mb-4 text-primary">{entry.data.title}</h1>
-    {/* Use theme colors for meta text */}
-    <p class="text-sm text-base-content/70 mb-6">
-      公開日: {entry.data.publishDate.toLocaleDateString('ja-JP')}
-    </p>
-    {/* Adjust tag styling for consistency */}
-    {entry.data.tags && (
-      <div class="flex flex-wrap gap-2 mb-8">
-        {entry.data.tags.map(tag => (
-          <span class="bg-secondary text-secondary-content text-xs font-medium px-3 py-1 rounded-full">
-            {tag}
-          </span>
-        ))}
-      </div>
-    )}
-    {/* Ensure prose styles apply correctly */}
-    <div class="prose lg:prose-xl max-w-none"> {/* Wrap Content in a div with prose styles */}
-        <Content /> {/* Renders the Markdown content */}
-    </div>
-  </article>
-</Layout>
-
-<style>
-  /* Remove basic styling for placeholder images if not needed */
-  /* img { ... } */
-</style>
+{/* Use ContentLayout and pass frontmatter props */}
+<ContentLayout
+  title={entry.data.title}
+  publishDate={entry.data.publishDate}
+  tags={entry.data.tags}
+  imageUrl={entry.data.imageUrl}
+>
+  {/* The Markdown content is passed as the default slot */}
+  <Content />
+</ContentLayout>

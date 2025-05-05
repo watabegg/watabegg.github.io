@@ -1,15 +1,17 @@
 ---
-title: 'My First Blog Post'
-description: 'Welcome to my new blog! Discussing the setup.'
-publishDate: 2024-05-01
-tags: ['astro', 'blogging', 'introduction']
-imageUrl: '/images/placeholder-blog.svg' # Placeholder image
+title: '個人サイト(ポートフォリオ)作りました'
+description: '別に必要ないけどふざけたかったので作りました。'
+publishDate: 2025-05-06
+tags: ['初投稿']
 ---
 
-## Welcome!
+## 個人サイト作った
 
-This is the first post on my new blog, built with Astro.
+個人サイト作りました。主な使用用途としては
 
-I decided to use Astro because of its focus on performance and content-driven websites. Setting up the content collections for products and blog posts was straightforward.
+*  **技術共有**: SEOが終わり散らかしているのでこんなサイトは誰の目にも止まらないという話は置いておいて、
+単純に自分が技術に対してどういった解釈をしていたのか、何を目的としてこのサービスを開発したかなどのメモ書きとして利用します。
+*  **ポートフォリオ**: 自分がどんな活動をしてどんな実績があるかをみんなに自慢するために使います。これでなんか案件とか来ると嬉しいです。お仕事ください。
+*  **就活の悪口**: 就活の悪口を書きます。就職活動とかいう意味のないものはやめましょう。
 
-More posts coming soon!
+以上です。これからどんどん書いていったり、全く書かなかったりします。よろしくお願いします！

@@ -1,0 +1,62 @@
+---
+// src/layouts/ContentLayout.astro
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  publishDate?: Date; // Optional for products/blogs that might not have it
+  author?: string; // Optional, mainly for blog
+  tags?: string[];
+  imageUrl?: string;
+}
+
+const { title, publishDate, author, tags, imageUrl } = Astro.props;
+const placeholderImageUrl = '/images/placeholder.svg';
+const displayImageUrl = imageUrl || placeholderImageUrl;
+---
+<Layout {title}>
+  <article class="container mx-auto px-6 py-16 flex flex-col md:text-left items-center">
+    {/* Image with placeholder logic */}
+    <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-8 shadow-md" />
+
+    {/* Heading */}
+    <h1 class="text-4xl font-bold mb-4 text-base-content">{title}</h1>
+
+    {/* Meta Info */}
+    <div class="text-sm text-base-content/70 mb-6 flex items-center gap-2 flex-wrap">
+      {author && (
+        <>
+          <span>作成者: {author}</span>
+          <span class="text-base-content/50">|</span>
+        </>
+      )}
+      {publishDate && (
+        <span>公開日: {publishDate.toLocaleDateString('ja-JP')}</span>
+      )}
+    </div>
+
+    {/* Tags */}
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-8">
+        {tags.map(tag => (
+          <span class="bg-secondary text-secondary-content text-xs font-medium px-4 py-2 rounded-xl">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    {/* Markdown Content Area with Prose styles */}
+    <div class="prose lg:prose-xl">
+      <slot /> {/* Markdown content will be rendered here */}
+    </div>
+  </article>
+</Layout>
+
+<style>
+  /* Ensure placeholder SVG scales correctly */
+  img[src$=".svg"] {
+    object-fit: contain; /* Adjust as needed, 'contain' might be better for SVG */
+    background-color: #f3f4f6; /* Light gray background for placeholder */
+  }
+</style>
