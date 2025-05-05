@@ -35,4 +35,6 @@ imageUrl: "/images/product/watabegg-hp.png"
 *   なし
 *   嘘です、なんかやるかもしれません。
 
+[GitHubリポジトリ](https://www.github.com/watabegg/watabegg.github.io)
+
 このサイトを通じて、watabeggの活動を見てもらえるといいなと思っています。
