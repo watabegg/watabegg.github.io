@@ -3,7 +3,6 @@ title: 'Product A'
 description: 'This is the first sample product.'
 publishDate: 2024-01-15
 tags: ['web', 'sample']
-imageUrl: '/images/placeholder-product.jpg' # Placeholder image path
 ---
 
 ## Overview

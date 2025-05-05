@@ -7,13 +7,16 @@ const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 ---
-<Layout title="Blog - MySite">
-  {/* Use base-content for title */}
-  <h1 class="text-4xl font-bold mb-8 text-center text-base-content">Blog</h1>
-  <div class="space-y-10 max-w-3xl mx-auto"> {/* Increased spacing, centered content */}
-    {posts.map(post => (
-      // Use base-100 for card background
-      <article class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+<Layout title="Blog | watabeggの個人サイト">
+  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
+    <div class="w-full max-w-3xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
+      <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
+        ブログ
+      </h1>
+      <div class="space-y-10 w-full"> {/* w-full を追加 */}
+        {posts.map(post => (
+          // Use base-100 for card background
+          <article class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"> {/* Added text-left */}
         {/* Use base-content for heading */}
         <h2 class="text-2xl font-semibold mb-2 text-base-content">
           {/* Use primary for link hover */}
@@ -42,6 +45,8 @@ const posts = (await getCollection('blog')).sort(
           続きを読む &rarr;
         </a>
       </article>
-    ))}
+        ))}
+      </div>
+    </div>
   </div>
 </Layout>

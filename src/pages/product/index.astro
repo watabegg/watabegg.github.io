@@ -7,13 +7,16 @@ const products = (await getCollection('products')).sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 ---
-<Layout title="Products - MySite">
-  {/* Use base-content for title */}
-  <h1 class="text-4xl font-bold mb-8 text-center text-base-content">My Products</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> {/* Increased gap */}
-    {products.map(product => (
-      // Use base-100 for card background
-      <div class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+<Layout title="Products | watabeggの個人サイト">
+  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
+    <div class="w-full max-w-4xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
+      <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
+        作ったやつ
+      </h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full"> {/* Increased gap, w-full */}
+        {products.map(product => (
+          // Use base-100 for card background
+          <div class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col text-left"> {/* Added text-left */}
         {product.data.imageUrl ? (
           <img src={product.data.imageUrl} alt={`Image for ${product.data.title}`} class="w-full h-48 object-cover" />
         ) : (
@@ -51,7 +54,9 @@ const products = (await getCollection('products')).sort(
           </div>
         </div>
       </div>
-    ))}
+        ))}
+      </div>
+    </div>
   </div>
 </Layout>
 

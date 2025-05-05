@@ -52,6 +52,7 @@ const programSkills = [
               loading="lazy"
               priority={index === 0}
               style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+              transition:name={index === 0 ? 'icon' : (index === 1 ? 'figure' : '')}
             />
           );
         })}
