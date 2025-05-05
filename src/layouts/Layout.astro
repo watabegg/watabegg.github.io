@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro'; // Import Footer
+import { ViewTransitions } from 'astro:transitions'; // Import ViewTransitions
 
 interface Props {
 	title?: string;
@@ -23,18 +25,20 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<ViewTransitions /> {/* Add ViewTransitions component */}
 	</head>
 	<!-- Use custom base colors -->
 	<body class="flex flex-col min-h-screen bg-base-100 text-base-content">
-		<Header />
+		{/* Conditionally render Header only if not isFullScreen */}
+		{ !isFullScreen && <Header /> }
 		<!-- Apply classes conditionally based on isFullScreen using template literal -->
 		<main
 			class={`flex-grow w-full ${!isFullScreen ? 'container mx-auto p-4' : ''} ${isFullScreen ? 'p-0 max-w-none' : ''}`}
 		>
 			<slot />
 		</main>
-		<!-- Optional: Add a footer later -->
-		<!-- <footer class="bg-gray-200 text-center p-4 mt-auto">Footer Content</footer> -->
+		{/* Conditionally render Footer only if not isFullScreen */}
+		{ !isFullScreen && <Footer /> }
 	</body>
 </html>
 

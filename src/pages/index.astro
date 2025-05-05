@@ -5,41 +5,111 @@ import TwitterIcon from '../components/icons/Twitter.astro';
 import GithubIcon from '../components/icons/Github.astro';
 import GmailIcon from '../components/icons/Gmail.astro';
 
+// Define links data directly here or import from a shared location if needed later
+const pageLinks = [
+  { name: 'About', href: '/about' },
+  { name: 'Product', href: '/product' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contact', href: '/contact' },
+];
+
 const socialLinks = [
-  { name: 'Instagram', href: 'https://www.instagram.com/watabegg', IconComponent: InstagramIcon },
   { name: 'Twitter', href: 'https://twitter.com/watabegg', IconComponent: TwitterIcon },
   { name: 'GitHub', href: 'https://github.com/watabegg', IconComponent: GithubIcon },
-  { name: 'Gmail', href: 'mailto:watabegg@gmail.com', IconComponent: GmailIcon }, 
+  { name: 'Instagram', href: 'https://www.instagram.com/watabegg', IconComponent: InstagramIcon },
+  { name: 'Gmail', href: 'mailto:watabegg@gmail.com', IconComponent: GmailIcon },
 ];
 ---
-{/* Pass isFullScreen prop to Layout */}
-<Layout title="Home - MySite" isFullScreen={true}>
-  {/* Use h-full to make this div fill the height of the <main> container */}
-  <div class="flex h-full flex-col items-center justify-center text-center text-white bg-gradient-to-br from-blue-900 to-purple-900">
-    <h1 class="text-6xl font-bold mb-4 animate-target">Welcome!</h1>
-    <p class="text-xl mb-8 animate-target">This is my personal website.</p>
+<Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
+  <div class="relative flex h-full w-full items-center justify-center overflow-hidden">
+    {/* Backgrounds: Adjust skew and width for mobile */}
+    <div
+      id="slanted-bg-header"
+      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80"
+      style="transform-origin: top left;"
+      transition:name="header-bg"
+    ></div>
 
-    <div class="flex space-x-6">
-      {socialLinks.map(link => (
-        <a href={link.href} target="_blank" rel="noopener noreferrer" class="text-white hover:text-gray-400 transition duration-300 animate-target" aria-label={link.name}>
-          <link.IconComponent class="w-8 h-8" />
-        </a>
-      ))}
+    <div
+      id="slanted-bg-footer"
+      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80"
+      style="transform-origin: top left;"
+      transition:name="footer-bg"
+    ></div>
+
+    {/* Content Container: flex-col on mobile, flex-row on md+ */}
+    <div class="relative z-10 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
+
+      {/* Left: Page Links: full width on mobile, centered */}
+      <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform order-1 mt-16 md:mt-0">
+        {/* Adjust heading size and margin for mobile */}
+        <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
+          watabegg
+        </h1>
+        {pageLinks.map((link, index) => (
+          <a
+            href={link.href}
+            class="text-2xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
+            data-astro-prefetch
+            style={`transition-delay: ${index * 100}ms;`}
+          >
+            {link.name}
+          </a>
+        ))}
+      </nav>
+
+      {/* Right: Social Links: full width on mobile, centered */}
+      <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform order-2">
+        {socialLinks.map((link, index) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
+            style=`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`
+          >
+            <link.IconComponent class="w-6 h-6 md:w-5 md:h-5" />
+            <span class="hidden md:block">{link.name}</span>
+          </a>
+        ))}
+      </aside>
     </div>
-
-    <script>
-      import { gsap } from "gsap";
-
-      // Ensure GSAP runs after Astro's view transitions (if enabled) or page load
-      document.addEventListener("astro:page-load", () => {
-        gsap.from(".animate-target", {
-          duration: 1,
-          opacity: 0,
-          y: 50, // Move up 50px
-          stagger: 0.2, // Delay between each element animation
-          ease: "power3.out",
-        });
-      });
-    </script>
   </div>
+
+  {/* GSAP for page transitions */}
+  <script>
+    import { gsap } from "gsap";
+
+    document.addEventListener("astro:page-load", () => {
+      // Page Links Animation: animate to opacity-85 and x=0
+      gsap.to("#page-links-home > *", {
+        duration: 0.8,
+        opacity: 0.85, // Animate to 85% opacity
+        x: 0,          // Animate x position
+        stagger: 0.1,
+        ease: "power3.out",
+        delay: 0.2
+      });
+
+      // Social Links Animation: animate to opacity-85 and x=0
+       gsap.to("#social-links-home > *", {
+        duration: 0.8,
+        opacity: 0.85, // Animate to 85% opacity
+        x: 0,          // Animate x position
+        stagger: 0.1,
+        ease: "power3.out",
+        delay: 0.4
+      });
+
+      // Background animation is removed as View Transitions will handle it
+      // Ensure the ID is correct if needed elsewhere, or remove if only for GSAP
+      // gsap.from("#slanted-bg-header", ...); // Example if targeting specific IDs
+      // gsap.from("#slanted-bg-footer", ...);
+    });
+
+  </script>
 </Layout>
+
+<style>
+  /* Add any specific styles if needed, e.g., fine-tuning the skew or spacing */
+</style>

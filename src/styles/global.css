@@ -1,22 +1,24 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light dark;
+}
 
 @plugin "daisyui/theme" {
-  name: "test";
-  default: false;
+  name: "light";
+  default: true;
   prefersdark: false;
   color-scheme: "light";
   --color-base-100: oklch(98% 0 0);
   --color-base-200: oklch(96% 0.001 286.375);
   --color-base-300: oklch(92% 0.004 286.32);
   --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(64% 0.2 131.684);
-  --color-primary-content: oklch(98% 0.031 120.757);
-  --color-secondary: oklch(58% 0.158 241.966);
+  --color-primary: oklch(52% 0.154 150.069);
+  --color-primary-content: oklch(98% 0.018 155.826);
+  --color-secondary: oklch(50% 0.134 242.749);
   --color-secondary-content: oklch(97% 0.013 236.62);
-  --color-accent: oklch(57% 0.245 27.325);
+  --color-accent: oklch(50% 0.213 27.518);
   --color-accent-content: oklch(97% 0.013 17.38);
-  --color-neutral: oklch(44% 0.017 285.786);
+  --color-neutral: oklch(37% 0.013 285.805);
   --color-neutral-content: oklch(98% 0 0);
   --color-info: oklch(78% 0.154 211.53);
   --color-info-content: oklch(30% 0.056 229.695);
@@ -34,4 +36,10 @@
   --border: 1px;
   --depth: 1;
   --noise: 0;
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.7s; /* Increase duration (default is usually shorter) */
+  animation-timing-function: ease-in-out; /* Smoother timing */
 }

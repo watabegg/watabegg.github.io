@@ -24,7 +24,7 @@ const products = (await getCollection('products')).sort(
           {/* Use base-content for heading */}
           <h2 class="text-xl font-semibold mb-2 text-base-content">
             {/* Use primary for link hover */}
-            <a href={`/product/${product.slug}`} class="hover:text-primary-700">
+            <a href={`/product/${product.slug}`} class="hover:text-primary"> {/* Updated hover color */}
               {product.data.title}
             </a>
           </h2>
@@ -36,8 +36,8 @@ const products = (await getCollection('products')).sort(
           {product.data.tags && (
             <div class="flex flex-wrap gap-2 mb-4">
               {product.data.tags.map(tag => (
-                // Use primary colors for tags
-                <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                // Use primary colors for tags (assuming daisyUI variables map well)
+                <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full"> {/* Updated tag colors */}
                   {tag}
                 </span>
               ))}
@@ -45,7 +45,7 @@ const products = (await getCollection('products')).sort(
           )}
           <div class="mt-auto"> {/* Pushes link to bottom */}
             {/* Use primary colors for link */}
-            <a href={`/product/${product.slug}`} class="text-primary-600 hover:text-primary-800 font-medium">
+            <a href={`/product/${product.slug}`} class="text-primary hover:text-primary/80 font-medium"> {/* Updated link colors */}
               詳細を見る &rarr;
             </a>
           </div>

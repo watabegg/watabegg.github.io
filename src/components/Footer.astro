@@ -1,0 +1,34 @@
+---
+// Import necessary icons (or pass them as props if preferred)
+import InstagramIcon from './icons/Instagram.astro';
+import TwitterIcon from './icons/Twitter.astro';
+import GithubIcon from './icons/Github.astro';
+import GmailIcon from './icons/Gmail.astro';
+
+const socialLinks = [
+  { name: 'Instagram', href: 'https://www.instagram.com/watabegg', IconComponent: InstagramIcon },
+  { name: 'Twitter', href: 'https://twitter.com/watabegg', IconComponent: TwitterIcon },
+  { name: 'GitHub', href: 'https://github.com/watabegg', IconComponent: GithubIcon },
+  { name: 'Gmail', href: 'mailto:watabegg@gmail.com', IconComponent: GmailIcon },
+];
+---
+
+<footer class="bg-primary text-primary-content" transition:name="footer-bg">
+  <div class="container mx-auto p-16 flex flex-col-reverse md:flex-row justify-between items-center">
+    <p class="text-sm mb-4 md:mb-0 opacity-80">&copy; {new Date().getFullYear()} watabegg. All rights reserved.</p> {/* Added opacity */}
+    {/* Social Links Container for GSAP */}
+    <div id="social-links-footer" class="flex items-center space-x-4">
+      {socialLinks.map((link) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="opacity-75 transition-opacity duration-300 hover:opacity-100"
+          aria-label={link.name}
+        >
+          <link.IconComponent class="w-5 h-5" />
+        </a>
+      ))}
+    </div>
+  </div>
+</footer>

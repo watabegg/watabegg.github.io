@@ -17,7 +17,7 @@ const posts = (await getCollection('blog')).sort(
         {/* Use base-content for heading */}
         <h2 class="text-2xl font-semibold mb-2 text-base-content">
           {/* Use primary for link hover */}
-          <a href={`/blog/${post.slug}`} class="hover:text-primary-700">
+          <a href={`/blog/${post.slug}`} class="hover:text-primary"> {/* Updated hover color */}
             {post.data.title}
           </a>
         </h2>
@@ -30,15 +30,15 @@ const posts = (await getCollection('blog')).sort(
         {post.data.tags && (
           <div class="flex flex-wrap gap-2 mb-4">
             {post.data.tags.map(tag => (
-              // Use primary colors for tags
-              <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+              // Use primary colors for tags (assuming daisyUI variables map well)
+              <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full"> {/* Updated tag colors */}
                 {tag}
               </span>
             ))}
           </div>
         )}
         {/* Use primary colors for link */}
-        <a href={`/blog/${post.slug}`} class="text-primary-600 hover:text-primary-800 font-medium">
+        <a href={`/blog/${post.slug}`} class="text-primary hover:text-primary/80 font-medium"> {/* Updated link colors */}
           続きを読む &rarr;
         </a>
       </article>
