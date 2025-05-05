@@ -82,7 +82,10 @@ const programSkills = [
 
       <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
         <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
-        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-05/pl.u-V9D7gpauBKRRAVm"></iframe>
+        <div class="flex flex-col gap-y-8 justify-center items-center">
+          <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-05/pl.u-V9D7gpauBKRRAVm"></iframe>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/n96cgEBWhl8?si=XECNRS89Vz2ehK28" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
       </section>
     </div>
   </div>
@@ -93,8 +96,8 @@ const programSkills = [
 
     // 5〜10秒のランダムなミリ秒を生成
     function getRandomDelay() {
-      // 2〜7秒のランダムなミリ秒を生成 (範囲を少し狭めて確認しやすく)
-      return (Math.random() * 5 + 2) * 1000;
+      // 1〜4秒のランダムなミリ秒を生成 (範囲を少し狭めて確認しやすく)
+      return (Math.random() * 2 + 1) * 1000;
     }
 
     let currentIconIndex = 0;

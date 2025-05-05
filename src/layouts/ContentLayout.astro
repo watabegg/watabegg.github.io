@@ -46,9 +46,12 @@ const displayImageUrl = imageUrl || placeholderImageUrl;
       </div>
     )}
 
-    {/* Markdown Content Area with Prose styles */}
     <div class="prose lg:prose-xl">
-      <slot /> {/* Markdown content will be rendered here */}
+      <slot /> 
+    </div>
+
+    <div class="mt-8">
+      <button onclick="history.back()" class="btn btn-primary btn-lg">戻る</button>
     </div>
   </article>
 </Layout>
