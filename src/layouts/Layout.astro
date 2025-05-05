@@ -8,23 +8,81 @@ interface Props {
 	title?: string;
 	description?: string;
 	isFullScreen?: boolean;
+	ogImageUrl?: string; // Add prop for OGP image
+	ogType?: 'website' | 'article'; // Add prop for OGP type
 }
 
 const {
 	title = 'watabegg',
 	description = 'watabeggの個人サイト',
-	isFullScreen = false
+	isFullScreen = false,
+	ogImageUrl, // Get OGP image URL from props
+	ogType = 'website', // Default OGP type
 } = Astro.props;
+
+// Construct the canonical URL
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
+// Determine the OGP image URL (use default if not provided)
+// Assuming a default OGP image exists at /images/ogp_default.png
+const defaultOgImageUrl = new URL('/images/ogp_default.png', Astro.site).toString();
+const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() : defaultOgImageUrl;
+
 ---
 <!doctype html>
-<html lang="ja">
+<html lang="ja" prefix="og: http://ogp.me/ns#"> {/* Add OGP prefix */}
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/webp" href="/favicon.webp" /> {/* Corrected type */}
+		<meta name="generator" content={Astro.generator} />
+
+		{/* SEO Meta Tags */}
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl.toString()} />
+
+		{/* Open Graph / Facebook */}
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonicalUrl.toString()} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={finalOgImageUrl} />
+		<meta property="og:site_name" content="watabegg" /> {/* Site name */}
+		<meta property="og:locale" content="ja_JP" />
+
+		{/* Twitter */}
+		<meta property="twitter:card" content="summary_large_image" /> {/* Use summary_large_image for better visibility */}
+		<meta property="twitter:url" content={canonicalUrl.toString()} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={finalOgImageUrl} />
+		{/* <meta name="twitter:site" content="@yourTwitterHandle"> */} {/* Optional: Add Twitter handle */}
+		{/* <meta name="twitter:creator" content="@yourTwitterHandle"> */} {/* Optional: Add Twitter handle */}
+
+    {/* JSON-LD Structured Data for Website */}
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": Astro.site?.toString(),
+      "name": "watabegg",
+      "description": description,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${Astro.site?.toString()}search?q={search_term_string}`, // Assuming a search page exists or will exist
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+
+		<!-- Google tag (gtag.js) -->
+		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2D4GRWSW25"></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-2D4GRWSW25');
+		</script>
 		<ViewTransitions />
 	</head>
 	<!-- Use custom base colors -->
