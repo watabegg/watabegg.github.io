@@ -1,20 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import pgpKey from '../assets/pgp/public-key.asc?url';
+import pgpKeyText from '../assets/pgp/public-key.asc?raw';
+
+const pgpKeyTxt = pgpKeyText
+  .replace(/-----BEGIN PGP PUBLIC KEY BLOCK-----/g, '')
+  .replace(/-----END PGP PUBLIC KEY BLOCK-----/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
 ---
-<Layout title="Contact - MySite">
-  <h1 class="text-4xl font-bold mb-8 text-center text-base-content">Contact Me</h1>
-  <div class="max-w-xl mx-auto bg-base-100 p-6 rounded-lg shadow-md">
-    <p class="mb-6 text-base-content opacity-90">
-      お問い合わせは、以下のいずれかの方法でご連絡ください。
-    </p>
-    <ul class="list-disc list-inside space-y-3 text-base-content opacity-90">
-      <li>
-        {/* Use primary for links */}
-        Email: <a href="mailto:watabegg@example.com" class="text-primary-600 hover:text-primary-800 hover:underline">watabegg@example.com</a> (メールアドレスは適宜変更してください)
-      </li>
-      <li>
-        Twitter: <a href="https://twitter.com/watabegg" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-800 hover:underline">@watabegg</a>
-    </li>
-    {/* Add other contact methods if desired */}
-  </ul>
+<Layout title="Contact | watabeggの個人サイト">
+  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
+    <div class="w-full max-w-3xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
+      <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
+        お問い合わせ
+      </h1>
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full bg-base-100 p-6 rounded-lg shadow-md text-left">
+        <p class="mb-6 text-base-content opacity-90">
+          お問い合わせは、以下のいずれかの方法でご連絡ください。
+        </p>
+        <dl class="space-y-2 text-base md:text-lg text-left">
+          <div class="flex flex-col md:flex-row">
+            <dt class="w-full md:w-24 font-medium text-gray-500 shrink-0">Gmail:</dt>
+            <dd class="flex-1"><a href="mailto:watabegg@gmail.com" class="text-primary hover:text-primary/80 hover:underline">watabegg@gmail.com</a></dd>
+          </div>
+          <div class="flex flex-col md:flex-row">
+            <dt class="w-full md:w-24 font-medium text-gray-500 shrink-0">Twitter:</dt>
+            <dd class="flex-1"><a href="https://twitter.com/watabegg" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 hover:underline">@watabegg</a></dd>
+          </div>
+        </dl>
+      </section>
+      
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full bg-base-100 p-6 rounded-lg shadow-md text-left">
+        <h2 class="text-2xl font-semibold mb-4 opacity-90">PGP 公開鍵</h2>
+        <p class="mb-4 text-base-content opacity-90">
+        </p>
+        <div class="bg-base-200 p-4 rounded-md overflow-x-auto">
+          <pre class="whitespace-pre-wrap break-all text-sm"><code>{pgpKeyTxt}</code></pre>
+        </div>
+        <div class="mt-4">
+          <a href={pgpKey} download class="btn btn-primary btn-sm">
+            公開鍵をダウンロード
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
 </Layout>

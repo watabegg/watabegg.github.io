@@ -18,39 +18,38 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 <Layout title={entry.data.title}>
-  <article class="prose lg:prose-xl max-w-none">
+  {/* Remove max-w-none to respect Layout's container */}
+  <article class="prose lg:prose-xl">
+    {/* Adjust image styling for consistency */}
     {entry.data.imageUrl && (
-      <img src={entry.data.imageUrl} alt={`Image for ${entry.data.title}`} class="w-full max-h-96 object-cover rounded-lg mb-6" />
+      <img src={entry.data.imageUrl} alt={`Image for ${entry.data.title}`} class="w-full h-auto max-h-[400px] object-cover rounded-md mb-8 shadow-md" />
     )}
-    <h1>{entry.data.title}</h1>
-    <div class="text-sm text-gray-500 mb-4">
-      <span>By {entry.data.author}</span> |
-      <span>Published on: {entry.data.publishDate.toLocaleDateString('ja-JP')}</span>
+    {/* Use theme colors for heading */}
+    <h1 class="text-4xl font-bold mb-4 text-primary">{entry.data.title}</h1>
+    {/* Use theme colors for meta text and adjust layout */}
+    <div class="text-sm text-base-content/70 mb-6 flex items-center gap-2">
+      <span>作成者: {entry.data.author}</span>
+      <span class="text-base-content/50">|</span>
+      <span>公開日: {entry.data.publishDate.toLocaleDateString('ja-JP')}</span>
     </div>
+    {/* Adjust tag styling for consistency */}
     {entry.data.tags && (
-      <div class="flex flex-wrap gap-2 mb-6">
+      <div class="flex flex-wrap gap-2 mb-8">
         {entry.data.tags.map(tag => (
-          <span class="bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+          <span class="bg-secondary text-secondary-content text-xs font-medium px-3 py-1 rounded-full">
             {tag}
           </span>
         ))}
       </div>
     )}
-    <Content /> {/* Renders the Markdown content */}
+    {/* Ensure prose styles apply correctly */}
+    <div class="prose lg:prose-xl max-w-none"> {/* Wrap Content in a div with prose styles */}
+        <Content /> {/* Renders the Markdown content */}
+    </div>
   </article>
 </Layout>
 
 <style>
-  /* Basic styling for placeholder images */
-  img {
-    background-color: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #aaa;
-    font-size: 0.8rem;
-  }
-  img::before {
-    content: 'Image';
-  }
+  /* Remove basic styling for placeholder images if not needed */
+  /* img { ... } */
 </style>
