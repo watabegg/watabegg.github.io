@@ -2,10 +2,17 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Fetch all product entries, sorted by publish date descending
-const products = (await getCollection('products')).sort(
-  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-);
+// Get current time
+const now = new Date();
+
+// Fetch all product entries
+const allProducts = await getCollection('products');
+
+// Filter products to show only those published in the past or now,
+// then sort by publish date descending
+const products = allProducts
+  .filter(product => product.data.publishDate.valueOf() <= now.valueOf())
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 ---
 <Layout title="Products | watabeggの個人サイト">
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">

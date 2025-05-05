@@ -3,7 +3,6 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 
-// Generate static paths for all products
 export async function getStaticPaths() {
   const products = await getCollection('products');
   return products.map(entry => ({
