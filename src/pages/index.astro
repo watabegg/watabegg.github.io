@@ -4,6 +4,9 @@ import InstagramIcon from '../components/icons/Instagram.astro';
 import TwitterIcon from '../components/icons/Twitter.astro';
 import GithubIcon from '../components/icons/Github.astro';
 import GmailIcon from '../components/icons/Gmail.astro';
+import { Image } from 'astro:assets';
+import IconImage from '../assets/real_icon.webp';
+import FigureImage from '../assets/figure_1_1.webp';
 
 // Define links data directly here or import from a shared location if needed later
 const pageLinks = [
@@ -25,31 +28,58 @@ const socialLinks = [
     {/* Backgrounds: Adjust skew and width for mobile */}
     <div
       id="slanted-bg-header"
-      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80"
+      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80 z-20"
       style="transform-origin: top left;"
       transition:name="header-bg"
     ></div>
 
     <div
       id="slanted-bg-footer"
-      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80"
+      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80 z-20"
       style="transform-origin: top left;"
       transition:name="footer-bg"
     ></div>
 
-    {/* Content Container: flex-col on mobile, flex-row on md+ */}
-    <div class="relative z-10 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
+    <div
+      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-white z-10"
+      style="transform-origin: top left;"
+    ></div>
 
-      {/* Left: Page Links: full width on mobile, centered */}
-      <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform order-1 mt-16 md:mt-0">
-        {/* Adjust heading size and margin for mobile */}
+    <div
+      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-white z-10"
+      style="transform-origin: top left;"
+    ></div>
+
+    <div class="absolute w-full md:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around">
+      <Image
+        src={IconImage}
+        alt="watabeggのアイコン"
+        class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
+        loading="lazy"
+        priority
+      />
+      <Image
+        src={FigureImage}
+        alt="watabeggのフィギュア"
+        class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
+        loading="lazy"
+        priority
+      />
+      {/* Removed the original image container div */}
+    </div>
+
+    {/* Content Container: flex-col on mobile, flex-row on md+ */}
+    {/* Adjusted z-index to z-30 to ensure content is above images */}
+    <div class="relative z-30 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
+
+      <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-16 md:mt-0 pointer-events-auto"> {/* Added pointer-events-auto */}
         <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
           watabegg
         </h1>
         {pageLinks.map((link, index) => (
           <a
             href={link.href}
-            class="text-2xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
+            class="text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
             data-astro-prefetch
             style={`transition-delay: ${index * 100}ms;`}
           >
@@ -58,8 +88,7 @@ const socialLinks = [
         ))}
       </nav>
 
-      {/* Right: Social Links: full width on mobile, centered */}
-      <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform order-2">
+      <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto"> {/* Added pointer-events-auto */}
         {socialLinks.map((link, index) => (
           <a
             href={link.href}
@@ -76,12 +105,10 @@ const socialLinks = [
     </div>
   </div>
 
-  {/* GSAP for page transitions */}
   <script>
     import { gsap } from "gsap";
 
     document.addEventListener("astro:page-load", () => {
-      // Page Links Animation: animate to opacity-85 and x=0
       gsap.to("#page-links-home > *", {
         duration: 0.8,
         opacity: 0.85, // Animate to 85% opacity
@@ -91,7 +118,6 @@ const socialLinks = [
         delay: 0.2
       });
 
-      // Social Links Animation: animate to opacity-85 and x=0
        gsap.to("#social-links-home > *", {
         duration: 0.8,
         opacity: 0.85, // Animate to 85% opacity
@@ -101,15 +127,7 @@ const socialLinks = [
         delay: 0.4
       });
 
-      // Background animation is removed as View Transitions will handle it
-      // Ensure the ID is correct if needed elsewhere, or remove if only for GSAP
-      // gsap.from("#slanted-bg-header", ...); // Example if targeting specific IDs
-      // gsap.from("#slanted-bg-footer", ...);
     });
 
   </script>
 </Layout>
-
-<style>
-  /* Add any specific styles if needed, e.g., fine-tuning the skew or spacing */
-</style>
