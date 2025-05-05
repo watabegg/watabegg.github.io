@@ -101,7 +101,7 @@ const programSkills = [
     }
 
     let currentIconIndex = 0;
-    let intervalId: number | null = null;
+    let intervalId: ReturnType<typeof setTimeout> | null = null;
     let isAnimating = false; // アニメーション実行中フラグ
 
     function changeIcon(iconElements: NodeListOf<Element>) {

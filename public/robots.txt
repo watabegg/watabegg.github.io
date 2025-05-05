@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://watabegg.github.io/sitemap-index.xml

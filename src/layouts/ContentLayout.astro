@@ -8,15 +8,39 @@ interface Props {
   author?: string; // Optional, mainly for blog
   tags?: string[];
   imageUrl?: string;
+  description?: string; // Add description prop
 }
 
-const { title, publishDate, author, tags, imageUrl } = Astro.props;
+const { title, publishDate, author, tags, imageUrl, description } = Astro.props; // Destructure description
 const placeholderImageUrl = '/images/placeholder.svg';
 const displayImageUrl = imageUrl || placeholderImageUrl;
+
+// Determine article type based on URL path (simple example)
+const isBlog = Astro.url.pathname.startsWith('/blog/');
+const articleType = isBlog ? 'BlogPosting' : 'Article';
+
+// Construct image URL for structured data
+const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString() : undefined;
+
 ---
-<Layout {title}>
+{/* Pass description, ogImageUrl, and ogType to Layout */}
+<Layout {title} {description} ogImageUrl={imageUrl} ogType="article">
+  {/* JSON-LD Structured Data for Article/BlogPosting */}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": articleType,
+    "headline": title,
+    "description": description,
+    "image": structuredDataImageUrl, // Use absolute URL or omit if no image
+    "datePublished": publishDate?.toISOString(), // Format date as ISO string
+    "author": author ? { "@type": "Person", "name": author } : undefined, // Add author if available
+    "publisher": { "@type": "Organization", "name": "watabegg", "logo": { "@type": "ImageObject", "url": new URL('/images/ogp_default.png', Astro.site).toString() } }, // Publisher info
+    "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.toString() }
+  })} />
+
   <article class="container mx-auto px-6 py-16 flex flex-col md:text-left items-center">
     {/* Image with placeholder logic */}
+    {/* Use displayImageUrl which includes placeholder logic */}
     <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-8 shadow-md" />
 
     {/* Heading */}
