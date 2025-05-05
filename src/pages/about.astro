@@ -1,30 +1,217 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import IconImage from '../assets/real_icon.webp';
+import IconImage2 from '../assets/figure_1_1.webp';
+import IconImage3 from '../assets/figure_dots.webp';
+import IconImage4 from '../assets/sumatera.webp';
+import DefinitionList from '../components/DefinitionList.astro';
+
+const iconObjects = [
+  IconImage,
+  IconImage2,
+  IconImage3,
+  IconImage4,
+];
+
+const personalInfo = [
+  { term: '本名', description: '渡辺 大樹 (わたなべ だいき)' },
+  { term: '住所', description: '日本 長野県' },
+  { term: '生年月日(ISO8601)', description: '2003-03-09T00:00:00.000+09:00' },
+  { term: '生年月日(UNIX)', description: '1047135600' },
+];
+
+const careerHistory = [
+  { term: '2018年04月 - 2021年03月', description: '岐阜県立恵那高等学校 普通科: 卒業' },
+  { term: '2021年04月 - 現在', description: '信州大学 工学部 電子情報システム工学科: 在学' },
+  { term: '2024年03月 - 2024年11月', description: '株式会社ウェブウェア: アルバイト' },
+  { term: '2024年11月 - 現在', description: 'ASUNA Frontier株式会社: 業務委託契約' },
+  { term: '2027年03月 (予定)', description: '信州大学 工学部 電子情報システム工学科: 卒業見込' },
+];
+
+const programSkills = [
+  { term: '言語', description: 'TypeScript, JavaScript, Python, PHP' },
+  { term: 'フレームワーク', description: 'Next.js, React, Astro, Tailwind CSS, GSAP, WordPress' },
+  { term: 'ツール', description: 'Git, GitHub, Docker, Figma' },
+  { term: 'OS', description: 'Linux (Ubuntu), Windows' },
+];
 ---
-<Layout title="About Me - MySite">
-  <div class="prose lg:prose-xl max-w-none"> {/* Using Tailwind Typography for basic styling */}
-    <h1>About Me</h1>
 
-    <section>
-      <h2>経歴</h2>
-      <p>ここにあなたの職務経歴や学歴などを記述します。</p>
-      <ul>
-        <li>20XX年 - YYYY年: 株式会社ZZZ - ソフトウェアエンジニア</li>
-        <li>20WW年 - XXXX年: △△大学 - 〇〇学部卒業</li>
-        {/* Add more items as needed */}
-      </ul>
-    </section>
+<Layout title="About | watabeggの個人サイト">
+  {/* シンプルなコンテナに変更 */}
+  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
+    <div id="about-content" class="w-full max-w-3xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
+      {/* 3D効果のためのperspectiveとtransform-styleを追加, position: relativeを追加 */}
+      <div id="about-icon" class="mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative" style="perspective: 1000px; transform-style: preserve-3d;">
+        {iconObjects.map((iconObj, index) => {
+          return (
+            <Image
+              src={iconObj}
+              alt={`watabeggのアイコン ${index + 1}`}
+              class={`rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0 ${index !== 0 ? 'opacity-0' : 'opacity-90'}`}
+              loading="lazy"
+              priority={index === 0}
+              style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+            />
+          );
+        })}
+      </div>
+      <span class="text-lg md:text-xl w-full font-semibold text-center text-base-content mb-4 self-center md:self-start">
+        @watabegg
+      </span>
 
-    <section>
-      <h2>自己PR</h2>
-      <p>ここに就職活動向けの自己PRを記述します。</p>
-      <p>
-        例：Web 技術への強い関心を持ち、特にフロントエンド開発に情熱を注いでいます。
-        Astro や Tailwind CSS、GSAP などのモダンな技術スタックを用いた開発経験があります。
-        チームでの協調性を大切にし、常に新しい技術を学び続ける意欲があります。
-        貴社でこれまでの経験と学習意欲を活かし、貢献したいと考えております。
-      </p>
-      {/* Add more paragraphs or details */}
-    </section>
+      <h1 class="text-4xl md:text-5xl w-full font-bold opacity-90 text-center md:self-start">
+        About
+      </h1>
+
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">個人情報</h2>
+        <DefinitionList items={personalInfo} />
+      </section>
+
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">経歴</h2>
+        <DefinitionList items={careerHistory} />
+      </section>
+
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">プログラミングスキル</h2>
+        <DefinitionList items={programSkills} />
+      </section>
+
+      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
+        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-05/pl.u-V9D7gpauBKRRAVm"></iframe>
+      </section>
+    </div>
   </div>
+
+  {/* define:varsは不要になったため削除 */}
+  <script>
+    import { gsap } from "gsap";
+
+    // 5〜10秒のランダムなミリ秒を生成
+    function getRandomDelay() {
+      // 2〜7秒のランダムなミリ秒を生成 (範囲を少し狭めて確認しやすく)
+      return (Math.random() * 5 + 2) * 1000;
+    }
+
+    let currentIconIndex = 0;
+    let intervalId: number | null = null;
+    let isAnimating = false; // アニメーション実行中フラグ
+
+    function changeIcon(iconElements: NodeListOf<Element>) {
+      // アニメーション実行中なら何もしない
+      if (isAnimating) return;
+      isAnimating = true;
+
+      // 既存のタイマーをクリア
+      if (intervalId) clearTimeout(intervalId);
+      intervalId = null;
+
+      if (!iconElements || iconElements.length <= 1) { // アイコンが1つ以下なら何もしない
+        isAnimating = false;
+        return;
+      }
+
+      const currentIconElement = iconElements[currentIconIndex];
+
+      // 次のアイコンをランダムに選択 (現在のアイコン以外)
+      let nextIconIndex;
+      do {
+        nextIconIndex = Math.floor(Math.random() * iconElements.length);
+      } while (nextIconIndex === currentIconIndex);
+
+      const nextIconElement = iconElements[nextIconIndex];
+
+      // 要素が存在するか確認
+      if (!currentIconElement || !nextIconElement) {
+        console.error("Current or next icon element not found during transition.");
+        isAnimating = false;
+        return;
+      }
+
+      // アニメーションタイムライン
+      const tl = gsap.timeline({
+        onComplete: () => {
+          // アニメーション完了後
+          currentIconIndex = nextIconIndex; // インデックスを更新
+          isAnimating = false; // アニメーションフラグを解除
+          // 次のタイマーを設定
+          intervalId = setTimeout(() => changeIcon(iconElements), getRandomDelay());
+        }
+      });
+
+      // 1. 現在の画像を回転して非表示にする
+      tl.to(currentIconElement, {
+        duration: 0.4, // 少し短縮
+        rotationY: -90,
+        opacity: 0,
+        ease: "power2.in",
+        onComplete: () => {
+          // 非表示アニメーション完了直後に次の要素の初期状態を設定
+          gsap.set(nextIconElement, { rotationY: 90, opacity: 0 });
+        }
+      });
+
+      // 2. 少し間を置いてから、次の画像を回転して表示する
+      //    前の tween が完了してから実行されるように調整
+      tl.to(nextIconElement, {
+        duration: 0.4, // 少し短縮
+        rotationY: 0,
+        opacity: 0.9,
+        ease: "power2.out"
+      }, ">"); // 前のアニメーション完了直後から開始
+
+    }
+
+    document.addEventListener("astro:page-load", () => {
+      // 既存のタイマーとアニメーションをクリア/停止
+      if (intervalId) clearTimeout(intervalId);
+      intervalId = null;
+      isAnimating = false; // フラグをリセット
+      gsap.killTweensOf(".rotating-icon-item"); // 既存のトゥイーンを停止
+      gsap.killTweensOf("#about-content > *:not(#about-icon), #about-content > span");
+
+      const iconWrapperElements = document.querySelectorAll(".rotating-icon-item");
+      if (!iconWrapperElements || iconWrapperElements.length === 0) {
+        console.error("Rotating icon wrapper elements not found.");
+        return;
+      }
+
+      // 全アイコンの初期状態をリセット (回転、不透明度、スケール)
+      gsap.set(iconWrapperElements, { rotationY: 0, opacity: 0, scale: 1 });
+      // 最初のアイコンを表示状態に
+      gsap.set(iconWrapperElements[0], { opacity: 0.9 });
+      currentIconIndex = 0; // インデックスをリセット
+
+      // 初回アニメーション: 最初のアイコンのフェードインとスケールアップ
+      if (iconWrapperElements[0]) {
+          gsap.from(iconWrapperElements[0], {
+            duration: 1,
+            opacity: 0,
+            scale: 0.8,
+            ease: "power3.out",
+            delay: 0.2,
+            onComplete: () => {
+               // 初回アニメーション完了後、ランダム切り替えを開始 (タイマーを再設定)
+               if (intervalId) clearTimeout(intervalId); //念のためクリア
+               intervalId = setTimeout(() => changeIcon(iconWrapperElements), getRandomDelay());
+            }
+          });
+      } else {
+          console.error("First icon wrapper element not found for initial animation.");
+      }
+
+      // テキストコンテンツのフェードインとスライドアップ
+      gsap.from("#about-content > *:not(#about-icon), #about-content > span", {
+        duration: 0.8,
+        opacity: 1, // ここ変えないで
+        y: 20,
+        stagger: 0.15,
+        ease: "power3.out",
+        delay: 0.4 
+      });
+    });
+  </script>
 </Layout>

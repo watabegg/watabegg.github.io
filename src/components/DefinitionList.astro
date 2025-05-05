@@ -1,0 +1,22 @@
+---
+interface Item {
+  term: string;
+  description: string;
+}
+
+interface Props {
+  items: Item[];
+  termWidthClass?: string; // dt要素の幅をカスタマイズするためのクラス (Tailwindクラスを想定)
+}
+
+const { items, termWidthClass = 'md:w-60' } = Astro.props; // デフォルト幅を設定
+---
+
+<dl class="space-y-2 text-base md:text-lg text-left">
+  {items.map((item) => (
+    <div class="flex flex-col md:flex-row">
+      <dt class:list={["w-full font-medium text-gray-500 shrink-0", termWidthClass]}>{item.term}:</dt>
+      <dd class="flex-1">{item.description}</dd>
+    </div>
+  ))}
+</dl>
