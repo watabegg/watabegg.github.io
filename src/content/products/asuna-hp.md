@@ -1,6 +1,6 @@
 ---
 title: "ASUNA Frontier株式会社 HP制作"
-publishDate: 2025-05-09 
+publishDate: 2025-05-05
 description: "業務委託契約を結んでおり、学生メンバーとして所属しているASUNA Frontier株式会社のHP制作"
 tags: ["Web制作", "デザイン", "Figma", "ホームページ", "WordPress", "React"]
 imageUrl: "/images/product/asuna-hp.png"

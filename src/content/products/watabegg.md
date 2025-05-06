@@ -1,7 +1,7 @@
 ---
 title: "watabeggの個人サイト"
 publishDate: 2025-05-05 
-description: "watabeggの個人サイトについて、その技術的な詳細と目的の説明"
+description: "watabeggの個人サイトについて、その技術的な詳細と目的"
 tags: ["Web開発", "Astro", "Tailwind CSS", "daisyUI", "ポートフォリオ"]
 imageUrl: "/images/product/watabegg-hp.png"
 ---
@@ -18,8 +18,9 @@ imageUrl: "/images/product/watabegg-hp.png"
 *   **[Tailwind CSS](https://tailwindcss.com/)**: CSSフレームワークの中で一番好きです。一番嫌いなのはstyled-componentsです。
     *   **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)**: Markdownコンテンツを美しく整えるプラグイン。
     *   **[daisyUI](https://daisyui.com/)**: Tailwind CSS用の便利なコンポーネントライブラリ。MUI ~~って名前のカス~~ の次に見つけたライブラリなので親だと思っています。
+    *   **GSAP**: JavaScriptのアニメーションライブラリ。Astroとは真逆の思想でマジで重すぎるけどアニメーションってかわいいから入れた！
 *   **[View Transitions API](https://developer.mozilla.org/ja/docs/Web/API/View_Transitions_API)** (Astro経由): ページ遷移を滑らかにするブラウザAPI。Astroがこれを簡単に使えるようにしています。今のAstroでは非推奨ですがどうしてもReact無しでSPAっぽくしたいので無視して使っています。
-*   **TypeScript**: 静的型付きが大好きです。
+*   **TypeScript**: 静的型付け大好き。
 
 ## 目的
 
