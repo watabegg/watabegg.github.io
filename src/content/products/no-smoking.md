@@ -1,6 +1,6 @@
 ---
 title: "個人的禁煙用アプリ"
-publishDate: 2025-03-02
+publishDate: 2025-05-05
 description: "自分が禁煙するために作った喫煙記録アプリ"
 tags: ["Web開発", "Next.js", "TypeScript", "PostgreSQL", "Vercel", "Cline"]
 imageUrl: "/images/product/no-smoking.png"

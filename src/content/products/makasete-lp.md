@@ -1,6 +1,6 @@
 ---
 title: "一般社団法人ASUNA ALLANCE CONSULTING LP制作"
-publishDate: 2025-05-09 
+publishDate: 2025-05-05 
 description: "一般社団法人ASUNA ALLANCE CONSULTINGのランディングページ制作"
 tags: ["Web制作", "Astro", "Tailwind CSS", "LP"]
 imageUrl: "/images/product/makasete-lp.png"
