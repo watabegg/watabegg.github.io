@@ -22,45 +22,47 @@ const products = allProducts
       </h1>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full"> {/* Increased gap, w-full */}
         {products.map(product => (
-          // Use base-100 for card background
-          <div class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col text-left"> {/* Added text-left */}
-        {product.data.imageUrl ? (
-          <img src={product.data.imageUrl} alt={`Image for ${product.data.title}`} class="w-full h-48 object-cover" />
-        ) : (
-          // Use base-300 for placeholder background
-          <div class="w-full h-48 bg-base-300 flex items-center justify-center text-base-content opacity-50">No Image</div>
-        )}
-        <div class="p-5 flex flex-col flex-grow"> {/* Increased padding, flex for footer alignment */}
-          {/* Use base-content for heading */}
-          <h2 class="text-xl font-semibold mb-2 text-base-content">
-            {/* Use primary for link hover */}
-            <a href={`/product/${product.slug}`} class="hover:text-primary"> {/* Updated hover color */}
-              {product.data.title}
-            </a>
-          </h2>
-          {/* Use base-content with opacity for description and date */}
-          <p class="text-base-content opacity-80 mb-4 flex-grow">{product.data.description}</p>
-          <p class="text-sm text-base-content opacity-60 mb-4">
-            公開日: {product.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} {/* Formatted date */}
-          </p>
-          {product.data.tags && (
-            <div class="flex flex-wrap gap-2 mb-4">
-              {product.data.tags.map(tag => (
-                // Use primary colors for tags (assuming daisyUI variables map well)
-                <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full"> {/* Updated tag colors */}
-                  {tag}
-                </span>
-              ))}
+          <div 
+            class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col text-left cursor-pointer"
+            onclick={`window.location.href = '/product/${product.slug}'`}
+          >
+            {product.data.imageUrl ? (
+              <img src={product.data.imageUrl} alt={`Image for ${product.data.title}`} class="w-full h-48 object-cover" />
+            ) : (
+              // Use base-300 for placeholder background
+              <div class="w-full h-48 bg-base-300 flex items-center justify-center text-base-content opacity-50">No Image</div>
+            )}
+            <div class="p-5 flex flex-col flex-grow"> {/* Increased padding, flex for footer alignment */}
+              {/* Use base-content for heading */}
+              <h2 class="text-xl font-semibold mb-2 text-base-content">
+                {/* Use primary for link hover */}
+                <a href={`/product/${product.slug}`} class="hover:text-primary"> {/* Updated hover color */}
+                  {product.data.title}
+                </a>
+              </h2>
+              {/* Use base-content with opacity for description and date */}
+              <p class="text-base-content opacity-80 mb-4 flex-grow">{product.data.description}</p>
+              <p class="text-sm text-base-content opacity-60 mb-4">
+                公開日: {product.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} {/* Formatted date */}
+              </p>
+              {product.data.tags && (
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {product.data.tags.map(tag => (
+                    // Use primary colors for tags (assuming daisyUI variables map well)
+                    <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full"> {/* Updated tag colors */}
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div class="mt-auto"> {/* Pushes link to bottom */}
+                {/* Use primary colors for link */}
+                <a href={`/product/${product.slug}`} class="text-primary hover:text-primary/80 font-medium"> {/* Updated link colors */}
+                  詳細を見る &rarr;
+                </a>
+              </div>
             </div>
-          )}
-          <div class="mt-auto"> {/* Pushes link to bottom */}
-            {/* Use primary colors for link */}
-            <a href={`/product/${product.slug}`} class="text-primary hover:text-primary/80 font-medium"> {/* Updated link colors */}
-              詳細を見る &rarr;
-            </a>
           </div>
-        </div>
-      </div>
         ))}
       </div>
     </div>

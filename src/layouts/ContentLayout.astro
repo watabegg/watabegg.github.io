@@ -1,6 +1,7 @@
 ---
 // src/layouts/ContentLayout.astro
 import Layout from './Layout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 
 interface Props {
   title: string;
@@ -9,9 +10,10 @@ interface Props {
   tags?: string[];
   imageUrl?: string;
   description?: string; // Add description prop
+  headings: { depth: number; slug: string; text: string }[]; // Add headings prop
 }
 
-const { title, publishDate, author, tags, imageUrl, description } = Astro.props; // Destructure description
+const { title, publishDate, author, tags, imageUrl, description, headings } = Astro.props; // Destructure description and headings
 const placeholderImageUrl = '/images/placeholder.svg';
 const displayImageUrl = imageUrl || placeholderImageUrl;
 
@@ -31,59 +33,69 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
     "@type": articleType,
     "headline": title,
     "description": description,
-    "image": structuredDataImageUrl, // Use absolute URL or omit if no image
-    "datePublished": publishDate?.toISOString(), // Format date as ISO string
-    "author": author ? { "@type": "Person", "name": author } : undefined, // Add author if available
-    "publisher": { "@type": "Organization", "name": "watabegg", "logo": { "@type": "ImageObject", "url": new URL('/images/ogp_default.png', Astro.site).toString() } }, // Publisher info
+    "image": structuredDataImageUrl,
+    "datePublished": publishDate?.toISOString(),
+    "author": author ? { "@type": "Person", "name": author } : undefined,
+    "publisher": { "@type": "Organization", "name": "watabegg", "logo": { "@type": "ImageObject", "url": new URL('/images/ogp_default.png', Astro.site).toString() } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.toString() }
   })} />
 
-  <article class="container mx-auto px-6 py-16 flex flex-col md:text-left items-center">
-    {/* Image with placeholder logic */}
-    {/* Use displayImageUrl which includes placeholder logic */}
-    <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-8 shadow-md" />
-
-    {/* Heading */}
-    <h1 class="text-4xl font-bold mb-4 text-base-content">{title}</h1>
-
-    {/* Meta Info */}
-    <div class="text-sm text-base-content/70 mb-6 flex items-center gap-2 flex-wrap">
-      {author && (
-        <>
-          <span>作成者: {author}</span>
-          <span class="text-base-content/50">|</span>
-        </>
-      )}
-      {publishDate && (
-        <span>公開日: {publishDate.toLocaleDateString('ja-JP')}</span>
-      )}
-    </div>
-
-    {/* Tags */}
-    {tags && tags.length > 0 && (
-      <div class="flex flex-wrap gap-2 mb-8">
-        {tags.map(tag => (
-          <span class="bg-secondary text-secondary-content text-xs font-medium px-4 py-2 rounded-xl">
-            {tag}
-          </span>
-        ))}
+  <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8">
+    <article class="main-content flex-grow lg:w-3/4 flex flex-col items-center lg:items-start">
+      <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-6 lg:mb-8 shadow-md" />
+      <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-center lg:text-left">{title}</h1>
+      <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-center lg:justify-start">
+        {author && (
+          <>
+            <span>作成者: {author}</span>
+            <span class="text-base-content/50">|</span>
+          </>
+        )}
+        {publishDate && (
+          <span>公開日: {publishDate.toLocaleDateString('ja-JP')}</span>
+        )}
       </div>
+      {tags && tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-6 lg:mb-8 justify-center lg:justify-start">
+          {tags.map(tag => (
+            <span class="bg-secondary text-secondary-content text-xs font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+      <div class="prose lg:prose-lg xl:prose-xl w-full max-w-none"> {/* Ensure prose takes full width and remove max-width constraints */}
+        <slot />
+      </div>
+      <div class="mt-8 w-full flex justify-center lg:justify-start">
+        <button onclick="history.back()" class="btn btn-primary btn-md sm:btn-lg">戻る</button>
+      </div>
+    </article>
+
+    {headings && headings.length > 1 && (
+      <aside class="sidebar-toc w-full lg:w-1/4 lg:sticky lg:top-20 mt-8 lg:mt-0"> {/* Adjusted for stickiness and mobile */}
+        {/* TableOfContents will handle its own mobile visibility via toggle */}
+        <TableOfContents headings={headings} />
+      </aside>
     )}
-
-    <div class="prose lg:prose-xl">
-      <slot /> 
-    </div>
-
-    <div class="mt-8">
-      <button onclick="history.back()" class="btn btn-primary btn-lg">戻る</button>
-    </div>
-  </article>
+  </div>
 </Layout>
 
 <style>
-  /* Ensure placeholder SVG scales correctly */
   img[src$=".svg"] {
-    object-fit: contain; /* Adjust as needed, 'contain' might be better for SVG */
-    background-color: #f3f4f6; /* Light gray background for placeholder */
+    object-fit: contain;
+    background-color: #f3f4f6;
+  }
+  .sidebar-toc {
+    /* For lg screens, ensure it can scroll if content is too long */
+    max-height: calc(100vh - 5rem); /* Adjust 5rem based on your header/sticky top height */
+    overflow-y: auto;
+  }
+
+  /* Hide sidebar-toc by default on smaller screens, TableOfContents component will manage its own display via a button */
+  @media (max-width: 1023.98px) { /* Below lg breakpoint */
+    .sidebar-toc {
+       /* This container will be present, but TableOfContents inside it will be toggled */
+    }
   }
 </style>

@@ -6,7 +6,7 @@ interface Item {
 
 interface Props {
   items: Item[];
-  termWidthClass?: string; // dt要素の幅をカスタマイズするためのクラス (Tailwindクラスを想定)
+  termWidthClass?: string;
 }
 
 const { items, termWidthClass = 'md:w-60' } = Astro.props; // デフォルト幅を設定

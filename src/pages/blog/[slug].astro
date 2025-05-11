@@ -1,9 +1,7 @@
 ---
-// Use the new ContentLayout
 import { type CollectionEntry, getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 
-// Generate static paths for all blog posts
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map(entry => ({
@@ -16,16 +14,15 @@ type Props = {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content, headings } = await entry.render();
 ---
-{/* Use ContentLayout and pass frontmatter props */}
 <ContentLayout
   title={entry.data.title}
   publishDate={entry.data.publishDate}
   author={entry.data.author}
   tags={entry.data.tags}
   imageUrl={entry.data.imageUrl}
+  headings={headings}
 >
-  {/* The Markdown content is passed as the default slot */}
   <Content />
 </ContentLayout>

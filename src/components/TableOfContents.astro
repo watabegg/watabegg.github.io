@@ -1,0 +1,125 @@
+---
+export interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const shouldShowToc = headings && headings.length > 1;
+
+const depthClasses: { [key: number]: string } = {
+  1: "font-semibold",
+  2: "pl-5",
+  3: "pl-10",
+  4: "pl-[3.75em]",
+};
+---
+
+{shouldShowToc && (
+  <>
+    <button
+      id="toc-toggle-mobile"
+      class="lg:hidden fixed top-1/2 right-0 transform -translate-y-1/2 p-3 rounded-l-md shadow-lg z-[1001]"
+      aria-expanded="false"
+      aria-controls="toc-aside-mobile"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      <span class="sr-only">目次を開く</span>
+    </button>
+
+    <aside
+      id="toc-aside-mobile"
+      class="lg:hidden fixed top-0 right-0 w-3/5 max-w-xs h-full bg-base-200 shadow-xl z-[1002] flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto p-0"
+      aria-hidden="true"
+    >
+      <div class="flex justify-between items-center p-6 border-b border-base-300">
+        <h2 class="text-xl font-semibold text-base-content">目次</h2>
+        <button id="toc-close-mobile" class="p-2 text-base-content hover:bg-base-300 rounded-md" aria-label="目次を閉じる">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <ul class="py-4 px-6 space-y-1.5">
+        {headings.map((heading) => (
+          <li class={`toc-item ${depthClasses[heading.depth] || ''}`}>
+            <a href={`#${heading.slug}`} class="block py-1.5 text-base text-base-content hover:text-primary hover:underline">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+
+    <div
+      id="toc-overlay"
+      class="lg:hidden fixed inset-0 bg-black/50 z-[1000] opacity-0 invisible transition-opacity duration-300 ease-in-out"
+      aria-hidden="true"
+    ></div>
+
+    <aside id="toc-aside-desktop" class="hidden lg:block p-6 bg-base-200 rounded-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-base-content">目次</h2>
+      <ul class="space-y-2">
+        {headings.map((heading) => (
+          <li class={`toc-item ${depthClasses[heading.depth] || ''}`}>
+            <a href={`#${heading.slug}`} class="block py-1 text-lg text-base-content hover:text-primary hover:underline">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </>
+)}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleButtonMobile = document.getElementById('toc-toggle-mobile');
+    const closeButtonMobile = document.getElementById('toc-close-mobile');
+    const tocAsideMobile = document.getElementById('toc-aside-mobile');
+    const tocOverlay = document.getElementById('toc-overlay');
+
+    function openMobileToc() {
+      if (tocAsideMobile && tocOverlay && toggleButtonMobile) {
+        tocAsideMobile.classList.remove('translate-x-full');
+        tocAsideMobile.setAttribute('aria-hidden', 'false');
+        tocOverlay.classList.remove('invisible', 'opacity-0');
+        tocOverlay.classList.add('visible', 'opacity-100');
+        toggleButtonMobile.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('overflow-hidden');
+      }
+    }
+
+    function closeMobileToc() {
+      if (tocAsideMobile && tocOverlay && toggleButtonMobile) {
+        tocAsideMobile.classList.add('translate-x-full');
+        tocAsideMobile.setAttribute('aria-hidden', 'true');
+        tocOverlay.classList.remove('visible', 'opacity-100');
+        tocOverlay.classList.add('invisible', 'opacity-0');
+        toggleButtonMobile.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    if (toggleButtonMobile) {
+      toggleButtonMobile.addEventListener('click', openMobileToc);
+    }
+    if (closeButtonMobile) {
+      closeButtonMobile.addEventListener('click', closeMobileToc);
+    }
+    if (tocOverlay) {
+      tocOverlay.addEventListener('click', closeMobileToc);
+    }
+
+    if (tocAsideMobile) {
+      tocAsideMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 1024) { // lg breakpoint
+            closeMobileToc();
+          }
+        });
+      });
+    }
+  });
+</script>
