@@ -1,7 +1,7 @@
 ---
 title: '就活用情報まとめページ'
 description: '僕が就職活動をするにあたって必要となる自己PRとかもろもろの情報をまとめています。個人情報はあげません。企業様はこちらを参考にしていただいても構いません。'
-publishDate: 2025-05-11
+publishDate: 2025-05-12
 tags: ['就活', '悪口無し']
 imageUrl: "https://user0514.cdnw.net/shared/img/thumb/danda-_MKT4840-11539_TP_V.jpg"
 ---
@@ -9,6 +9,9 @@ imageUrl: "https://user0514.cdnw.net/shared/img/thumb/danda-_MKT4840-11539_TP_V.
 
 # 何このページ？
 就活用に、自分のプロフィールやエントリーシートに書く用のテキストを保存してます。パクったりしてOK！
+
+# サポーターズの招待用リンク
+[5月9日(金)　16:00 〜 6月7日(土)　23:59](https://talent.supporterz.jp/signup/referral/cb0afd0b-5d71-4c33-80db-4113ab998f82/)
 
 # ES用のテキスト
 ## 自己PR
