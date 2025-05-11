@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-// Fetch all blog posts, sorted by publish date descending
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
@@ -13,38 +12,34 @@ const posts = (await getCollection('blog')).sort(
       <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
         ブログ
       </h1>
-      <div class="space-y-10 w-full"> {/* w-full を追加 */}
+      <div class="space-y-10 w-full">
         {posts.map(post => (
-          // Use base-100 for card background
-          <article class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"> {/* Added text-left */}
-        {/* Use base-content for heading */}
-        <h2 class="text-2xl font-semibold mb-2 text-base-content">
-          {/* Use primary for link hover */}
-          <a href={`/blog/${post.slug}`} class="hover:text-primary"> {/* Updated hover color */}
-            {post.data.title}
-          </a>
-        </h2>
-        {/* Use base-content with opacity for metadata */}
-        <p class="text-sm text-base-content opacity-60 mb-3">
-          作成者: {post.data.author} | 公開日: {post.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} {/* Formatted date */}
-        </p>
-        {/* Use base-content with opacity for description */}
-        <p class="text-base-content opacity-80 mb-4">{post.data.description}</p>
-        {post.data.tags && (
-          <div class="flex flex-wrap gap-2 mb-4">
-            {post.data.tags.map(tag => (
-              // Use primary colors for tags (assuming daisyUI variables map well)
-              <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full"> {/* Updated tag colors */}
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-        {/* Use primary colors for link */}
-        <a href={`/blog/${post.slug}`} class="text-primary hover:text-primary/80 font-medium"> {/* Updated link colors */}
-          続きを読む &rarr;
-        </a>
-      </article>
+          <article 
+            class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"
+            onclick={`window.location.href = '/blog/${post.slug}'`} 
+          >
+            <h2 class="text-2xl font-semibold mb-2 text-base-content">
+              <a href={`/blog/${post.slug}`} class="hover:text-primary">
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="text-sm text-base-content opacity-60 mb-3">
+              作成者: {post.data.author} | 公開日: {post.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            <p class="text-base-content opacity-80 mb-4">{post.data.description}</p>
+            {post.data.tags && (
+              <div class="flex flex-wrap gap-2 mb-4">
+                {post.data.tags.map(tag => (
+                  <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <a href={`/blog/${post.slug}`} class="text-primary hover:text-primary/80 font-medium">
+              続きを読む &rarr;
+            </a>
+          </article>
         ))}
       </div>
     </div>

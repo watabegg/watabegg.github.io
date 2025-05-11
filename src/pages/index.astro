@@ -8,7 +8,6 @@ import { Image } from 'astro:assets';
 import IconImage from '../assets/real_icon.webp';
 import FigureImage from '../assets/figure_1_1.webp';
 
-// Define links data directly here or import from a shared location if needed later
 const pageLinks = [
   { name: 'About', href: '/about' },
   { name: 'Product', href: '/product' },
@@ -27,26 +26,16 @@ const socialLinks = [
   <div class="relative flex h-full w-full items-center justify-center overflow-hidden">
     <div
       id="slanted-bg-header"
-      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80 z-20"
+      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary z-20"
       style="transform-origin: top left;"
       transition:name="header-bg"
     ></div>
 
     <div
       id="slanted-bg-footer"
-      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary opacity-80 z-20"
+      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary z-20"
       style="transform-origin: top left;"
       transition:name="footer-bg"
-    ></div>
-
-    <div
-      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-white z-10"
-      style="transform-origin: top left;"
-    ></div>
-
-    <div
-      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-white z-10"
-      style="transform-origin: top left;"
     ></div>
 
     <div class="absolute w-full md:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around">

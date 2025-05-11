@@ -10,8 +10,8 @@ const links = [
 const currentPath = Astro.url.pathname;
 ---
 {/* Apply bg-primary, keep text/sticky/transition. Removed header-bg-pattern class. */}
-<header class="bg-primary text-primary-content sticky top-0 z-50" transition:name="header-bg" style="clip-path: polygon(0 0, 2000px 0, 0 100%);">
-  <nav class="container mx-auto flex items-center p-4">
+<header class="bg-primary text-primary-content sticky top-0 z-50" transition:name="header-bg" style="clip-path: polygon(0 0, 2500px 0, 0 100%);">
+  <nav class="container mx-auto flex items-center p-4 text-lg md:text-xl">
     <ul class="flex space-x-6">
       {links.map(link => {
         const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
