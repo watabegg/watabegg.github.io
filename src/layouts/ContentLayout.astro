@@ -40,7 +40,7 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
     "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.toString() }
   })} />
 
-  <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8">
+  <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8 max-w-5xl">
     <article class="main-content flex-grow lg:w-3/4 flex flex-col items-center lg:items-start">
       <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-6 lg:mb-8 shadow-md" />
       <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-center lg:text-left">{title}</h1>
@@ -64,7 +64,7 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
           ))}
         </div>
       )}
-      <div class="prose lg:prose-lg xl:prose-xl w-full max-w-none"> {/* Ensure prose takes full width and remove max-width constraints */}
+      <div class="prose lg:prose-lg w-full"> {/* Ensure prose takes full width and remove max-width constraints */}
         <slot />
       </div>
       <div class="mt-8 w-full flex justify-center lg:justify-start">
