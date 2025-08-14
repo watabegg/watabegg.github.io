@@ -63,7 +63,7 @@ const depthClasses: { [key: number]: string } = {
       <ul class="space-y-2">
         {headings.map((heading) => (
           <li class={`toc-item ${depthClasses[heading.depth] || ''}`}>
-            <a href={`#${heading.slug}`} class="block py-1 text-lg text-base-content hover:text-primary hover:underline">
+            <a href={`#${heading.slug}`} class="block py-1 text-base text-base-content hover:text-primary hover:underline">
               {heading.text}
             </a>
           </li>
