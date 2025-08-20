@@ -24,7 +24,6 @@ const products = allProducts
         {products.map(product => (
           <div 
             class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col text-left cursor-pointer"
-            onclick={`window.location.href = '/product/${product.slug}'`}
           >
             {product.data.imageUrl ? (
               <img src={product.data.imageUrl} alt={`Image for ${product.data.title}`} class="w-full h-48 object-cover" />

@@ -15,6 +15,11 @@ Versionは1.1.2となっており、今後も必要に応じて更新してい�
 
 またnpmでのプロジェクトの公開が初めてだったので、いろいろと学びながら公開しました。npm、便利すぎ
 
+## 使用技術
+- **Slidev**: Markdownベースのスライド作成ツール。`pnpm create slidev-theme`でテーマを作成しました。
+- **Vue.js**: いくつかのコンポーネントをVueで作成しました。
+- **CSS**: スタイルシート言語であり、HTMLの見た目を整えるために使用されます。
+
 ## 成果物
 [npmパッケージ](https://www.npmjs.com/package/slidev-theme-exam-prep)
 [GitHubリポジトリ](https://github.com/watabegg/slidev-exam-prep)
