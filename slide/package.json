@@ -1,0 +1,29 @@
+{
+  "name": "slide",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev --open",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.1.0",
+    "@slidev/theme-default": "latest",
+    "@slidev/types": "^52.1.0",
+    "unocss": "^66.4.2",
+    "vue": "^3.5.18"
+  },
+  "//": "Learn more: https://sli.dev/guide/write-theme.html",
+  "slidev": {
+    "colorSchema": "light",
+    "defaults": {
+      "background": "#FFFFFF",
+      "fonts": {
+        "sans": "M PLUS 2",
+        "mono": "Fira Code"
+      },
+      "lineNumbers": false
+    }
+  }
+}
