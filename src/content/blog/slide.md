@@ -2,7 +2,7 @@
 title: '自己紹介用のスライドを作ってこのページに公開した'
 description: '自己紹介用のスライドをSlidevで作成し、GitHub Pagesを使用して公開しました。'
 tags: ['Slidev', 'GitHub Pages', '自己紹介']
-publishDate: '2025-08-21'
+publishDate: 2025-08-21
 ---
 
 ## 概要
@@ -11,7 +11,7 @@ publishDate: '2025-08-21'
 URLは[こちら](https://watabegg.github.io/slide/)です。
 
 ## 使用技術
-- **Slidev**: [この記事で書いたテーマ](https://watabegg.github.io/products/exam-prep/)をもとに改変して作成しました。
+- **Slidev**: [この記事で書いたテーマ](https://watabegg.github.io/product/exam-prep/)をもとに改変して作成しました。
 
 ## 余談
-別に書くことないな、自己紹介とか
+別に書くことないよな、自己紹介とか
