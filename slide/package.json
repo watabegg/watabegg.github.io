@@ -16,6 +16,7 @@
   },
   "//": "Learn more: https://sli.dev/guide/write-theme.html",
   "slidev": {
+    "base": "/slide",
     "colorSchema": "light",
     "defaults": {
       "background": "#FFFFFF",
