@@ -60,10 +60,22 @@ jobs:
 
       - name: Build with Astro
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} npm run build \
+          ${{ steps.detect-package-manager.outputs.runner }} astro build \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
         working-directory: ${{ env.BUILD_PATH }}
+
+      # -------------------- ここから追加 --------------------
+
+      - name: Install dependencies for Slidev
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        working-directory: ${{ env.BUILD_PATH }}/slide
+
+      - name: Build with Slidev
+        run: ${{ steps.detect-package-manager.outputs.runner }} slidev build --base /slide/ --out ../dist/slide
+        working-directory: ${{ env.BUILD_PATH }}/slide
+
+      # -------------------- ここまで追加 --------------------
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
