@@ -79,6 +79,7 @@ jobs:
         run: |
           # Slidevのビルド成果物(slide/dist)を、Astroのビルド成果物(dist)の中に移動
           mv ${{ env.BUILD_PATH }}/slide/dist ${{ env.BUILD_PATH }}/dist/slide
+          mv ${{ env.BUILD_PATH }}/slide/dist/assets ${{ env.BUILD_PATH }}/dist/assets
 
       # -------------------- ここまで追加 --------------------
 
