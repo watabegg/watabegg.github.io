@@ -7,6 +7,7 @@ import GmailIcon from '../components/icons/Gmail.astro';
 import { Image } from 'astro:assets';
 import IconImage from '../assets/real_icon.webp';
 import FigureImage from '../assets/figure_1_1.webp';
+import LatestLinks from '../components/LatestLinks.astro';
 
 const pageLinks = [
   { name: 'About', href: '/about' },
@@ -65,14 +66,18 @@ const socialLinks = [
           watabegg
         </h1>
         {pageLinks.map((link, index) => (
-          <a
-            href={link.href}
-            class="text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
-            data-astro-prefetch
-            style={`transition-delay: ${index * 100}ms;`}
-          >
-            {link.name}
-          </a>
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-2">
+            <a
+              href={link.href}
+              class="page-link text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
+              data-astro-prefetch
+              style={`transition-delay: ${index * 100}ms;`}
+            >
+              {link.name}
+            </a>
+            {link.href === '/product' && (<LatestLinks mode="product" />)}
+            {link.href === '/blog' && (<LatestLinks mode="blog" />)}
+          </div>
         ))}
       </nav>
 
@@ -83,7 +88,7 @@ const socialLinks = [
             target="_blank"
             rel="noopener noreferrer"
             class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
-            style=`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`
+            style={`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`}
           >
             <link.IconComponent class="w-6 h-6 md:w-5 md:h-5" />
             <span class="hidden md:block">{link.name}</span>
@@ -97,7 +102,7 @@ const socialLinks = [
     import { gsap } from "gsap";
 
     document.addEventListener("astro:page-load", () => {
-      gsap.to("#page-links-home > *", {
+      gsap.to("#page-links-home h1, #page-links-home a.page-link", {
         duration: 0.8,
         opacity: 0.85, // Animate to 85% opacity
         x: 0,          // Animate x position

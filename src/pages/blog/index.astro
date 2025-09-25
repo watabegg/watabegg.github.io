@@ -1,10 +1,36 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { fetchQiitaItems } from '../../lib/qiita';
+import QiitaIcon from '../../assets/qiita.png';
 
-const posts = (await getCollection('blog')).sort(
+const localPosts = (await getCollection('blog')).sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
+
+// Optionally fetch one latest Qiita item and blend into the list
+const qiitaItems = await fetchQiitaItems(10);
+
+type BlendItem =
+  | { kind: 'local'; slug: string; title: string; description: string; author: string; publishDate: Date; tags?: string[] }
+  | { kind: 'qiita'; title: string; url: string; createdAt: Date };
+
+const blended: BlendItem[] = [
+  ...localPosts.map(p => ({
+    kind: 'local' as const,
+    slug: p.slug,
+    title: p.data.title,
+    description: p.data.description,
+    author: p.data.author,
+    publishDate: p.data.publishDate,
+    tags: p.data.tags,
+  })),
+  ...qiitaItems.map(q => ({ kind: 'qiita' as const, title: q.title, url: q.url, createdAt: q.createdAt })),
+].sort((a, b) => {
+  const ad = a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf();
+  const bd = b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf();
+  return bd - ad;
+});
 ---
 <Layout title="Blog | watabeggの個人サイト">
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
@@ -13,31 +39,53 @@ const posts = (await getCollection('blog')).sort(
         ブログ
       </h1>
       <div class="space-y-10 w-full">
-        {posts.map(post => (
-          <article 
+        {blended.map(item => (
+          <article
             class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"
           >
-            <h2 class="text-2xl font-semibold mb-2 text-base-content">
-              <a href={`/blog/${post.slug}`} class="hover:text-primary">
-                {post.data.title}
-              </a>
-            </h2>
-            <p class="text-sm text-base-content opacity-60 mb-3">
-              作成者: {post.data.author} | 公開日: {post.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <p class="text-base-content opacity-80 mb-4">{post.data.description}</p>
-            {post.data.tags && (
-              <div class="flex flex-wrap gap-2 mb-4">
-                {post.data.tags.map(tag => (
-                  <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            {item.kind === 'local' ? (
+              <>
+                <h2 class="text-2xl font-semibold mb-2 text-base-content">
+                  <a href={`/blog/${item.slug}`} class="hover:text-primary">
+                    {item.title}
+                  </a>
+                </h2>
+                <p class="text-sm text-base-content opacity-60 mb-3">
+                  作成者: {item.author} | 公開日: {item.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+                <p class="text-base-content opacity-80 mb-4">{item.description}</p>
+                {item.tags && (
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    {item.tags.map(tag => (
+                      <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <a href={`/blog/${item.slug}`} class="text-primary hover:text-primary/80 font-medium">
+                  続きを読む &rarr;
+                </a>
+              </>
+            ) : (
+              <>
+                <div class="flex items-center gap-2 mb-2">
+                  <img src={QiitaIcon.src} alt="Qiita" class="w-5 h-5" width={20} height={20} loading="lazy" />
+                  <span class="text-xs bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full tracking-wide">Qiita</span>
+                </div>
+                <h2 class="text-2xl font-semibold mb-2 text-base-content">
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" class="hover:text-primary">
+                    {item.title}
+                  </a>
+                </h2>
+                <p class="text-sm text-base-content opacity-60 mb-3">
+                  公開日: {item.createdAt.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} | 出典: Qiita
+                </p>
+                <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 font-medium">
+                  記事を読む ↗
+                </a>
+              </>
             )}
-            <a href={`/blog/${post.slug}`} class="text-primary hover:text-primary/80 font-medium">
-              続きを読む &rarr;
-            </a>
           </article>
         ))}
       </div>
