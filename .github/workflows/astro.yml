@@ -64,6 +64,9 @@ jobs:
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
         working-directory: ${{ env.BUILD_PATH }}
+        env:
+          QIITA_USERNAME: 'watabegg'
+          QIITA_TOKEN: ${{ secrets.QIITA_TOKEN }}
 
       # -------------------- ここから追加 --------------------
 
