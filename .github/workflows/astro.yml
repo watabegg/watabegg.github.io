@@ -70,7 +70,7 @@ jobs:
 
       - name: Generate PDF slides
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} astro run generate-pdf
+          ${{ steps.detect-package-manager.outputs.runner }} node scripts/generate-skillsheet.mjs
         working-directory: ${{ env.BUILD_PATH }}
 
       # -------------------- ここから追加 --------------------
