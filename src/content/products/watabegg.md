@@ -1,41 +1,50 @@
 ---
 title: "watabeggの個人サイト"
-publishDate: 2025-05-05 
-description: "watabeggの個人サイトについて、その技術的な詳細と目的"
-tags: ["Web開発", "Astro", "Tailwind CSS", "daisyUI", "ポートフォリオ"]
+publishDate: 2025-05-05
+description: "ポートフォリオ兼ブログとして運用している個人サイトの構築"
+tags:
+  - "Web開発"
+  - "Astro"
+  - "Tailwind CSS"
+  - "daisyUI"
+  - "ポートフォリオ"
 imageUrl: "/images/product/watabegg-hp.png"
+includeInSkillsheet: true
 ---
 
-## 概要
+自身の活動とアウトプットをまとめるため、Astroをベースに高速で管理しやすいポートフォリオサイトを構築。ブログ・プロダクト紹介・スキル情報のハブとして設計し、コンテンツ更新の効率化も図った。
 
-このウェブサイトは、watabeggのポートフォリオ兼技術ブログです。最新のウェブ技術を使って作られており、シンプルで使いやすいデザインと高速な動作を目指しています。
+---
 
-## 使用技術
+Astroで構築したポートフォリオサイトを運用し、ブログとプロダクト情報を一元管理。
 
-このサイトでは、以下の技術を活用しています。
+---
 
-*   **[Astro](https://astro.build/)**: コンテンツ中心のウェブサイトを作るための軽量フレームワーク。不要なJavaScriptを削ぎ落とし、ページの読み込みを高速化します。
-*   **[Tailwind CSS](https://tailwindcss.com/)**: CSSフレームワークの中で一番好きです。一番嫌いなのはstyled-componentsです。
-    *   **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)**: Markdownコンテンツを美しく整えるプラグイン。
-    *   **[daisyUI](https://daisyui.com/)**: Tailwind CSS用の便利なコンポーネントライブラリ。MUI ~~って名前のカス~~ の次に見つけたライブラリなので親だと思っています。
-    *   **GSAP**: JavaScriptのアニメーションライブラリ。Astroとは真逆の思想でマジで重すぎるけどアニメーションってかわいいから入れた！
-*   **[View Transitions API](https://developer.mozilla.org/ja/docs/Web/API/View_Transitions_API)** (Astro経由): ページ遷移を滑らかにするブラウザAPI。Astroがこれを簡単に使えるようにしています。今のAstroでは非推奨ですがどうしてもReact無しでSPAっぽくしたいので無視して使っています。
-*   **TypeScript**: 静的型付け大好き。
+2025-04-01/present
 
-## 目的
+---
 
-*   自分のプロジェクトや制作物を紹介する。
-*   学んだことや技術的な知見をブログ記事として共有する。
-*   最新のウェブ技術を試しながらスキルを磨く場にする。
-*   就職活動において自分の技術を宣伝する場にする。
+- Astro | 静的生成と部分的なインタラクションを両立
+- Tailwind CSS + daisyUI | デザインシステムをユーティリティで管理
+- TypeScript | コンポーネントとスクリプトの型安全性を担保
 
-## 今後の展望
+---
 
-今後は、以下のような機能や改善を考えています。
+- サイト情報アーキテクチャの設計
+- UIデザインとテーマの策定
+- コンテンツコレクションとビルドパイプライン整備
+- GitHub Pagesへのデプロイ構成構築
 
-*   なし
-*   嘘です、なんかやるかもしれません。
+---
 
-[GitHubリポジトリ](https://www.github.com/watabegg/watabegg.github.io)
+1. Astro Content Collectionsで記事とプロダクト情報を管理
+2. TailwindプリセットとdaisyUIでコンポーネント開発を効率化
+3. GSAPを用いたアニメーションでブランド体験を向上
 
-このサイトを通じて、watabeggの活動を見てもらえるといいなと思っています。
+---
+
+- watabeggの個人サイト | https://watabegg.github.io
+
+---
+
+サイト自体を実験場と位置付け、スキルシート自動生成や新しいライブラリの検証を随時実施中。今後は多言語化やアクセシビリティ改善にも着手予定。

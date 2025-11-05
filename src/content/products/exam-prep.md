@@ -1,28 +1,50 @@
 ---
 title: "塾の集団授業スライド作成用Slidevテーマ"
 publishDate: 2025-08-14
-description: "アルバイトをしている塾の集団授業用スライドを作成するためのSlidevテーマ"
-tags: ["Web開発", "Slidev", "TypeScript", "Vue.js", "CSS", "npm"]
+description: "塾の集団授業スライドを効率化するために開発したSlidevテーマ"
+tags:
+  - "Web開発"
+  - "Slidev"
+  - "TypeScript"
+  - "Vue.js"
+  - "CSS"
+  - "npm"
 imageUrl: "https://raw.githubusercontent.com/watabegg/slidev-exam-prep/refs/heads/main/example/1.png"
+includeInSkillsheet: true
 ---
 
-## 概要
-アルバイト先の塾で集団授業をすることになり、「PowerPointでのスライド作成、本当に面倒くせー」と思っている際にSlidevを見つけ、それを用いてスライドを作成していました。
+アルバイト先である塾で、自身が集団授業を行う際、PowerPointなどを利用するのがだるく、Slidevベースのプレゼンテーションをテーマ化。日本語環境のフォント調整や授業テンプレート、再利用可能なVueコンポーネントをまとめ、講師(自分)が内容に集中できる仕組みを提供した。
 
-しかし日本語でSlidevを使おうとするとなんかフォントとか面倒くさいしいろんなコンポーネントを作っていくうちにモノレポで管理していたSlidevのプロジェクトが肥大化してしまったので、Slidevのテーマとしてnpmに公開しました。
+---
 
-Versionは1.1.2となっており、今後も必要に応じて更新していく予定です。すでにいくつかバグみたいな部分があるので今後確認します。
+Slidevによる授業スライド制作をテンプレート化し、日本語対応と授業用コンポーネントをセットにしたテーマをnpmで公開。
 
-またnpmでのプロジェクトの公開が初めてだったので、いろいろと学びながら公開しました。npm、便利すぎ
+---
 
-## 使用技術
-- **Slidev**: Markdownベースのスライド作成ツール。`pnpm create slidev-theme`でテーマを作成しました。
-- **Vue.js**: いくつかのコンポーネントをVueで作成しました。
-- **CSS**: スタイルシート言語であり、HTMLの見た目を整えるために使用されます。
+2025-08-01/present
 
-## 成果物
-[npmパッケージ](https://www.npmjs.com/package/slidev-theme-exam-prep)
-[GitHubリポジトリ](https://github.com/watabegg/slidev-exam-prep)
+---
 
-## 余談
-実際の授業スライドはモノレポ管理でCloudflare Pagesを使ってデプロイしています。これまた便利ー開発体験よすぎー
+- Slidev | テーマスキャフォールドとレイアウトのカスタマイズ
+- Vue 3 + TypeScript | 授業用コンポーネントとアニメーションを実装
+- npm workspace | テーマの配布とバージョニングを整備
+
+---
+
+- 授業設計ヒアリングとスライドテンプレート要件の定義
+- テーマ開発とコンポーネント設計、スタイルガイド作成
+- npm公開フローの構築とドキュメント執筆
+
+---
+
+1. 日本語フォントと縦書き要件を満たすSlidevテーマを実装
+2. 授業パターンをコンポーネント化し授業準備時間を大幅削減
+3. CIでのリリース自動化を整備し更新作業を効率化
+
+---
+
+- GitHub - slidev-exam-prep | https://github.com/watabegg/slidev-exam-prep
+- npm - slidev-theme-exam-prep | https://www.npmjs.com/package/slidev-theme-exam-prep
+---
+
+初めてのnpm公開だったため、バージョニングやCHANGELOG運用を学習しながら運用。バグ修正と授業からのフィードバックをもとに継続改善している。

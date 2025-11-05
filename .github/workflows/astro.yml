@@ -68,6 +68,11 @@ jobs:
           QIITA_USERNAME: 'watabegg'
           QIITA_TOKEN: ${{ secrets.QIITA_TOKEN }}
 
+      - name: Generate PDF slides
+        run: |
+          ${{ steps.detect-package-manager.outputs.runner }} astro run generate-pdf
+        working-directory: ${{ env.BUILD_PATH }}
+
       # -------------------- ここから追加 --------------------
 
       - name: Install dependencies for Slidev
