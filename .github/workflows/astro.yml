@@ -68,11 +68,12 @@ jobs:
           QIITA_USERNAME: 'watabegg'
           QIITA_TOKEN: ${{ secrets.QIITA_TOKEN }}
 
-      - name: Generate PDF slides
-        run: |
-          npx install playwright \
-            &&
-          ${{ steps.detect-package-manager.outputs.runner }} node scripts/generate-skillsheet.mjs -- --skip-build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Generate skill sheet PDF
+        run: node scripts/generate-skillsheet.mjs -- --skip-build
         working-directory: ${{ env.BUILD_PATH }}
 
       # -------------------- ここから追加 --------------------
