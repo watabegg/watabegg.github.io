@@ -25,7 +25,7 @@ title: 自己紹介
 - **趣味**: バンド活動、音楽
 
 ::right::
-![私の写真](./images/watabegg.jpg)
+![私の写真](/images/watabegg.jpg)
 
 
 ---
@@ -53,7 +53,7 @@ title: 制作物 - 軽音楽サークルホームページ
 - [あしたぼホームページ](https://www.ashitabo.net/)
 
 ::right::
-![軽音楽サークルホームページ](./images/ashitabo.png)
+![軽音楽サークルホームページ](/images/ashitabo.png)
 
 ---
 layout: two-cols
@@ -70,7 +70,7 @@ title: 制作物 - 軽音楽サークルホームページ
 
 ::right::
 
-![軽音楽サークルホームページ - アーキテクチャ図](./images/ashitabo-architecture.png)
+![軽音楽サークルホームページ - アーキテクチャ図](/images/ashitabo-architecture.png)
 
 ---
 
