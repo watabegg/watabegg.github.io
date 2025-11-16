@@ -49,7 +49,6 @@ title: 制作物 - 軽音楽サークルホームページ
 ::left::
 ## 概要
 - 信州大学工学部軽音楽サークル「あしたぼ」の公式サイト
-- 学内スタジオの予約管理システムをメインに提供
 - 過去にあったPHP製アプリ+WordPress製サイトを全面リニューアル
 - [あしたぼホームページ](https://www.ashitabo.net/)
 
@@ -64,9 +63,10 @@ title: 制作物 - 軽音楽サークルホームページ
 ::left::
 
 ## 技術スタック
-- フロントエンド: Next.js 16, Vercel
+- [フロントエンド](https://github.com/ashitaboliff/ashitabo_frontend): Next.js 16, Vercel
 - バックエンド: Hono, Cloudflare Workers
 - データベース: PostgreSQL, Neon
+- 認証: Auth.js(LINE OAuth)
 
 ::right::
 
@@ -99,14 +99,20 @@ title: 制作物 - 軽音楽サークルホームページ
 - ライブ日程管理、タイムテーブル生成機能の追加
 
 ---
+layout: two-cols
+title: 制作物 - Slidevのテーマ
+---
 
-# 制作物 - Slidevのテーマ
+::left::
 
 ## 概要
-- SlidevはMarkdownでスライドを作成できるVueベースのOSSツール
-- そのカスタムテーマ「slidev-theme-exam-prep」を開発
+- Slidevのカスタムテーマ「slidev-theme-exam-prep」を開発
+- OSSとして公開
 - 塾講師として授業で個人的に活用
-- [GitHubリポジトリ](https://github.com/watabegg/slidev-theme-exam-prep)
+- [GitHubリポジトリ](https://github.com/watabegg/slidev-exam-prep)
+
+::right::
+![Slidevテーマ - slidev-theme-exam-prep](https://raw.githubusercontent.com/watabegg/slidev-exam-prep/refs/heads/main/example/1.png)
 
 ---
 

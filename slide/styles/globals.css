@@ -6,6 +6,16 @@
   --slidev-theme-secondary: #ffdb0e;
 }
 
+a {
+  @apply underline decoration-auto;
+}
+
+.slidev-layout {
+  a {
+    @apply underline decoration-auto;
+  }
+}
+
 .slidev-layout:not(.cover, .image) h1::before {
   content: '# ';
   color: var(--slidev-theme-primary);
