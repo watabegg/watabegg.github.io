@@ -31,244 +31,115 @@ const skillItems = [
 ];
 ---
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
-  />
-</head>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body class="m-0 bg-white text-slate-800 font-['Noto_Sans_JP',_sans-serif] antialiased" style="font-feature-settings:'palt' 1;">
+    <main class="flex flex-col gap-[18mm] px-[12mm] py-[16mm] text-[12px] leading-[1.55] print:px-[10mm] print:py-[12mm] print:gap-[14mm]">
+      <header class="flex items-start justify-between">
+        <div>
+          <h1 class="text-[24px] font-semibold tracking-[0.04em] m-0">Skill Sheet</h1>
+          <p class="mt-1 text-[11px] text-slate-500">更新日: {referenceDate.toLocaleDateString('ja-JP')}</p>
+        </div>
+      </header>
 
-<main class="pdf-container">
-  <header class="pdf-header">
-    <div>
-      <h1>Skill Sheet</h1>
-      <p class="updated">更新日: {referenceDate.toLocaleDateString('ja-JP')}</p>
-    </div>
-  </header>
+      <section class="space-y-3">
+        <h2 class="text-[16px] font-semibold border-b border-slate-300 pb-1 mb-2">基本情報</h2>
+        <dl class="grid grid-cols-[32mm_1fr] gap-y-[6px] gap-x-[10px]">
+          {definitionItems.map((item) => {
+            const [term, description] = item;
+            return (
+              <div class="contents">
+                <dt class="font-semibold text-slate-700">{term}</dt>
+                <dd class="m-0">{description}</dd>
+              </div>
+            );
+          })}
+        </dl>
+        
+        <h3 class="text-[14px] font-semibold mt-4 mb-1.5">学歴・職歴</h3>
+        <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+          {profile.education.map((item) => (
+            <li>{item.period} — {item.description}</li>
+          ))}
+        </ul>
+      </section>
 
-  <section class="pdf-section">
-    <h2>基本情報</h2>
-    <dl class="definition-grid">
-      {definitionItems.map((item) => {
-        const [term, description] = item;
-        return (
-          <div class="definition-row">
-            <dt>{term}</dt>
-            <dd>{description}</dd>
-          </div>
-        );
-      })}
-    </dl>
-    
-    <h3>学歴・職歴</h3>
-    <ul class="list">
-      {profile.education.map((item) => (
-        <li>{item.period} — {item.description}</li>
-      ))}
-    </ul>
-  </section>
+      <section class="space-y-3">
+        <h2 class="text-[16px] font-semibold border-b border-slate-300 pb-1 mb-2">スキル</h2>
+        <dl class="grid grid-cols-[32mm_1fr] gap-y-[6px] gap-x-[10px]">
+          {skillItems.map((item) => {
+            const [term, description] = item;
+            return (
+              <div class="contents">
+                <dt class="font-semibold text-slate-700">{term}</dt>
+                <dd class="m-0">{description}</dd>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
 
-  <section class="pdf-section">
-    <h2>スキル</h2>
-    <dl class="definition-grid">
-      {skillItems.map((item) => {
-        const [term, description] = item;
-        return (
-          <div class="definition-row">
-            <dt>{term}</dt>
-            <dd>{description}</dd>
-          </div>
-        );
-      })}
-    </dl>
-  </section>
-
-  <section class="pdf-section">
-    <h2>経験</h2>
-    <table class="experience-table">
-      <thead>
-        <tr>
-          <th scope="col">期間</th>
-          <th scope="col">内容</th>
-          <th scope="col">業務領域</th>
-          <th scope="col">技術</th>
-          <th scope="col">成果物</th>
-        </tr>
-      </thead>
-      <tbody>
-        {experiences.map((experience) => (
-          <tr>
-            <td>
-              <div class="period">{experience.periodLabel}</div>
-              <div class="duration">{experience.durationMonths}カ月</div>
-            </td>
-            <td>
-              <div class="title">{experience.title}</div>
-              <p class="summary">{experience.summary}</p>
-            </td>
-            <td>
-              <ul class="list">
-                {experience.responsibilities.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            </td>
-            <td>
-              <ul class="list">
-                {experience.techStack.map((tech) => (
-                  <li>{tech}</li>
-                ))}
-              </ul>
-            </td>
-            <td>
-              <ul class="list">
-                {experience.deliverables.map((deliverable) => (
-                  <li>
-                    <span class="link-label">{deliverable.label}</span>
-                    <span class="link-url">{deliverable.url}</span>
-                  </li>
-                ))}
-              </ul>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </section>
-</main>
-
-<style>
-  :global(body) {
-    margin: 0;
-    font-family: 'Noto Sans JP', 'Noto Sans', 'Yu Gothic Medium', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-    color: #1f2933;
-    background: #fff;
-    font-feature-settings: 'palt' 1;
-  }
-
-  .pdf-container {
-    padding: 16mm 12mm;
-    display: flex;
-    flex-direction: column;
-    gap: 18mm;
-    font-size: 12px;
-    line-height: 1.55;
-  }
-
-  .pdf-header h1 {
-    font-size: 24px;
-    margin: 0;
-    letter-spacing: 0.04em;
-  }
-
-  .updated {
-    margin-top: 4px;
-    font-size: 11px;
-    color: #5f6c7b;
-  }
-
-  .pdf-section h2 {
-    font-size: 16px;
-    margin: 0 0 8px;
-    border-bottom: 1px solid #cbd5e1;
-    padding-bottom: 4px;
-  }
-
-  .pdf-section h3 {
-    font-size: 14px;
-    margin: 16px 0 6px;
-  }
-
-  .definition-grid {
-    display: grid;
-    grid-template-columns: 32mm 1fr;
-    row-gap: 6px;
-    column-gap: 10px;
-  }
-
-  .definition-row {
-    display: contents;
-  }
-
-  dt {
-    font-weight: 600;
-    color: #3d4859;
-  }
-
-  dd {
-    margin: 0;
-  }
-
-  .list {
-    list-style: disc;
-    padding-left: 14px;
-    margin: 0;
-  }
-
-  .list li {
-    margin-bottom: 2px;
-  }
-
-  .experience-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 11.5px;
-  }
-
-  .experience-table th,
-  .experience-table td {
-    border: 1px solid #d5dbe3;
-    padding: 6px 8px;
-    vertical-align: top;
-  }
-
-  .experience-table th {
-    background: #f3f4f6;
-    font-weight: 600;
-  }
-
-  .period {
-    font-weight: 600;
-  }
-
-  .duration {
-    font-size: 10px;
-    color: #5f6c7b;
-  }
-
-  .title {
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-
-  .summary {
-    margin: 0;
-    white-space: pre-line;
-  }
-
-  .link-label {
-    display: block;
-    font-weight: 600;
-  }
-
-  .link-url {
-    display: block;
-    font-size: 10px;
-    color: #475569;
-    word-break: break-all;
-  }
-
-  @media print {
-    :global(body) {
-      margin: 0;
-    }
-
-    .pdf-container {
-      padding: 12mm 10mm;
-      gap: 14mm;
-    }
-  }
-</style>
+      <section class="space-y-3">
+        <h2 class="text-[16px] font-semibold border-b border-slate-300 pb-1 mb-2">経験</h2>
+        <table class="w-full border-collapse text-[11.5px]">
+          <thead>
+            <tr>
+              <th class="border border-slate-300 bg-slate-100 font-semibold p-2 align-top text-left" scope="col">期間</th>
+              <th class="border border-slate-300 bg-slate-100 font-semibold p-2 align-top text-left" scope="col">内容</th>
+              <th class="border border-slate-300 bg-slate-100 font-semibold p-2 align-top text-left" scope="col">業務領域</th>
+              <th class="border border-slate-300 bg-slate-100 font-semibold p-2 align-top text-left" scope="col">技術</th>
+              <th class="border border-slate-300 bg-slate-100 font-semibold p-2 align-top text-left" scope="col">成果物</th>
+            </tr>
+          </thead>
+          <tbody>
+            {experiences.map((experience) => (
+              <tr class="print:break-inside-avoid">
+                <td class="border border-slate-300 p-2 align-top">
+                  <div class="font-semibold">{experience.periodLabel}</div>
+                  <div class="text-[10px] text-slate-500">{experience.durationMonths}カ月</div>
+                </td>
+                <td class="border border-slate-300 p-2 align-top">
+                  <div class="font-semibold mb-[2px]">{experience.title}</div>
+                  <p class="m-0 whitespace-pre-line">{experience.summary}</p>
+                </td>
+                <td class="border border-slate-300 p-2 align-top">
+                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                    {experience.responsibilities.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="border border-slate-300 p-2 align-top">
+                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                    {experience.techStack.map((tech) => (
+                      <li>{tech}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="border border-slate-300 p-2 align-top">
+                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                    {experience.deliverables.map((deliverable) => (
+                      <li>
+                        <span class="block font-semibold">{deliverable.label}</span>
+                        <span class="block text-[10px] text-slate-600 break-all">{deliverable.url}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

@@ -4,19 +4,8 @@ import InstagramIcon from '../components/icons/Instagram.astro';
 import TwitterIcon from '../components/icons/Twitter.astro';
 import GithubIcon from '../components/icons/Github.astro';
 import GmailIcon from '../components/icons/Gmail.astro';
-import { Image } from 'astro:assets';
-import IconImage from '../assets/real_icon.webp';
-import FigureImage from '../assets/figure_1_1.webp';
 import LatestLinks from '../components/LatestLinks.astro';
-
-const pageLinks = [
-  { name: 'About', href: '/about' },
-  { name: 'Product', href: '/product' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Slide', href: '/slide' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'Skill Sheet', href: '/skillsheet' },
-];
+import { links as pageLinks } from '../data/constant.ts';
 
 const socialLinks = [
   { name: 'Twitter', href: 'https://twitter.com/watabegg', IconComponent: TwitterIcon },
@@ -26,102 +15,57 @@ const socialLinks = [
 ];
 ---
 <Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
-  <div class="relative flex h-full w-full items-center justify-center overflow-hidden">
-    <div
-      id="slanted-bg-header"
-      class="absolute w-full md:w-3/5 h-3/5 md:h-full inset-0 -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary z-20"
-      style="transform-origin: top left;"
-      transition:name="header-bg"
-    ></div>
-
-    <div
-      id="slanted-bg-footer"
-      class="absolute w-full md:w-2/5 md:inset-y-0 -bottom-[20%] md:bottom-0 h-2/5 md:h-full md:-right-[20%] -skew-y-6 md:skew-y-0 md:-skew-x-6 transform bg-primary z-20"
-      style="transform-origin: top left;"
-      transition:name="footer-bg"
-    ></div>
-
-    <div class="absolute w-full md:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around">
-      <Image
-        src={IconImage}
-        alt="watabeggのアイコン"
-        class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
-        loading="lazy"
-        priority
-        transition:name='icon'
-      />
-      <Image
-        src={FigureImage}
-        alt="watabeggのフィギュア"
-        class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
-        loading="lazy"
-        priority
-        transition:name='figure'
-      />
-    </div>
-
-    <div class="relative z-30 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
-
-      <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-16 md:mt-0 pointer-events-auto"> {/* Added pointer-events-auto */}
-        <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
-          watabegg
-        </h1>
-        {pageLinks.map((link, index) => (
-          <div class="flex flex-wrap md:flex-nowrap items-center gap-2">
-            <a
-              href={link.href}
-              class="page-link text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
-              data-astro-prefetch
-              style={`transition-delay: ${index * 100}ms;`}
-            >
-              {link.name}
-            </a>
-            {link.href === '/product' && (<LatestLinks mode="product" />)}
-            {link.href === '/blog' && (<LatestLinks mode="blog" />)}
-          </div>
-        ))}
-      </nav>
-
-      <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto"> {/* Added pointer-events-auto */}
-        {socialLinks.map((link, index) => (
+  <div class="z-10 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
+    <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-8 sm:mt-16 md:mt-0 pointer-events-auto">
+      <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
+        watabegg
+      </h1>
+      {pageLinks.map((link, index) => (
+        <div class={`flex flex-nowrap items-center gap-2 ${link.href === '/slide' || link.href === '/skillsheet' ? 'hidden sm:block' : ''} ${link.href === '/' ? 'hidden' : ''}`}>
           <a
             href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
-            style={`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`}
+            class="page-link text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
+            data-astro-prefetch
+            style={`transition-delay: ${index * 100}ms;`}
           >
-            <link.IconComponent class="w-6 h-6 md:w-5 md:h-5" />
-            <span class="hidden md:block">{link.name}</span>
+            {link.name}
           </a>
-        ))}
-      </aside>
-    </div>
+          {link.href === '/product' && (<LatestLinks mode="product" />)}
+          {link.href === '/blog' && (<LatestLinks mode="blog" />)}
+        </div>
+      ))}
+    </nav>
+
+    <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto">
+      {socialLinks.map((link, index) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
+          style={`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`}
+        >
+          <link.IconComponent class="w-6 h-6 md:w-5 md:h-5" />
+          <span class="hidden md:block">{link.name}</span>
+        </a>
+      ))}
+    </aside>
   </div>
 
   <script>
     import { gsap } from "gsap";
 
-    document.addEventListener("astro:page-load", () => {
-      gsap.to("#page-links-home h1, #page-links-home a.page-link", {
-        duration: 0.8,
-        opacity: 0.85, // Animate to 85% opacity
-        x: 0,          // Animate x position
-        stagger: 0.1,
-        ease: "power3.out",
-        delay: 0.2
-      });
+    const enterTimeline = () => {
+      const tl = gsap.timeline();
 
-       gsap.to("#social-links-home > *", {
-        duration: 0.8,
-        opacity: 0.85, // Animate to 85% opacity
-        x: 0,          // Animate x position
-        stagger: 0.1,
-        ease: "power3.out",
-        delay: 0.4
-      });
+      tl.to(
+        "#page-links-home h1, #page-links-home a.page-link , #social-links-home a",
+        { duration: 0.8, opacity: 0.85, x: 0, stagger: 0.1, ease: "power3.out" },
+        "content"
+      );
+    };
 
-    });
+    document.addEventListener("astro:page-load", enterTimeline);
 
   </script>
 </Layout>

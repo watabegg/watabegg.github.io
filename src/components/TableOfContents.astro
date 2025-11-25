@@ -115,7 +115,7 @@ const depthClasses: { [key: number]: string } = {
     if (tocAsideMobile) {
       tocAsideMobile.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
-          if (window.innerWidth < 1024) { // lg breakpoint
+          if (window.innerWidth < 1024) {
             closeMobileToc();
           }
         });

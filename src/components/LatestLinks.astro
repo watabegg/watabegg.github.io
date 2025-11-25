@@ -7,7 +7,6 @@ import { fetchQiitaItems } from '../lib/qiita';
 interface Props { mode: 'product' | 'blog' }
 const { mode } = Astro.props as Props;
 
-// Fetch latest product & blog from local content collections
 const [products, blogs] = await Promise.all([
   getCollection('products'),
   getCollection('blog')
@@ -21,74 +20,38 @@ const latestBlog = [...blogs]
 
 const latestQiita = (await fetchQiitaItems(1))[0] ?? null;
 ---
-
-<style>
-  .latest-inline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: 0.5rem;
-    font-size: 0.875rem; /* ~14px on base */
-    line-height: 1.1;
-    opacity: 0.85;
-    flex-wrap: wrap;
-  }
-
-  .latest-inline a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: rgba(255,255,255,0.95);
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(255,255,255,0.3);
-    padding-bottom: 1px;
-  }
-
-  .latest-inline a:hover {
-    opacity: 1;
-    transform: translateY(-1px);
-  }
-
-  .latest-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 3px;
-    object-fit: cover;
-    background: none;
-  }
-
-  .latest-sep {
-    opacity: 0.35;
-    margin: 0 0.25rem;
-  }
-</style>
-
 {mode === 'product' && latestProduct && (
-  <span class="latest-inline" aria-label="Latest product">
-    <a href={`/product/${latestProduct.slug}`} data-astro-prefetch>
+  <span
+    class="inline-flex items-center gap-[0.1rem] ml-2 text-xs leading-[1.1] opacity-80 flex-wrap"
+    aria-label="Latest product"
+  >
+    <a href={`/product/${latestProduct.slug}`} data-astro-prefetch class="inline-flex items-center gap-1.5 text-white border-b border-dashed border-white/30 pb-px no-underline transition hover:opacity-100 hover:-translate-y-px">
       {latestProduct.data.imageUrl ? (
-        <img src={latestProduct.data.imageUrl} alt="product" class="latest-thumb" loading="lazy" />
+        <img src={latestProduct.data.imageUrl} alt="product" class="w-[14px] h-[14px] rounded-[3px] object-cover bg-transparent shrink-0" loading="lazy" />
       ) : (
-        <span class="latest-thumb" />
+        <span class="inline-block w-[14px] h-[14px] rounded-[3px] bg-transparent" />
       )}
-      <span class="truncate max-w-[12rem]">{latestProduct.data.title}</span>
+      <span class="truncate max-w-[11rem]">{latestProduct.data.title}</span>
     </a>
   </span>
 )}
 
 {mode === 'blog' && (
-  <span class="latest-inline" aria-label="Latest blog items">
+  <span
+    class="inline-flex items-center gap-[0.1rem] ml-2 text-xs leading-[1.1] opacity-80 flex-wrap"
+    aria-label="Latest blog items"
+  >
     {latestBlog && (
-      <a href={`/blog/${latestBlog.slug}`} data-astro-prefetch>
-        <img src={RealIcon.src} alt="blog" class="latest-thumb" width={18} height={18} loading="lazy" />
-        <span class="truncate max-w-[12rem]">{latestBlog.data.title}</span>
+      <a href={`/blog/${latestBlog.slug}`} data-astro-prefetch class="inline-flex items-center gap-1.5 text-white border-b border-dashed border-white/30 pb-px no-underline transition hover:opacity-100 hover:-translate-y-px">
+        <img src={RealIcon.src} alt="blog" class="w-[14px] h-[14px] rounded-[3px] object-cover bg-transparent shrink-0" width={18} height={18} loading="lazy" />
+        <span class="truncate max-w-[11rem]">{latestBlog.data.title}</span>
       </a>
     )}
-    {latestBlog && latestQiita ? <span class="latest-sep">/</span> : null}
+    {latestBlog && latestQiita ? <span class="opacity-40 mx-1 text-white">/</span> : null}
     {latestQiita && (
-      <a href={latestQiita.url} target="_blank" rel="noopener noreferrer">
-        <img src={QiitaIcon.src} alt="Qiita" class="latest-thumb" width={18} height={18} loading="lazy" />
-        <span class="truncate max-w-[12rem]">{latestQiita.title}</span>
+      <a href={latestQiita.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-white border-b border-dashed border-white/30 pb-px no-underline transition hover:opacity-100 hover:-translate-y-px">
+        <img src={QiitaIcon.src} alt="Qiita" class="w-[14px] h-[14px] rounded-[3px] object-cover bg-transparent shrink-0" width={18} height={18} loading="lazy" />
+        <span class="truncate max-w-[11rem]">{latestQiita.title}</span>
       </a>
     )}
   </span>
