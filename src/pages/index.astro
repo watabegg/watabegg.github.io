@@ -15,7 +15,7 @@ const socialLinks = [
 ];
 ---
 <Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
-  <div class="z-10 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
+  <div class="z-20 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
     <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-8 sm:mt-16 md:mt-0 pointer-events-auto">
       <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
         watabegg
@@ -60,7 +60,7 @@ const socialLinks = [
 
       tl.to(
         "#page-links-home h1, #page-links-home a.page-link , #social-links-home a",
-        { duration: 0.8, opacity: 0.85, x: 0, stagger: 0.1, ease: "power3.out" },
+        { duration: 0.2, opacity: 0.85, x: 0, stagger: 0.1, ease: "power3.out" },
         "content"
       );
     };

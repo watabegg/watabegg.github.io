@@ -3,7 +3,7 @@ export interface Props {
   headings: { depth: number; slug: string; text: string }[];
 }
 
-const { headings } = Astro.props;
+const { headings } = Astro.props as Props;
 const shouldShowToc = headings && headings.length > 1;
 
 const depthClasses: { [key: number]: string } = {
@@ -18,7 +18,7 @@ const depthClasses: { [key: number]: string } = {
   <>
     <button
       id="toc-toggle-mobile"
-      class="lg:hidden fixed top-1/2 right-0 transform -translate-y-1/2 p-3 rounded-l-md shadow-lg z-[1001]"
+      class="lg:hidden fixed top-1/2 right-0 transform -translate-y-1/2 p-3 rounded-l-md shadow-lg z-40 bg-white"
       aria-expanded="false"
       aria-controls="toc-aside-mobile"
     >
@@ -30,7 +30,7 @@ const depthClasses: { [key: number]: string } = {
 
     <aside
       id="toc-aside-mobile"
-      class="lg:hidden fixed top-0 right-0 w-3/5 max-w-xs h-full bg-base-200 shadow-xl z-[1002] flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto p-0"
+      class="lg:hidden fixed top-0 right-0 w-2/5 max-w-xs h-full bg-base-200 shadow-xl z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto p-0"
       aria-hidden="true"
     >
       <div class="flex justify-between items-center p-6 border-b border-base-300">
@@ -54,7 +54,7 @@ const depthClasses: { [key: number]: string } = {
 
     <div
       id="toc-overlay"
-      class="lg:hidden fixed inset-0 bg-black/50 z-[1000] opacity-0 invisible transition-opacity duration-300 ease-in-out text-md"
+      class="lg:hidden fixed inset-0 bg-black/50 z-30 opacity-0 invisible transition-opacity duration-300 ease-in-out text-md"
       aria-hidden="true"
     ></div>
 
@@ -74,43 +74,39 @@ const depthClasses: { [key: number]: string } = {
 )}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  const setupMobileToc = () => {
     const toggleButtonMobile = document.getElementById('toc-toggle-mobile');
     const closeButtonMobile = document.getElementById('toc-close-mobile');
     const tocAsideMobile = document.getElementById('toc-aside-mobile');
     const tocOverlay = document.getElementById('toc-overlay');
 
-    function openMobileToc() {
-      if (tocAsideMobile && tocOverlay && toggleButtonMobile) {
-        tocAsideMobile.classList.remove('translate-x-full');
-        tocAsideMobile.setAttribute('aria-hidden', 'false');
-        tocOverlay.classList.remove('invisible', 'opacity-0');
-        tocOverlay.classList.add('visible', 'opacity-100');
-        toggleButtonMobile.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('overflow-hidden');
-      }
-    }
+    // 同じ要素への多重バインドを防ぐ
+    if (!toggleButtonMobile || toggleButtonMobile.dataset.bound === 'true') return;
+    toggleButtonMobile.dataset.bound = 'true';
 
-    function closeMobileToc() {
-      if (tocAsideMobile && tocOverlay && toggleButtonMobile) {
-        tocAsideMobile.classList.add('translate-x-full');
-        tocAsideMobile.setAttribute('aria-hidden', 'true');
-        tocOverlay.classList.remove('visible', 'opacity-100');
-        tocOverlay.classList.add('invisible', 'opacity-0');
-        toggleButtonMobile.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('overflow-hidden');
-      }
-    }
+    const openMobileToc = () => {
+      if (!tocAsideMobile || !tocOverlay || !toggleButtonMobile) return;
+      tocAsideMobile.classList.remove('translate-x-full');
+      tocAsideMobile.setAttribute('aria-hidden', 'false');
+      tocOverlay.classList.remove('invisible', 'opacity-0');
+      tocOverlay.classList.add('visible', 'opacity-100');
+      toggleButtonMobile.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('overflow-hidden');
+    };
 
-    if (toggleButtonMobile) {
-      toggleButtonMobile.addEventListener('click', openMobileToc);
-    }
-    if (closeButtonMobile) {
-      closeButtonMobile.addEventListener('click', closeMobileToc);
-    }
-    if (tocOverlay) {
-      tocOverlay.addEventListener('click', closeMobileToc);
-    }
+    const closeMobileToc = () => {
+      if (!tocAsideMobile || !tocOverlay || !toggleButtonMobile) return;
+      tocAsideMobile.classList.add('translate-x-full');
+      tocAsideMobile.setAttribute('aria-hidden', 'true');
+      tocOverlay.classList.remove('visible', 'opacity-100');
+      tocOverlay.classList.add('invisible', 'opacity-0');
+      toggleButtonMobile.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    toggleButtonMobile.addEventListener('click', openMobileToc);
+    closeButtonMobile?.addEventListener('click', closeMobileToc);
+    tocOverlay?.addEventListener('click', closeMobileToc);
 
     if (tocAsideMobile) {
       tocAsideMobile.querySelectorAll('a').forEach(link => {
@@ -121,5 +117,8 @@ const depthClasses: { [key: number]: string } = {
         });
       });
     }
-  });
+  };
+
+  setupMobileToc();
+  document.addEventListener('astro:page-load', setupMobileToc);
 </script>

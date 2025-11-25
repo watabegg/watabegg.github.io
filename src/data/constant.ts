@@ -1,22 +1,11 @@
-import {
-  House,
-  Info,
-  Package,
-  SquarePen,
-  MessageCircle,
-  LayoutPanelTop,
-  FileBadge,
-  type AstroComponent,
-} from '@lucide/astro';
-
-export type NavLink = { name: string; href: string; icon: AstroComponent };
+export type NavLink = { name: string; href: string };
 
 export const links = [
-  { name: 'Home', href: '/', icon: House },
-  { name: 'About', href: '/about', icon: Info },
-  { name: 'Product', href: '/product', icon: Package },
-  { name: 'Blog', href: '/blog', icon: SquarePen },
-  { name: 'Slide', href: '/slide', icon: LayoutPanelTop },
-  { name: 'Skill Sheet', href: '/skillsheet', icon: FileBadge },
-  { name: 'Contact', href: '/contact', icon: MessageCircle },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Product', href: '/product' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Slide', href: '/slide' },
+  { name: 'Skill Sheet', href: '/skillsheet' },
+  { name: 'Contact', href: '/contact' },
 ] satisfies NavLink[];
