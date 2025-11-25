@@ -79,6 +79,140 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
         "query-input": "required name=search_term_string"
       }
     })} />
+    <script>
+      import { gsap } from "gsap";
+      import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
+
+      type PageType = "home" | "inner";
+
+      const HEADER = "#header-bg";
+      const FOOTER = "#footer-bg";
+      const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
+
+      const getType = (): PageType => document.body.classList.contains("is-home") ? "home" : "inner";
+      const nextTypeFrom = (url: URL): PageType => url.pathname === "/" ? "home" : "inner";
+
+      type Shape = {
+        w: string;
+        h: string;
+        top?: string;
+        left?: string;
+        right?: string;
+        bottom?: string;
+        skewX: string;
+        skewY: string;
+        scaleX: number;
+        scaleY: number;
+        originX: string;
+        originY: string;
+      };
+
+      const presets = {
+        mobile: {
+          home: {
+            header: { w: "100vw", h: "60vh", top: "0", left: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "40vh", bottom: "-20vh", right: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
+          },
+          inner: {
+            header: { w: "100vw", h: "66px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "184px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
+          }
+        },
+        desktop: {
+          home: {
+            header: { w: "60vw", h: "100%", top: "0", left: "0", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "40vw", h: "100%", bottom: "0", right: "-10vw", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
+          },
+          inner: {
+            header: { w: "100vw", h: "72px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "148px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
+          }
+        }
+      } as const;
+
+      const mm = window.matchMedia("(min-width: 768px)");
+      const getPreset = (type: PageType) => mm.matches ? presets.desktop[type] : presets.mobile[type];
+
+      const applyShape = (el: HTMLElement, shape: Shape, vars?: gsap.TweenVars) => {
+        const base = {
+          "--w": shape.w,
+          "--h": shape.h,
+          "--top": shape.top ?? "auto",
+          "--left": shape.left ?? "auto",
+          "--right": shape.right ?? "auto",
+          "--bottom": shape.bottom ?? "auto",
+          "--skewX": shape.skewX,
+          "--skewY": shape.skewY,
+          "--scaleX": shape.scaleX,
+          "--scaleY": shape.scaleY,
+          "--originX": shape.originX,
+          "--originY": shape.originY,
+        } as Record<string, string | number>;
+
+        gsap.to(el, { ...base, ...vars });
+      };
+
+      const setShape = (el: HTMLElement, shape: Shape) => {
+        gsap.set(el, {
+          "--w": shape.w,
+          "--h": shape.h,
+          "--top": shape.top ?? "auto",
+          "--left": shape.left ?? "auto",
+          "--right": shape.right ?? "auto",
+          "--bottom": shape.bottom ?? "auto",
+          "--skewX": shape.skewX,
+          "--skewY": shape.skewY,
+          "--scaleX": shape.scaleX,
+          "--scaleY": shape.scaleY,
+          "--originX": shape.originX,
+          "--originY": shape.originY,
+        });
+      };
+
+      const prep = (type: PageType) => {
+        const preset = getPreset(type);
+        const h = $(HEADER);
+        const f = $(FOOTER);
+        if (h) setShape(h, preset.header);
+        if (f) setShape(f, preset.footer);
+      };
+
+      const animateTo = (to: PageType, duration = 0.7) => {
+        const preset = getPreset(to);
+        const h = $(HEADER);
+        const f = $(FOOTER);
+        const common: gsap.TweenVars = { duration, ease: "power3.inOut", overwrite: "auto" };
+        if (h) applyShape(h, preset.header, common);
+        if (f) applyShape(f, preset.footer, common);
+      };
+
+      document.addEventListener("astro:page-load", () => {
+        const current = getType();
+        const prev = (window as any).__lastPageType as PageType | undefined ?? "inner";
+
+        prep(prev);
+        animateTo(current, 0.8);
+
+        (window as any).__lastPageType = current;
+      });
+
+      document.addEventListener("astro:before-preparation", (event) => {
+        if (!isTransitionBeforePreparationEvent(event)) return;
+
+        const current = getType();
+        const next = nextTypeFrom(event.to);
+        (window as any).__lastPageType = current;
+
+        const loader = event.loader;
+
+        event.loader = async () => {
+          if (current !== next) {
+            animateTo(next, 0.45);
+          }
+          await loader();
+        };
+      });
+    </script>
 		<ClientRouter />
 	</head>
 	<body class={`flex flex-col min-h-screen bg-base-100 text-base-content ${isFullScreen ? 'is-home' : ''}`}>
@@ -124,141 +258,6 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 		) }
 	</body>
 </html>
-
-<script>
-  import { gsap } from "gsap";
-  import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
-
-  type PageType = "home" | "inner";
-
-  const HEADER = "#header-bg";
-  const FOOTER = "#footer-bg";
-  const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
-
-  const getType = (): PageType => document.body.classList.contains("is-home") ? "home" : "inner";
-  const nextTypeFrom = (url: URL): PageType => url.pathname === "/" ? "home" : "inner";
-
-  type Shape = {
-    w: string;
-    h: string;
-    top?: string;
-    left?: string;
-    right?: string;
-    bottom?: string;
-    skewX: string;
-    skewY: string;
-    scaleX: number;
-    scaleY: number;
-    originX: string;
-    originY: string;
-  };
-
-  const presets = {
-    mobile: {
-      home: {
-        header: { w: "100vw", h: "60vh", top: "0", left: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-        footer: { w: "100vw", h: "40vh", bottom: "-20vh", right: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
-      },
-      inner: {
-        header: { w: "100vw", h: "66px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-        footer: { w: "100vw", h: "184px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
-      }
-    },
-    desktop: {
-      home: {
-        header: { w: "60vw", h: "100%", top: "0", left: "0", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-        footer: { w: "40vw", h: "100%", bottom: "0", right: "-10vw", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
-      },
-      inner: {
-        header: { w: "100vw", h: "72px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-        footer: { w: "100vw", h: "148px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
-      }
-    }
-  } as const;
-
-  const mm = window.matchMedia("(min-width: 768px)");
-  const getPreset = (type: PageType) => mm.matches ? presets.desktop[type] : presets.mobile[type];
-
-  const applyShape = (el: HTMLElement, shape: Shape, vars?: gsap.TweenVars) => {
-    const base = {
-      "--w": shape.w,
-      "--h": shape.h,
-      "--top": shape.top ?? "auto",
-      "--left": shape.left ?? "auto",
-      "--right": shape.right ?? "auto",
-      "--bottom": shape.bottom ?? "auto",
-      "--skewX": shape.skewX,
-      "--skewY": shape.skewY,
-      "--scaleX": shape.scaleX,
-      "--scaleY": shape.scaleY,
-      "--originX": shape.originX,
-      "--originY": shape.originY,
-    } as Record<string, string | number>;
-
-    gsap.to(el, { ...base, ...vars });
-  };
-
-  const setShape = (el: HTMLElement, shape: Shape) => {
-    gsap.set(el, {
-      "--w": shape.w,
-      "--h": shape.h,
-      "--top": shape.top ?? "auto",
-      "--left": shape.left ?? "auto",
-      "--right": shape.right ?? "auto",
-      "--bottom": shape.bottom ?? "auto",
-      "--skewX": shape.skewX,
-      "--skewY": shape.skewY,
-      "--scaleX": shape.scaleX,
-      "--scaleY": shape.scaleY,
-      "--originX": shape.originX,
-      "--originY": shape.originY,
-    });
-  };
-
-  const prep = (type: PageType) => {
-    const preset = getPreset(type);
-    const h = $(HEADER);
-    const f = $(FOOTER);
-    if (h) setShape(h, preset.header);
-    if (f) setShape(f, preset.footer);
-  };
-
-  const animateTo = (to: PageType, duration = 0.7) => {
-    const preset = getPreset(to);
-    const h = $(HEADER);
-    const f = $(FOOTER);
-    const common: gsap.TweenVars = { duration, ease: "power3.inOut", overwrite: "auto" };
-    if (h) applyShape(h, preset.header, common);
-    if (f) applyShape(f, preset.footer, common);
-  };
-
-  document.addEventListener("astro:page-load", () => {
-    const current = getType();
-    const prev = (window as any).__lastPageType as PageType | undefined ?? "inner";
-
-    prep(prev);
-    animateTo(current, 0.8);
-
-    (window as any).__lastPageType = current;
-  });
-
-  document.addEventListener("astro:before-preparation", (event) => {
-    if (!isTransitionBeforePreparationEvent(event)) return;
-
-    const current = getType();
-    const next = nextTypeFrom(event.to);
-    (window as any).__lastPageType = current;
-
-    const loader = event.loader;
-
-    event.loader = async () => {
-      if (current !== next) {
-        animateTo(next, 0.45);
-      }
-      await loader();
-    };
-  });
-</script>
 
 <style is:global>
 	body {
