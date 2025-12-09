@@ -7,7 +7,7 @@ export interface HeadInfo {
   name: string;
   furigana: string;
   gender: string;
-  birthDate: string; // ISO8601 (YYYY-MM-DD)
+  birthDate: string;
   email: string;
   address: string;
 }

@@ -10,7 +10,7 @@ interface Props {
   content: ProductContentSections;
 }
 
-const { content } = Astro.props;
+const { content } = Astro.props as Props;
 const periodRange = parsePeriodRange(content.period);
 const periodLabel = formatPeriodLabel(periodRange);
 const durationMonths = calculateDurationMonths(periodRange);

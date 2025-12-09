@@ -9,7 +9,7 @@ interface Props {
   termWidthClass?: string;
 }
 
-const { items, termWidthClass = 'md:w-60' } = Astro.props; // デフォルト幅を設定
+const { items, termWidthClass = 'md:w-60' } = Astro.props as Props;
 ---
 
 <dl class="space-y-2 text-base md:text-lg text-left">

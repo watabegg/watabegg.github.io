@@ -1,12 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import IconImage from '../assets/real_icon.webp';
-import IconImage2 from '../assets/figure_1_1.webp';
-import IconImage3 from '../assets/figure_dots.webp';
-import IconImage4 from '../assets/sumatera.webp';
-import DefinitionList from '../components/DefinitionList.astro';
-import { profile } from '../data/profile';
+import IconImage from '../../assets/real_icon.webp';
+import IconImage2 from '../../assets/figure_1_1.webp';
+import IconImage3 from '../../assets/figure_dots.webp';
+import IconImage4 from '../../assets/sumatera.webp';
+import DefinitionList from '../../components/DefinitionList.astro';
+import { profile } from '../../data/profile';
 
 const iconObjects = [
   IconImage,
@@ -85,13 +85,12 @@ const programSkills = [
       <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
         <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
         <div class="flex flex-col gap-y-8 justify-center items-center">
-          <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-05/pl.u-V9D7gpauBKRRAVm"></iframe>
+          <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-11/pl.u-mJy834RCzmbbrEp"></iframe>
             <div class="aspect-video w-full max-w-[700px] rounded-lg overflow-hidden">
             <iframe 
               class="w-full h-full" 
               src="https://www.youtube.com/embed/n96cgEBWhl8?si=XECNRS89Vz2ehK28" 
               title="YouTube video player" 
-              frameborder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
               referrerpolicy="strict-origin-when-cross-origin" 
               allowfullscreen
@@ -102,37 +101,31 @@ const programSkills = [
     </div>
   </div>
 
-  {/* define:varsは不要になったため削除 */}
   <script>
     import { gsap } from "gsap";
 
-    // 5〜10秒のランダムなミリ秒を生成
     function getRandomDelay() {
-      // 1〜4秒のランダムなミリ秒を生成 (範囲を少し狭めて確認しやすく)
       return (Math.random() * 2 + 1) * 1000;
     }
 
     let currentIconIndex = 0;
     let intervalId: ReturnType<typeof setTimeout> | null = null;
-    let isAnimating = false; // アニメーション実行中フラグ
+    let isAnimating = false;
 
     function changeIcon(iconElements: NodeListOf<Element>) {
-      // アニメーション実行中なら何もしない
       if (isAnimating) return;
       isAnimating = true;
 
-      // 既存のタイマーをクリア
       if (intervalId) clearTimeout(intervalId);
       intervalId = null;
 
-      if (!iconElements || iconElements.length <= 1) { // アイコンが1つ以下なら何もしない
+      if (!iconElements || iconElements.length <= 1) {
         isAnimating = false;
         return;
       }
 
       const currentIconElement = iconElements[currentIconIndex];
 
-      // 次のアイコンをランダムに選択 (現在のアイコン以外)
       let nextIconIndex;
       do {
         nextIconIndex = Math.floor(Math.random() * iconElements.length);
@@ -140,53 +133,44 @@ const programSkills = [
 
       const nextIconElement = iconElements[nextIconIndex];
 
-      // 要素が存在するか確認
       if (!currentIconElement || !nextIconElement) {
         console.error("Current or next icon element not found during transition.");
         isAnimating = false;
         return;
       }
 
-      // アニメーションタイムライン
       const tl = gsap.timeline({
         onComplete: () => {
-          // アニメーション完了後
-          currentIconIndex = nextIconIndex; // インデックスを更新
-          isAnimating = false; // アニメーションフラグを解除
-          // 次のタイマーを設定
+          currentIconIndex = nextIconIndex;
+          isAnimating = false;
           intervalId = setTimeout(() => changeIcon(iconElements), getRandomDelay());
         }
       });
 
-      // 1. 現在の画像を回転して非表示にする
       tl.to(currentIconElement, {
-        duration: 0.4, // 少し短縮
+        duration: 0.4,
         rotationY: -90,
         opacity: 0,
         ease: "power2.in",
         onComplete: () => {
-          // 非表示アニメーション完了直後に次の要素の初期状態を設定
           gsap.set(nextIconElement, { rotationY: 90, opacity: 0 });
         }
       });
 
-      // 2. 少し間を置いてから、次の画像を回転して表示する
-      //    前の tween が完了してから実行されるように調整
       tl.to(nextIconElement, {
-        duration: 0.4, // 少し短縮
+        duration: 0.4,
         rotationY: 0,
         opacity: 0.9,
         ease: "power2.out"
-      }, ">"); // 前のアニメーション完了直後から開始
+      }, ">");
 
     }
 
     document.addEventListener("astro:page-load", () => {
-      // 既存のタイマーとアニメーションをクリア/停止
       if (intervalId) clearTimeout(intervalId);
       intervalId = null;
-      isAnimating = false; // フラグをリセット
-      gsap.killTweensOf(".rotating-icon-item"); // 既存のトゥイーンを停止
+      isAnimating = false;
+      gsap.killTweensOf(".rotating-icon-item");
       gsap.killTweensOf("#about-content > *:not(#about-icon), #about-content > span");
 
       const iconWrapperElements = document.querySelectorAll(".rotating-icon-item");
@@ -195,13 +179,10 @@ const programSkills = [
         return;
       }
 
-      // 全アイコンの初期状態をリセット (回転、不透明度、スケール)
       gsap.set(iconWrapperElements, { rotationY: 0, opacity: 0, scale: 1 });
-      // 最初のアイコンを表示状態に
       gsap.set(iconWrapperElements[0], { opacity: 0.9 });
-      currentIconIndex = 0; // インデックスをリセット
+      currentIconIndex = 0;
 
-      // 初回アニメーション: 最初のアイコンのフェードインとスケールアップ
       if (iconWrapperElements[0]) {
           gsap.from(iconWrapperElements[0], {
             duration: 1,
@@ -210,8 +191,7 @@ const programSkills = [
             ease: "power3.out",
             delay: 0.2,
             onComplete: () => {
-               // 初回アニメーション完了後、ランダム切り替えを開始 (タイマーを再設定)
-               if (intervalId) clearTimeout(intervalId); //念のためクリア
+               if (intervalId) clearTimeout(intervalId);
                intervalId = setTimeout(() => changeIcon(iconWrapperElements), getRandomDelay());
             }
           });
@@ -219,10 +199,9 @@ const programSkills = [
           console.error("First icon wrapper element not found for initial animation.");
       }
 
-      // テキストコンテンツのフェードインとスライドアップ
       gsap.from("#about-content > *:not(#about-icon), #about-content > span", {
         duration: 0.8,
-        opacity: 1, // ここ変えないで
+        opacity: 1,
         y: 20,
         stagger: 0.15,
         ease: "power3.out",

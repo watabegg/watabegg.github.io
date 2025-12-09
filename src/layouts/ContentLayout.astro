@@ -1,33 +1,30 @@
 ---
-// src/layouts/ContentLayout.astro
 import Layout from './Layout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 
 interface Props {
   title: string;
-  publishDate?: Date; // Optional for products/blogs that might not have it
-  author?: string; // Optional, mainly for blog
+  publishDate?: Date;
+  author?: string;
   tags?: string[];
   imageUrl?: string;
-  description?: string; // Add description prop
-  headings: { depth: number; slug: string; text: string }[]; // Add headings prop
+  description?: string;
+  headings: { depth: number; slug: string; text: string }[];
 }
 
-const { title, publishDate, author, tags, imageUrl, description, headings } = Astro.props; // Destructure description and headings
+const { title, publishDate, author, tags, imageUrl, description, headings } = Astro.props as Props;
 const placeholderImageUrl = '/images/placeholder.svg';
 const displayImageUrl = imageUrl || placeholderImageUrl;
 
-// Determine article type based on URL path (simple example)
 const isBlog = Astro.url.pathname.startsWith('/blog/');
 const articleType = isBlog ? 'BlogPosting' : 'Article';
 
-// Construct image URL for structured data
 const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString() : undefined;
+const isSvgImage = displayImageUrl.endsWith('.svg');
+const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`;
 
 ---
-{/* Pass description, ogImageUrl, and ogType to Layout */}
 <Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={imageUrl} ogType="article">
-  {/* JSON-LD Structured Data for Article/BlogPosting */}
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": articleType,
@@ -42,7 +39,7 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
 
   <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8 max-w-5xl">
     <article class="main-content flex-grow lg:w-3/4 flex flex-col items-center lg:items-start">
-      <img src={displayImageUrl} alt={`Image for ${title}`} class="w-full h-auto object-cover rounded-md mb-6 lg:mb-8 shadow-md" />
+      <img src={displayImageUrl} alt={`Image for ${title}`} class={imageClasses} />
       <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-center lg:text-left">{title}</h1>
       <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-center lg:justify-start">
         {author && (
@@ -64,7 +61,7 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
           ))}
         </div>
       )}
-      <div class="prose lg:prose-lg w-full"> {/* Ensure prose takes full width and remove max-width constraints */}
+      <div class="prose lg:prose-lg w-full">
         <slot />
       </div>
       <div class="mt-8 w-full flex justify-center lg:justify-start">
@@ -73,29 +70,9 @@ const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString
     </article>
 
     {headings && headings.length > 1 && (
-      <aside class="sidebar-toc w-full lg:w-1/4 lg:sticky lg:top-20 mt-8 lg:mt-0"> {/* Adjusted for stickiness and mobile */}
-        {/* TableOfContents will handle its own mobile visibility via toggle */}
+      <aside class="w-full lg:w-1/4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto mt-8 lg:mt-0">
         <TableOfContents headings={headings} />
       </aside>
     )}
   </div>
 </Layout>
-
-<style>
-  img[src$=".svg"] {
-    object-fit: contain;
-    background-color: #f3f4f6;
-  }
-  .sidebar-toc {
-    /* For lg screens, ensure it can scroll if content is too long */
-    max-height: calc(100vh - 5rem); /* Adjust 5rem based on your header/sticky top height */
-    overflow-y: auto;
-  }
-
-  /* Hide sidebar-toc by default on smaller screens, TableOfContents component will manage its own display via a button */
-  @media (max-width: 1023.98px) { /* Below lg breakpoint */
-    .sidebar-toc {
-       /* This container will be present, but TableOfContents inside it will be toggled */
-    }
-  }
-</style>

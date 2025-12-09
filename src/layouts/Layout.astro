@@ -2,43 +2,41 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { ViewTransitions } from 'astro:transitions';
+import { Image } from 'astro:assets';
+import IconImage from '../assets/real_icon.webp';
+import FigureImage from '../assets/figure_1_1.webp';
+import { ClientRouter, fade } from 'astro:transitions';
 
 interface Props {
 	title?: string;
 	description?: string;
 	isFullScreen?: boolean;
-	ogImageUrl?: string; // Add prop for OGP image
-	ogType?: 'website' | 'article'; // Add prop for OGP type
+	ogImageUrl?: string;
+	ogType?: 'website' | 'article';
 }
 
 const {
 	title = 'watabegg',
 	description = 'watabeggの個人サイト',
 	isFullScreen = false,
-	ogImageUrl, // Get OGP image URL from props
-	ogType = 'website', // Default OGP type
+	ogImageUrl,
+	ogType = 'website',
 } = Astro.props;
 
-// Construct the canonical URL
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 
-// Determine the OGP image URL (use default if not provided)
-// Assuming a default OGP image exists at /images/ogp_default.png
 const defaultOgImageUrl = new URL('/images/ogp_default.png', Astro.site).toString();
 const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() : defaultOgImageUrl;
 
 ---
 <!doctype html>
-<html lang="ja" prefix="og: http://ogp.me/ns#"> {/* Add OGP prefix */}
+<html lang="ja" prefix="og: http://ogp.me/ns#">
 	<head>
 		<meta charset="UTF-8" />
 		<title>{title}</title>
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/webp" href="/favicon.webp" /> {/* Corrected type */}
+		<link rel="icon" type="image/webp" href="/favicon.webp" />
 		<meta name="generator" content={Astro.generator} />
-
-		<!-- Google tag (gtag.js) -->
 		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2D4GRWSW25"></script>
 		<script is:inline>
 			window.dataLayer = window.dataLayer || [];
@@ -48,35 +46,27 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 			gtag('config', 'G-2D4GRWSW25');
 		</script>
 
-		<!-- Google Tag Manager -->
-	<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PGTBZF6M');</script>
-	<!-- End Google Tag Manager -->
+		<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PGTBZF6M');</script>
 
 		<meta name="google-site-verification" content="rpZl-aR3PveVL3tfGb_qZL_1aiCJfKEUm-AoabDAnwo" />
 
-		{/* SEO Meta Tags */}
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl.toString()} />
 
-		{/* Open Graph / Facebook */}
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalUrl.toString()} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={finalOgImageUrl} />
-		<meta property="og:site_name" content="watabegg" /> {/* Site name */}
+		<meta property="og:site_name" content="watabegg" />
 		<meta property="og:locale" content="ja_JP" />
 
-		{/* Twitter */}
-		<meta property="twitter:card" content="summary_large_image" /> {/* Use summary_large_image for better visibility */}
+		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:url" content={canonicalUrl.toString()} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={finalOgImageUrl} />
-		{/* <meta name="twitter:site" content="@yourTwitterHandle"> */} {/* Optional: Add Twitter handle */}
-		{/* <meta name="twitter:creator" content="@yourTwitterHandle"> */} {/* Optional: Add Twitter handle */}
 
-    {/* JSON-LD Structured Data for Website */}
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -85,35 +75,205 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
       "description": description,
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `${Astro.site?.toString()}search?q={search_term_string}`, // Assuming a search page exists or will exist
+        "target": `${Astro.site?.toString()}search?q={search_term_string}`,
         "query-input": "required name=search_term_string"
       }
     })} />
-		<ViewTransitions />
+    <script>
+      import { gsap } from "gsap";
+      import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
+
+      type PageType = "home" | "inner";
+
+      const HEADER = "#header-bg";
+      const FOOTER = "#footer-bg";
+      const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
+
+      const getType = (): PageType => document.body.classList.contains("is-home") ? "home" : "inner";
+      const nextTypeFrom = (url: URL): PageType => url.pathname === "/" ? "home" : "inner";
+
+      type Shape = {
+        w: string;
+        h: string;
+        top?: string;
+        left?: string;
+        right?: string;
+        bottom?: string;
+        skewX: string;
+        skewY: string;
+        scaleX: number;
+        scaleY: number;
+        originX: string;
+        originY: string;
+      };
+
+      const presets = {
+        mobile: {
+          home: {
+            header: { w: "100vw", h: "60vh", top: "0", left: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "40vh", bottom: "-20vh", right: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
+          },
+          inner: {
+            header: { w: "100vw", h: "66px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "184px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
+          }
+        },
+        desktop: {
+          home: {
+            header: { w: "60vw", h: "100%", top: "0", left: "0", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "40vw", h: "100%", bottom: "0", right: "-10vw", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
+          },
+          inner: {
+            header: { w: "100vw", h: "72px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
+            footer: { w: "100vw", h: "148px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
+          }
+        }
+      } as const;
+
+      const mm = window.matchMedia("(min-width: 768px)");
+      const getPreset = (type: PageType) => mm.matches ? presets.desktop[type] : presets.mobile[type];
+
+      const applyShape = (el: HTMLElement, shape: Shape, vars?: gsap.TweenVars) => {
+        const base = {
+          "--w": shape.w,
+          "--h": shape.h,
+          "--top": shape.top ?? "auto",
+          "--left": shape.left ?? "auto",
+          "--right": shape.right ?? "auto",
+          "--bottom": shape.bottom ?? "auto",
+          "--skewX": shape.skewX,
+          "--skewY": shape.skewY,
+          "--scaleX": shape.scaleX,
+          "--scaleY": shape.scaleY,
+          "--originX": shape.originX,
+          "--originY": shape.originY,
+        } as Record<string, string | number>;
+
+        gsap.to(el, { ...base, ...vars });
+      };
+
+      const setShape = (el: HTMLElement, shape: Shape) => {
+        gsap.set(el, {
+          "--w": shape.w,
+          "--h": shape.h,
+          "--top": shape.top ?? "auto",
+          "--left": shape.left ?? "auto",
+          "--right": shape.right ?? "auto",
+          "--bottom": shape.bottom ?? "auto",
+          "--skewX": shape.skewX,
+          "--skewY": shape.skewY,
+          "--scaleX": shape.scaleX,
+          "--scaleY": shape.scaleY,
+          "--originX": shape.originX,
+          "--originY": shape.originY,
+        });
+      };
+
+      const prep = (type: PageType) => {
+        const preset = getPreset(type);
+        const h = $(HEADER);
+        const f = $(FOOTER);
+        if (h) setShape(h, preset.header);
+        if (f) setShape(f, preset.footer);
+      };
+
+      const animateTo = (to: PageType, duration = 0.7) => {
+        const preset = getPreset(to);
+        const h = $(HEADER);
+        const f = $(FOOTER);
+        const common: gsap.TweenVars = { duration, ease: "power3.inOut", overwrite: "auto" };
+        if (h) applyShape(h, preset.header, common);
+        if (f) applyShape(f, preset.footer, common);
+      };
+
+      document.addEventListener("astro:page-load", () => {
+        const current = getType();
+        const prev = (window as any).__lastPageType as PageType | undefined ?? "inner";
+
+        prep(prev);
+        animateTo(current, 0.8);
+
+        (window as any).__lastPageType = current;
+      });
+
+      document.addEventListener("astro:before-preparation", (event) => {
+        if (!isTransitionBeforePreparationEvent(event)) return;
+
+        const current = getType();
+        const next = nextTypeFrom(event.to);
+        (window as any).__lastPageType = current;
+
+        const loader = event.loader;
+
+        event.loader = async () => {
+          if (current !== next) {
+            animateTo(next, 0.45);
+          }
+          await loader();
+        };
+      });
+    </script>
+		<ClientRouter />
 	</head>
-	<!-- Use custom base colors -->
-	<body class="flex flex-col min-h-screen bg-base-100 text-base-content">
-		{ !isFullScreen && <Header /> }
-		<main
-			class={`flex-grow w-full ${!isFullScreen ? 'container mx-auto p-4' : ''} ${isFullScreen ? 'p-0 max-w-none' : ''}`}
-		>
+	<body class={`flex flex-col min-h-screen bg-base-100 text-base-content ${isFullScreen ? 'is-home' : ''}`}>
+		<div id="bg-layer" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden z-5">
+			<div id="header-bg" class="bg-panel bg-primary"></div>
+			<div id="footer-bg" class="bg-panel bg-primary"></div>
+		</div>
+
+		{ !isFullScreen && (
+		<header class="relative text-primary-content top-0 overflow-visible z-20">
+			<Header />
+		</header>
+		)}
+		<main class="relative flex-grow flex items-center justify-center overflow-hidden">
+			{ isFullScreen && (
+				<div class="absolute w-full md:w-3/5 lg:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around z-0">
+					<Image
+						src={IconImage}
+						alt="watabeggのアイコン"
+						class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
+						loading="lazy"
+						priority
+						transition:name='icon'
+						transition:animate={fade({ duration: 1 })}
+					/>
+					<Image
+						src={FigureImage}
+						alt="watabeggのフィギュア"
+						class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
+						loading="lazy"
+						priority
+						transition:name='figure'
+						transition:animate={fade({ duration: 1 })}
+					/>
+				</div>
+			)}
 			<slot />
 		</main>
-		{ !isFullScreen && <Footer /> }
+		{ !isFullScreen && (
+			<footer class="relative text-primary-content overflow-hidden">
+				<Footer />
+			</footer>
+		) }
 	</body>
 </html>
 
 <style is:global>
-	/* Apply some basic global styles */
 	body {
-		font-family: sans-serif; /* Example: Set a default font */
+		font-family: sans-serif;
+		position: relative;
 	}
 
-	/* Ensure html and body take full height for flex layout */
-	html, body {
-		height: 100%;
-		margin: 0;
+	.bg-panel {
+		position: absolute;
+		width: var(--w, 100%);
+		height: var(--h, 100%);
+		top: var(--top, auto);
+		left: var(--left, auto);
+		right: var(--right, auto);
+		bottom: var(--bottom, auto);
+		transform-origin: var(--originX, 0%) var(--originY, 0%);
+		transform: translate3d(0, 0, 0) skewX(var(--skewX, 0deg)) skewY(var(--skewY, 0deg)) scale(var(--scaleX, 1), var(--scaleY, 1));
 	}
-
-	/* Removed the :has selector as conditional classes handle this now */
 </style>

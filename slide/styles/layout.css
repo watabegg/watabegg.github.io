@@ -1,10 +1,5 @@
 .slidev-layout.end {
-  @apply h-full place-items-center;
-  background: #FFFFFF;
-
-  h1 {
-    @apply leading-tight;
-  }
+  @apply place-items-center;
 
   a {
     @apply text-3xl opacity-90 mt-20;

@@ -1,6 +1,3 @@
-// Small server-side helper to fetch latest Qiita article for a given user
-// Uses private env vars: QIITA_USERNAME (required), QIITA_TOKEN (optional)
-
 export type QiitaItem = {
   title: string;
   url: string;
@@ -18,7 +15,7 @@ export async function fetchQiitaItems(perPage: number = 20): Promise<QiitaItem[]
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   try {
-    const res = await fetch(url, { headers, cache: 'no-store' });
+    const res = await fetch(url, { headers, cache: 'force-cache' });
     if (!res.ok) return [];
     const items = (await res.json()) as Array<{ title: string; url: string; created_at?: string }>;
     if (!Array.isArray(items) || items.length === 0) return [];

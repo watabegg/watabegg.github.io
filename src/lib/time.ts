@@ -13,7 +13,6 @@ export function differenceInMonths(start: Date, end: Date): number {
     return 1;
   }
 
-  // Include the current month if end day is on or after start day.
   if (endDay >= startDay) {
     months += 1;
   }
