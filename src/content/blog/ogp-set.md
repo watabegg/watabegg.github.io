@@ -15,6 +15,10 @@ AstroのOGP画像生成ですが、SVGを返すエンドポイントを用意し
 
 OGP画像のデザインはシンプルに保ちつつ、タイトルが長い場合でも見切れないようにテキストを分割・調整するロジックも組み込みました(Codexが)。
 
+って思ってデプロイしたらSVGってOGP画像として認識されませんでした。[ここ](https://ogp.me/)に書いてなくて[ここ](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#image-files-jpg-png-gif)に書いてあるの罠すぎる。なので、SVGをPNGに変換して返すエンドポイントも追加しました。`resvg` ライブラリを使ってSVGをPNGに変換し、OGP画像として利用できるようにしました。
+
+あとフォントですが、Webフォントを使うとOGP画像生成時にフォントが適用されない問題があるので、ローカルにフォントファイルを配置し、`resvg` に読み込ませる形で対応しました。今回はGoogle FontsのNoto Sans JPを使いました。こんなこと(Webフォントを持ってくるやつ)しとぅない...
+
 ## 余談
 
 実際に先に例を挙げたZenn,Qiita,noteではOGP画像生成はCloudinaryとかサーバで処理してそうですが、このサイトはGitHub Pagesだし、サーバレスで完結させたかったので、この方法を選びました。Astroの柔軟性のおかげで、こうした動的コンテンツ生成も比較的簡単に実装できて満足しています。  

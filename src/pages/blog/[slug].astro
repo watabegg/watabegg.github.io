@@ -15,7 +15,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
-const ogImageUrl = `/og/blog/${entry.slug}.svg`;
+const ogImageUrl = `/og/blog/${entry.slug}.png`;
 ---
 <ContentLayout
   title={entry.data.title}
