@@ -42,51 +42,50 @@ const programSkills = [
 ---
 
 <Layout title="About | watabeggの個人サイト">
-  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
-    <div id="about-content" class="w-full max-w-3xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
-      <div id="about-icon" class="mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative" style="perspective: 1000px; transform-style: preserve-3d;">
-        {iconObjects.map((iconObj, index) => {
-          return (
-            <Image
-              src={iconObj}
-              alt={`watabeggのアイコン ${index + 1}`}
-              class={`rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0 ${index !== 0 ? 'opacity-0' : 'opacity-90'}`}
-              loading="lazy"
-              priority={index === 0}
-              style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
-              transition:name={index === 0 ? 'icon' : (index === 1 ? 'figure' : '')}
-            />
-          );
-        })}
-      </div>
-      <span class="text-lg md:text-xl w-full font-semibold text-center text-base-content mb-4 self-center md:self-start">
-        @watabegg
-      </span>
+  <div id="about-content" class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left max-w-3xl space-y-6 md:space-y-8 text-base-content">
+    <div id="about-icon" class="mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative" style="perspective: 1000px; transform-style: preserve-3d;">
+      {iconObjects.map((iconObj, index) => {
+        return (
+          <Image
+            src={iconObj}
+            alt={`watabeggのアイコン ${index + 1}`}
+            class={`rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0 ${index !== 0 ? 'opacity-0' : 'opacity-90'}`}
+            loading="lazy"
+            priority={index === 0}
+            style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+            transition:name={index === 0 ? 'icon' : (index === 1 ? 'figure' : '')}
+          />
+        );
+      })}
+    </div>
+    <span class="text-lg md:text-xl w-full font-semibold text-center text-base-content mb-4 self-center md:self-start">
+      @watabegg
+    </span>
 
-      <h1 class="text-4xl md:text-5xl w-full font-bold opacity-90 text-center md:self-start">
-        About
-      </h1>
+    <h1 class="text-4xl md:text-5xl w-full font-bold opacity-90 text-center md:self-start">
+      About
+    </h1>
 
-      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-3">個人情報</h2>
-        <DefinitionList items={personalInfo} />
-      </section>
+    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">個人情報</h2>
+      <DefinitionList items={personalInfo} />
+    </section>
 
-      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-3">経歴</h2>
-        <DefinitionList items={careerHistory} />
-      </section>
+    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">経歴</h2>
+      <DefinitionList items={careerHistory} />
+    </section>
 
-      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-3">プログラミングスキル</h2>
-        <DefinitionList items={programSkills} />
-      </section>
+    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">プログラミングスキル</h2>
+      <DefinitionList items={programSkills} />
+    </section>
 
-      <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
-        <div class="flex flex-col gap-y-8 justify-center items-center">
-          <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-11/pl.u-mJy834RCzmbbrEp"></iframe>
-            <div class="aspect-video w-full max-w-[700px] rounded-lg overflow-hidden">
+    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
+      <div class="flex flex-col gap-y-8 justify-center items-center">
+        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-11/pl.u-mJy834RCzmbbrEp"></iframe>
+          <div class="aspect-video w-full max-w-[700px] rounded-lg overflow-hidden">
             <iframe 
               class="w-full h-full" 
               src="https://www.youtube.com/embed/n96cgEBWhl8?si=XECNRS89Vz2ehK28" 
@@ -95,10 +94,9 @@ const programSkills = [
               referrerpolicy="strict-origin-when-cross-origin" 
               allowfullscreen
             ></iframe>
-            </div>
-        </div>
-      </section>
-    </div>
+          </div>
+      </div>
+    </section>
   </div>
 
   <script>

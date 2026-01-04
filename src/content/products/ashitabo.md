@@ -1,5 +1,5 @@
 ---
-title: "あしたぼ (軽音サークルHP & Webアプリ)"
+title: "所属軽音サークルあしたぼHP & Webアプリ"
 publishDate: 2025-05-05
 description: "所属する軽音サークルのために開発した公式ホームページ兼部員向けWebアプリ"
 tags:
@@ -11,42 +11,59 @@ tags:
   - "チーム開発"
 imageUrl: "/images/product/ashitabo.png"
 includeInSkillsheet: true
+skillsheet:
+  summary: "軽音サークル公式サイト兼会員向けWebアプリをNext.jsフルスタック構成で刷新し、部内業務のオンライン化を実現。"
+  period: "2024-07-01/2025-08-01"
+  responsibilities:
+    - "旧サイトの現状調査と情報設計の立案"
+    - "UI/UX要件の整理とReactコンポーネント実装"
+    - "データベース/認証を含むバックエンド開発と運用"
+  techStack:
+    - "Next.js 15 + TypeScript | App Routerとcache戦略を活用したフルスタック構成"
+    - "Prisma + PostgreSQL | 本番DB設計とマイグレーション管理"
+    - "Auth.js (LINE OAuth) | LINE認証で部員限定機能にアクセス制御"
+    - "Vercel | 高速デプロイとプレビュー環境の整備"
+  deliverables:
+    - label: "あしたぼホームページ"
+      url: "https://www.ashitabo.net"
 ---
+
+## 概要
 
 所属大学軽音サークル「あしたぼ」向けに、旧来のPHP+CSV構成をリプレースしてモダンなWebアプリとして再構築。公開サイトと部員専用機能を一体化し、情報発信と部内オペレーションを同じ基盤で扱えるようにした。
 また部内の先輩後輩や外部メンバーと協力して開発を進めた。
 
----
-
-軽音サークル公式サイト兼会員向けWebアプリをNext.jsフルスタック構成で刷新し、部内業務のオンライン化を実現。
-
----
+## 期間
 
 2024-07-01/2025-08-01
 
----
+## 使用技術
 
 - Next.js 15 + TypeScript | App Routerとcache戦略を活用したフルスタック構成
 - Prisma + PostgreSQL | 本番DB設計とマイグレーション管理
 - Auth.js (LINE OAuth) | LINE認証で部員限定機能にアクセス制御
 - Vercel | 高速デプロイとプレビュー環境の整備
 
----
+## 業務領域
 
 - 旧サイトの現状調査と情報設計の立案
 - UI/UX要件の整理とReactコンポーネント実装
 - データベース/認証を含むバックエンド開発と運用
 
----
+## 工夫点
 
 1. レガシーなCSVベース運用をDB化し、情報更新を一元管理
 2. 部室予約や限定ライブ動画検索など、サークル特有の業務フローをWeb化
 3. Auth.js v5の変更点を吸収しつつLINE OAuthを安定実装
 
----
+## 成果物
 
-- あしたぼホームページ | https://www.ashitabo.net
+- [あしたぼホームページ](https://www.ashitabo.net)
 
----
+## 余談
 
 チームドキュメント整備や後輩への引き継ぎ体制も構築中。今後は日程調整機能や初期実装のリファクタリングを進め、サークル内で継続的に改善できる仕組みづくりを目指している。
+
+## 余談その2
+
+現在は [あしたぼホームページv1](https://watabegg.github.io/product/ashitabo-v1/) の技術スタックに移行しています。

@@ -9,6 +9,17 @@ const productsCollection = defineCollection({
     tags: z.array(z.string()).default([]),
     imageUrl: z.string().optional(),
     includeInSkillsheet: z.boolean().default(true),
+    draft: z.boolean().default(false),
+    skillsheet: z.object({
+      summary: z.string(),
+      period: z.string(),
+      responsibilities: z.array(z.string()).default([]),
+      techStack: z.array(z.string()).default([]),
+      deliverables: z.array(z.object({
+        label: z.string(),
+        url: z.string(),
+      })).default([]),
+    }).optional(),
   }),
 });
 
