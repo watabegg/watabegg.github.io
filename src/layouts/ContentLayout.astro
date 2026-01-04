@@ -13,8 +13,8 @@ interface Props {
 }
 
 const { title, publishDate, author, tags, imageUrl, description, ogImageUrl, headings } = Astro.props as Props;
-const placeholderImageUrl = '/images/placeholder.svg';
-const displayImageUrl = imageUrl || placeholderImageUrl;
+const ogpImageUrl = `/og/blog/${Astro.url.pathname.split('/').pop()}.svg`;
+const displayImageUrl = imageUrl || ogpImageUrl;
 
 const isBlog = Astro.url.pathname.startsWith('/blog/');
 const articleType = isBlog ? 'BlogPosting' : 'Article';
