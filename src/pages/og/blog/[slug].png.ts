@@ -1,6 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { Resvg } from '@resvg/resvg-js';
-import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { buildBlogOgSvg } from '../../../lib/og/blog';
 
 export async function getStaticPaths() {
@@ -17,19 +18,18 @@ type Props = {
 
 export async function GET({ props }: { props: Props }) {
   const svg = buildBlogOgSvg(props.entry);
-  const fontPath = fileURLToPath(
-    new URL('../../../assets/fonts/NotoSansJP-Bold.ttf', import.meta.url)
-  );
+  const fontPath = resolve(process.cwd(), 'src/assets/fonts/NotoSansJP-Bold.ttf');
+  const hasFont = existsSync(fontPath);
   const resvg = new Resvg(svg, {
     fitTo: {
       mode: 'width',
       value: 1200,
     },
     font: {
-      loadSystemFonts: false,
-      fontFiles: [fontPath],
-      defaultFontFamily: 'Noto Sans JP',
-      sansSerifFamily: 'Noto Sans JP',
+      loadSystemFonts: !hasFont,
+      fontFiles: hasFont ? [fontPath] : [],
+      defaultFontFamily: hasFont ? 'Noto Sans JP' : 'sans-serif',
+      sansSerifFamily: hasFont ? 'Noto Sans JP' : 'sans-serif',
     },
   });
   const pngBuffer = resvg.render().asPng();
