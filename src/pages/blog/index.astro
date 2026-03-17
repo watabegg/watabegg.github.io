@@ -1,108 +1,122 @@
 ---
-import { getCollection } from 'astro:content'
-import QiitaIcon from '../../assets/qiita.png'
-import Layout from '../../layouts/Layout.astro'
-import { fetchQiitaItems } from '../../lib/qiita'
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { fetchQiitaItems } from '../../lib/qiita';
+import { fetchZennItems } from '../../lib/zenn';
+import QiitaIcon from '../../assets/qiita.png';
+import ZennIcon from '../../assets/zenn.png';
 
-const localPosts = (await getCollection('blog')).sort(
-	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
-)
+const MAX_EXTERNAL_ITEMS = 100;
 
-const qiitaItems = await fetchQiitaItems(10)
+const [localPostsRaw, qiitaResult, zennResult] = await Promise.all([
+  getCollection('blog'),
+  fetchQiitaItems(MAX_EXTERNAL_ITEMS),
+  fetchZennItems(MAX_EXTERNAL_ITEMS),
+]);
+
+const localPosts = localPostsRaw.sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
 
 type BlendItem =
-	| {
-			kind: 'local'
-			slug: string
-			title: string
-			description: string
-			author: string
-			publishDate: Date
-			tags?: string[]
-	  }
-	| { kind: 'qiita'; title: string; url: string; createdAt: Date }
+  | { kind: 'local'; slug: string; title: string; description: string; author: string; publishDate: Date; tags?: string[] }
+  | { kind: 'qiita'; title: string; url: string; createdAt: Date }
+  | { kind: 'zenn'; title: string; url: string; createdAt: Date };
 
 const blended: BlendItem[] = [
-	...localPosts.map((p) => ({
-		kind: 'local' as const,
-		slug: p.id,
-		title: p.data.title,
-		description: p.data.description,
-		author: p.data.author,
-		publishDate: p.data.publishDate,
-		tags: p.data.tags,
-	})),
-	...qiitaItems.map((q) => ({
-		kind: 'qiita' as const,
-		title: q.title,
-		url: q.url,
-		createdAt: q.createdAt,
-	})),
+  ...localPosts.map(p => ({
+    kind: 'local' as const,
+    slug: p.id,
+    title: p.data.title,
+    description: p.data.description,
+    author: p.data.author,
+    publishDate: p.data.publishDate,
+    tags: p.data.tags,
+  })),
+  ...qiitaResult.items.map(q => ({ kind: 'qiita' as const, title: q.title, url: q.url, createdAt: q.createdAt })),
+  ...zennResult.items.map(z => ({ kind: 'zenn' as const, title: z.title, url: z.url, createdAt: z.createdAt })),
 ].sort((a, b) => {
-	const ad =
-		a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf()
-	const bd =
-		b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf()
-	return bd - ad
-})
+  const ad = a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf();
+  const bd = b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf();
+  return bd - ad;
+});
+
+const externalMeta = {
+  qiita: {
+    label: 'Qiita',
+    icon: QiitaIcon,
+    badgeClass: 'bg-emerald-500/15 text-emerald-600',
+  },
+  zenn: {
+    label: 'Zenn',
+    icon: ZennIcon,
+    badgeClass: 'bg-sky-500/15 text-sky-600',
+  },
+} as const;
 ---
 <Layout title="Blog | watabeggの個人サイト">
-  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">
-    <div class="w-full max-w-3xl flex flex-col items-center md:items-start space-y-6 md:space-y-8 text-base-content">
-      <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
-        ブログ
-      </h1>
-      <div class="space-y-10 w-full">
-        {blended.map(item => (
-          <article
-            class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"
-          >
-            {item.kind === 'local' ? (
-              <>
-                <h2 class="text-2xl font-semibold mb-2 text-base-content">
-                  <a href={`/blog/${item.slug}`} class="hover:text-primary">
-                    {item.title}
-                  </a>
-                </h2>
-                <p class="text-sm text-base-content opacity-60 mb-3">
-                  作成者: {item.author} | 公開日: {item.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-                <p class="text-base-content opacity-80 mb-4">{item.description}</p>
-                {item.tags && (
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    {item.tags.map(tag => (
-                      <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <a href={`/blog/${item.slug}`} class="text-primary hover:text-primary/80 font-medium">
-                  続きを読む &rarr;
+  <div class="container mx-auto max-w-3xl px-6 py-16 flex flex-col items-center text-center md:text-left space-y-6 md:space-y-8 text-base-content">
+    <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
+      ブログ
+    </h1>
+    <div class="space-y-10 w-full">
+      {blended.map(item => (
+        <article
+          class="bg-base-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-left"
+        >
+          {item.kind === 'local' ? (
+            <>
+              <h2 class="text-2xl font-semibold mb-2 text-base-content">
+                <a href={`/blog/${item.slug}`} class="hover:text-primary">
+                  {item.title}
                 </a>
-              </>
-            ) : (
-              <>
-                <div class="flex items-center gap-2 mb-2">
-                  <img src={QiitaIcon.src} alt="Qiita" class="w-5 h-5" width={20} height={20} loading="lazy" />
-                  <span class="text-xs bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full tracking-wide">Qiita</span>
+              </h2>
+              <p class="text-sm text-base-content opacity-60 mb-3">
+                作成者: {item.author} | 公開日: {item.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <p class="text-base-content opacity-80 mb-4">{item.description}</p>
+              {item.tags && (
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {item.tags.map(tag => (
+                    <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <h2 class="text-2xl font-semibold mb-2 text-base-content">
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" class="hover:text-primary">
-                    {item.title}
+              )}
+              <a href={`/blog/${item.slug}`} class="text-primary hover:text-primary/80 font-medium">
+                続きを読む &rarr;
+              </a>
+            </>
+          ) : (
+            (() => {
+              const meta = externalMeta[item.kind];
+              return (
+                <>
+                  <div class="flex items-center gap-2 mb-2">
+                    <img src={meta.icon.src} alt={meta.label} class="w-5 h-5" width={20} height={20} loading="lazy" />
+                    <span class={`text-xs ${meta.badgeClass} px-2 py-0.5 rounded-full tracking-wide`}>{meta.label}</span>
+                  </div>
+                  <h2 class="text-2xl font-semibold mb-2 text-base-content">
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" class="hover:text-primary">
+                      {item.title}
+                    </a>
+                  </h2>
+                  <p class="text-sm text-base-content opacity-60 mb-3">
+                    公開日: {item.createdAt.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} | 出典: {meta.label}
+                  </p>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 font-medium">
+                    記事を読む ↗
                   </a>
-                </h2>
-                <p class="text-sm text-base-content opacity-60 mb-3">
-                  公開日: {item.createdAt.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })} | 出典: Qiita
-                </p>
-                <a href={item.url} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 font-medium">
-                  記事を読む ↗
-                </a>
-              </>
-            )}
-          </article>
-        ))}
-      </div>
+                </>
+              );
+            })()
+          )}
+        </article>
+      ))}
+      {blended.length === 0 && (
+        <p class="text-sm text-base-content/70 text-center">まだ記事がありません。</p>
+      )}
     </div>
   </div>
 </Layout>

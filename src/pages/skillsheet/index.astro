@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content'
-import DefinitionList from '../../components/DefinitionList.astro'
-import { profile } from '../../data/profile'
-import Layout from '../../layouts/Layout.astro'
-import { buildProductExperience } from '../../lib/product'
-import { calculateAge } from '../../lib/time'
+import Layout from '../../layouts/Layout.astro';
+import DefinitionList from '../../components/DefinitionList.astro';
+import { profile } from '../../data/profile';
+import { getCollection } from 'astro:content';
+import { calculateAge } from '../../lib/time';
+import { calculateDurationMonths, formatPeriodLabel, parsePeriodRange } from '../../lib/period';
 
 const referenceDate = new Date()
 const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
@@ -12,9 +12,22 @@ const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
 const products = await getCollection('products')
 
 const experiences = products
-	.map((product) => buildProductExperience(product, referenceDate))
-	.filter((experience) => experience.includeInSkillsheet)
-	.sort((a, b) => a.sortKey - b.sortKey)
+  .filter((product) => !product.data.draft && product.data.includeInSkillsheet && product.data.skillsheet)
+  .map((product) => {
+    const skillsheet = product.data.skillsheet!;
+    const range = parsePeriodRange(skillsheet.period);
+    return {
+      title: product.data.title,
+      summary: skillsheet.summary,
+      periodLabel: formatPeriodLabel(range),
+      durationMonths: calculateDurationMonths(range, referenceDate),
+      responsibilities: skillsheet.responsibilities ?? [],
+      techStack: skillsheet.techStack ?? [],
+      deliverables: skillsheet.deliverables ?? [],
+      sortKey: range.start.valueOf(),
+    };
+  })
+  .sort((a, b) => a.sortKey - b.sortKey);
 
 const headList = [
 	{

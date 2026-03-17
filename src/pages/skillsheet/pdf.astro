@@ -1,16 +1,29 @@
 ---
-import { getCollection } from 'astro:content'
-import { profile } from '../../data/profile'
-import { buildProductExperience } from '../../lib/product'
-import { calculateAge } from '../../lib/time'
+import { getCollection } from 'astro:content';
+import { profile } from '../../data/profile';
+import { calculateAge } from '../../lib/time';
+import { calculateDurationMonths, formatPeriodLabel, parsePeriodRange } from '../../lib/period';
 
 const referenceDate = new Date()
 const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
 
 const experiences = (await getCollection('products'))
-	.map((entry) => buildProductExperience(entry, referenceDate))
-	.filter((experience) => experience.includeInSkillsheet)
-	.sort((a, b) => a.sortKey - b.sortKey)
+  .filter((product) => !product.data.draft && product.data.includeInSkillsheet && product.data.skillsheet)
+  .map((product) => {
+    const skillsheet = product.data.skillsheet!;
+    const range = parsePeriodRange(skillsheet.period);
+    return {
+      title: product.data.title,
+      summary: skillsheet.summary,
+      periodLabel: formatPeriodLabel(range),
+      durationMonths: calculateDurationMonths(range, referenceDate),
+      responsibilities: skillsheet.responsibilities ?? [],
+      techStack: skillsheet.techStack ?? [],
+      deliverables: skillsheet.deliverables ?? [],
+      sortKey: range.start.valueOf(),
+    };
+  })
+  .sort((a, b) => a.sortKey - b.sortKey);
 
 const definitionItems = [
 	['氏名', `${profile.head.name} (${profile.head.furigana})`],

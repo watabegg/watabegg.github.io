@@ -11,41 +11,54 @@ tags:
   - "React"
 imageUrl: "/images/product/asuna-hp.png"
 includeInSkillsheet: true
+skillsheet:
+  summary: "ASUNA Frontierのブランドトーンを定義し、FigmaデザインとWordPress実装を連携させたコーポレートサイト制作をリード。"
+  period: "2025-02-01/2025-05-31"
+  responsibilities:
+    - "ブランドアイデンティティの定義とビジュアルデザイン"
+    - "CMS要件の整理とエディターフローの設計"
+    - "WordPressテーマおよびReactプラグインの実装"
+    - "公開後の運用ドキュメント作成とレクチャー"
+  techStack:
+    - "Figma | ロゴ設計とスタイルガイド、UIキットを共同作成"
+    - "WordPress | 運用負荷を抑えるカスタムテーマ構築"
+    - "TypeScript + React | 共通コンポーネントをプラグイン化し再利用性を向上"
+  deliverables:
+    - label: "ASUNA Frontier公式サイト"
+      url: "https://asuna-ac.net/"
 ---
+
+## 概要
 
 学生メンバーで構成されるチームの一員として、ASUNA Frontier株式会社のブランディング刷新とWebサイト構築を担当。ロゴやUIデザインからCMS実装まで一気通貫で仕上げ、社内外の情報発信基盤を整備した。
 
----
-
-ASUNA Frontierのブランドトーンを定義し、FigmaデザインとWordPress実装を連携させたコーポレートサイト制作をリード。
-
----
+## 期間
 
 2025-02-01/2025-05-31
 
----
+## 使用技術
 
 - Figma | ロゴ設計とスタイルガイド、UIキットを共同作成
 - WordPress | 運用負荷を抑えるカスタムテーマ構築
 - TypeScript + React | 共通コンポーネントをプラグイン化し再利用性を向上
 
----
+## 業務領域
 
 - ブランドアイデンティティの定義とビジュアルデザイン
 - CMS要件の整理とエディターフローの設計
 - WordPressテーマおよびReactプラグインの実装
 - 公開後の運用ドキュメント作成とレクチャー
 
----
+## 工夫点
 
 1. ロゴ・カラー・タイポグラフィを統一しブランドトーンを明文化
 2. Reactコンポーネント化で複数ページの表現を一元管理
 3. 更新オペレーションをテンプレート化しメンバーの教育コストを削減
 
----
+## 成果物
 
-- ASUNA Frontier公式サイト | https://asuna-ac.net/
+- [ASUNA Frontier公式サイト](https://asuna-ac.net/)
 
----
+## 余談
 
 継続的な運用を見据えて、学習コンテンツや社内イベント情報を追加できるブロック設計も準備。今後はSEO改善や多言語対応も視野に入れ、企業成長に伴うサイト進化を支えていく予定。

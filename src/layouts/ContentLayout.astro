@@ -1,32 +1,36 @@
 ---
-import TableOfContents from '../components/TableOfContents.astro'
-import Layout from './Layout.astro'
+import Layout from './Layout.astro';
 
 interface Props {
-	title: string
-	publishDate?: Date
-	author?: string
-	tags?: string[]
-	imageUrl?: string
-	description?: string
-	headings: { depth: number; slug: string; text: string }[]
+  title: string;
+  publishDate?: Date;
+  author?: string;
+  tags?: string[];
+  imageUrl?: string;
+  description?: string;
+  ogImageUrl?: string;
+  headings: { depth: number; slug: string; text: string }[];
 }
 
-const { title, publishDate, author, tags, imageUrl, description, headings } =
-	Astro.props as Props
-const placeholderImageUrl = '/images/placeholder.svg'
-const displayImageUrl = imageUrl || placeholderImageUrl
+const { title, publishDate, author, tags, imageUrl, description, ogImageUrl, headings } = Astro.props as Props;
+const displayImageUrl = imageUrl || ogImageUrl || '/images/ogp_default.png';
 
 const isBlog = Astro.url.pathname.startsWith('/blog/')
 const articleType = isBlog ? 'BlogPosting' : 'Article'
 
-const structuredDataImageUrl = imageUrl
-	? new URL(imageUrl, Astro.site).toString()
-	: undefined
-const isSvgImage = displayImageUrl.endsWith('.svg')
-const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`
+const structuredDataImageUrl = (ogImageUrl ?? imageUrl) ? new URL(ogImageUrl ?? imageUrl ?? '', Astro.site).toString() : undefined;
+const isSvgImage = displayImageUrl.endsWith('.svg');
+const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`;
+
+const depthClasses: { [key: number]: string } = {
+  1: "font-semibold",
+  2: "pl-5",
+  3: "pl-10",
+  4: "pl-[3.75em]",
+};
+
 ---
-<Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={imageUrl} ogType="article">
+<Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={ogImageUrl ?? imageUrl} ogType="article">
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": articleType,
@@ -40,10 +44,10 @@ const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgIma
   })} />
 
   <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8 max-w-5xl">
-    <article class="main-content flex-grow lg:w-3/4 flex flex-col items-center lg:items-start">
+    <article class="main-content flex-grow lg:w-3/4 flex flex-col items-start">
       <img src={displayImageUrl} alt={`Image for ${title}`} class={imageClasses} />
-      <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-center lg:text-left">{title}</h1>
-      <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-center lg:justify-start">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-left">{title}</h1>
+      <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-start">
         {author && (
           <>
             <span>作成者: {author}</span>
@@ -55,7 +59,7 @@ const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgIma
         )}
       </div>
       {tags && tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-6 lg:mb-8 justify-center lg:justify-start">
+        <div class="flex flex-wrap gap-2 mb-6 lg:mb-8 justify-start">
           {tags.map(tag => (
             <span class="bg-secondary text-secondary-content text-xs font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl">
               {tag}
@@ -66,14 +70,21 @@ const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgIma
       <div class="prose lg:prose-lg w-full">
         <slot />
       </div>
-      <div class="mt-8 w-full flex justify-center lg:justify-start">
-        <button onclick="history.back()" class="btn btn-primary btn-md sm:btn-lg">戻る</button>
-      </div>
+      <button onclick="history.back()" class="btn btn-primary btn-outline w-full mt-8">戻る</button>
     </article>
 
     {headings && headings.length > 1 && (
-      <aside class="w-full lg:w-1/4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto mt-8 lg:mt-0">
-        <TableOfContents headings={headings} />
+      <aside id="toc-aside-desktop" class="hidden lg:block p-6 bg-base-200 rounded-lg h-full min-w-50">
+        <h2 class="text-2xl font-semibold mb-4 text-base-content">目次</h2>
+        <ul class="space-y-2">
+          {headings.map((heading) => (
+            <li class={`toc-item ${depthClasses[heading.depth] || ''}`}>
+              <a href={`#${heading.slug}`} class="block py-1 text-base text-base-content hover:text-primary hover:underline">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
       </aside>
     )}
   </div>
