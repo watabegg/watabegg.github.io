@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content'
-import { profile } from '../../data/profile'
+import { profile } from '@/data/profile'
 import {
 	calculateDurationMonths,
 	formatPeriodLabel,
 	parsePeriodRange,
-} from '../../lib/period'
-import { calculateAge } from '../../lib/time'
+} from '@/lib/period'
+import { calculateAge } from '@/lib/time'
 
 const referenceDate = new Date()
 const age = calculateAge(new Date(profile.head.birthDate), referenceDate)

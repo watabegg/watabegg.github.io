@@ -6,8 +6,8 @@ import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
-	// GitHub Pages deployment configuration
 	site: 'https://watabegg.github.io',
+	devToolbar: { enabled: false },
 	integrations: [sitemap()],
 
 	vite: {

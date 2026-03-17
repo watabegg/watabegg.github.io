@@ -1,47 +1,35 @@
 ---
-import GithubIcon from './icons/Github.astro'
-import GmailIcon from './icons/Gmail.astro'
-import InstagramIcon from './icons/Instagram.astro'
-import TwitterIcon from './icons/Twitter.astro'
+import GithubIcon from '@/components/icons/Github.astro'
+import GmailIcon from '@/components/icons/Gmail.astro'
+import InstagramIcon from '@/components/icons/Instagram.astro'
+import TwitterIcon from '@/components/icons/Twitter.astro'
+import { socialLinks } from '@/data/constant'
 
-const socialLinks = [
-	{
-		name: 'Instagram',
-		href: 'https://www.instagram.com/watabegg',
-		IconComponent: InstagramIcon,
-	},
-	{
-		name: 'Twitter',
-		href: 'https://twitter.com/watabegg',
-		IconComponent: TwitterIcon,
-	},
-	{
-		name: 'GitHub',
-		href: 'https://github.com/watabegg',
-		IconComponent: GithubIcon,
-	},
-	{
-		name: 'Gmail',
-		href: 'mailto:watabegg@gmail.com',
-		IconComponent: GmailIcon,
-	},
-]
+type IconKey = 'Twitter' | 'GitHub' | 'Instagram' | 'Gmail'
+const iconMap: Record<IconKey, typeof TwitterIcon> = {
+	Twitter: TwitterIcon,
+	GitHub: GithubIcon,
+	Instagram: InstagramIcon,
+	Gmail: GmailIcon,
+}
 ---
-
 
 <div class="relative z-10 container mx-auto py-16 px-12 flex flex-col-reverse md:flex-row justify-between items-center text-center">
   <p class="text-sm mb-4 md:mb-0 opacity-80">&copy; {new Date().getFullYear()} watabegg. All rights reserved.</p>
   <div id="social-links-footer" class="flex items-center space-x-4">
-    {socialLinks.map((link) => (
-      <a
-        href={link.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="opacity-75 transition-opacity duration-300 hover:opacity-100"
-        aria-label={link.name}
-      >
-        <link.IconComponent class="w-5 h-5" />
-      </a>
-    ))}
+    {socialLinks.map((link) => {
+      const IconComponent = iconMap[link.name as IconKey]
+      return (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="opacity-75 transition-opacity duration-300 hover:opacity-100"
+          aria-label={link.name}
+        >
+          <IconComponent class="w-5 h-5" />
+        </a>
+      )
+    })}
   </div>
 </div>

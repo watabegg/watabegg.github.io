@@ -1,11 +1,11 @@
 ---
-import '../styles/global.css'
+import '@/styles/global.css'
 import { Image } from 'astro:assets'
 import { ClientRouter, fade } from 'astro:transitions'
-import FigureImage from '../assets/figure_1_1.webp'
-import IconImage from '../assets/real_icon.webp'
-import Footer from '../components/Footer.astro'
-import Header from '../components/Header.astro'
+import FigureImage from '@/assets/figure_1_1.webp'
+import IconImage from '@/assets/real_icon.webp'
+import Footer from '@/components/Footer.astro'
+import Header from '@/components/Header.astro'
 
 interface Props {
 	title?: string
@@ -72,126 +72,7 @@ const finalOgImageUrl = ogImageUrl
       }
     })} />
     <script>
-      import { gsap } from "gsap";
-      import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
-      import type { PageType } from '../types/page';
-
-      const HEADER = "#header-bg";
-      const FOOTER = "#footer-bg";
-      const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
-
-      const getType = (): PageType => document.body.classList.contains("is-home") ? "home" : "inner";
-      const nextTypeFrom = (url: URL): PageType => url.pathname === "/" ? "home" : "inner";
-
-      type Shape = {
-        w: string;
-        h: string;
-        top?: string;
-        left?: string;
-        right?: string;
-        bottom?: string;
-        skewX: number;
-        skewY: number;
-        scaleX: number;
-        scaleY: number;
-        originX: string;
-        originY: string;
-      };
-
-      const presets = {
-        mobile: {
-          home: {
-            header: { w: "100vw", h: "60vh",  top: "0",     left: "0",     skewX: 0,  skewY: -6, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
-            footer: { w: "100vw", h: "40vh",  bottom: "-20vh", right: "0", skewX: 0,  skewY: -6, scaleX: 1, scaleY: 1, originX: "0%",   originY: "100%" },
-          },
-          inner: {
-            header: { w: "100vw", h: "66px",  top: "0",     left: "0",     skewX: 0,  skewY: -2, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
-            footer: { w: "100vw", h: "184px", bottom: "0",  right: "0",    skewX: 0,  skewY:  0, scaleX: 1, scaleY: 1, originX: "0%",   originY: "100%" },
-          },
-        },
-        desktop: {
-          home: {
-            header: { w: "60vw",  h: "100%",  top: "0",     left: "0",     skewX: -6, skewY:  0, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
-            footer: { w: "40vw",  h: "100%",  bottom: "0",  right: "-10vw",skewX: -6, skewY:  0, scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" },
-          },
-          inner: {
-            header: { w: "100vw", h: "72px",  top: "0",     left: "0",     skewX: 0,  skewY: -2, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
-            footer: { w: "100vw", h: "148px", bottom: "0",  right: "0",    skewX: 0,  skewY:  0, scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" },
-          },
-        },
-      } as const;
-
-      const mm = window.matchMedia("(min-width: 768px)");
-      const getPreset = (type: PageType) => mm.matches ? presets.desktop[type] : presets.mobile[type];
-
-      const buildVars = (shape: Shape): gsap.TweenVars => ({
-        "--w": shape.w,
-        "--h": shape.h,
-        "--top": shape.top ?? "auto",
-        "--left": shape.left ?? "auto",
-        "--right": shape.right ?? "auto",
-        "--bottom": shape.bottom ?? "auto",
-        skewX: shape.skewX,
-        skewY: shape.skewY,
-        scaleX: shape.scaleX,
-        scaleY: shape.scaleY,
-        transformOrigin: `${shape.originX} ${shape.originY}`,
-      });
-
-      const setShape = (el: HTMLElement, shape: Shape) =>
-        gsap.set(el, buildVars(shape));
-
-      const prep = (type: PageType) => {
-        const preset = getPreset(type);
-        const h = $(HEADER);
-        const f = $(FOOTER);
-        if (h) setShape(h, preset.header);
-        if (f) setShape(f, preset.footer);
-      };
-
-      let currentTl: gsap.core.Timeline | null = null;
-
-      const animateTo = (to: PageType, duration = 0.7) => {
-        currentTl?.kill();
-        const preset = getPreset(to);
-        const h = $(HEADER);
-        const f = $(FOOTER);
-        currentTl = gsap.timeline({ defaults: { duration, ease: "power3.inOut" } });
-        if (h) currentTl.to(h, buildVars(preset.header), 0);
-        if (f) currentTl.to(f, buildVars(preset.footer), 0.06);
-      };
-
-      // 2回目以降のナビゲーション: DOMスワップ後に前ページの形状をセット
-      document.addEventListener("astro:after-swap", () => {
-        const prev = window.__lastPageType as PageType ?? "inner";
-        prep(prev);
-      });
-
-      document.addEventListener("astro:page-load", () => {
-        const current = getType();
-        // 初回ロード時は after-swap が発火しないため、ここで初期形状をセット
-        if (window.__lastPageType === undefined) {
-          prep("inner");
-        }
-        animateTo(current, 0.8);
-        window.__lastPageType = current;
-      });
-
-      document.addEventListener("astro:before-preparation", (event) => {
-        if (!isTransitionBeforePreparationEvent(event)) return;
-
-        const current = getType();
-        const next = nextTypeFrom(event.to);
-        window.__lastPageType = current;
-
-        const loader = event.loader;
-        event.loader = async () => {
-          if (current !== next) {
-            animateTo(next, 0.45);
-          }
-          await loader();
-        };
-      });
+      import '@/layouts/Layout.client'
     </script>
 		<ClientRouter />
 	</head>
@@ -238,21 +119,3 @@ const finalOgImageUrl = ogImageUrl
 		) }
 	</body>
 </html>
-
-<style is:global>
-	body {
-		font-family: sans-serif;
-		position: relative;
-	}
-
-	.bg-panel {
-		position: absolute;
-		width: var(--w, 100%);
-		height: var(--h, 100%);
-		top: var(--top, auto);
-		left: var(--left, auto);
-		right: var(--right, auto);
-		bottom: var(--bottom, auto);
-		will-change: transform;
-	}
-</style>

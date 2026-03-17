@@ -2,7 +2,7 @@ import { type CollectionEntry, getCollection } from 'astro:content'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { Resvg } from '@resvg/resvg-js'
-import { buildBlogOgSvg } from '../../../lib/og/blog'
+import { buildBlogOgSvg } from '@/lib/og/blog'
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog')

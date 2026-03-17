@@ -1,12 +1,10 @@
 ---
 import { getCollection } from 'astro:content'
-import Layout from '../../layouts/Layout.astro'
+import Layout from '@/layouts/Layout.astro'
 
 const now = new Date()
 
-const allProducts = await getCollection('products')
-
-const products = allProducts
+const products = (await getCollection('products'))
 	.filter(
 		(product) =>
 			!product.data.draft &&
@@ -15,15 +13,13 @@ const products = allProducts
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 ---
 <Layout title="Products | watabeggの個人サイト">
-  <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left max-w-5xl space-y-6 md:space-y-8 text-base-content">
+  <div class="page-section max-w-5xl text-center md:text-left w-full">
     <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
       作ったやつ
     </h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
       {products.map(product => (
-        <article
-          class="bg-base-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col text-left cursor-pointer"
-        >
+        <article class="content-card overflow-hidden flex flex-col text-left cursor-pointer">
           {product.data.imageUrl ? (
             <img src={product.data.imageUrl} alt={`${product.data.title}のOGP画像`} class="aspect-2/1 object-cover bg-base-200" />
           ) : (
@@ -42,13 +38,11 @@ const products = allProducts
             {product.data.tags && (
               <div class="flex flex-wrap gap-2 mb-4">
                 {product.data.tags.map(tag => (
-                  <span class="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {tag}
-                  </span>
+                  <span class="tag-badge">{tag}</span>
                 ))}
               </div>
             )}
-            <a href={`/product/${product.id}`} class="text-primary hover:text-primary/80 font-medium">
+            <a href={`/product/${product.id}`} class="read-more-link">
               詳細を見る &rarr;
             </a>
           </div>

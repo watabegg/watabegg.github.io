@@ -1,5 +1,6 @@
 ---
-import Layout from './Layout.astro'
+import Layout from '@/layouts/Layout.astro'
+import styles from './ContentLayout.module.css'
 
 interface Props {
 	title: string
@@ -32,9 +33,8 @@ const structuredDataImageUrl =
 		? new URL(ogImageUrl ?? imageUrl ?? '', Astro.site).toString()
 		: undefined
 const isSvgImage = displayImageUrl.endsWith('.svg')
-const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`
 
-const depthClasses: { [key: number]: string } = {
+const depthIndent: { [key: number]: string } = {
 	1: 'font-semibold',
 	2: 'pl-5',
 	3: 'pl-10',
@@ -54,11 +54,18 @@ const depthClasses: { [key: number]: string } = {
     "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.toString() }
   })} />
 
-  <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8 max-w-5xl">
-    <article class="main-content grow lg:w-3/4 flex flex-col items-start">
-      <img src={displayImageUrl} alt={`Image for ${title}`} class={imageClasses} />
-      <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-left">{title}</h1>
-      <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-start">
+  <div class={styles.contentWrapper}>
+    <article class={styles.mainContent}>
+      <img
+        src={displayImageUrl}
+        alt={`Image for ${title}`}
+        class:list={[
+          'w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md',
+          isSvgImage ? 'object-contain bg-base-200' : 'object-cover',
+        ]}
+      />
+      <h1 class={styles.contentTitle}>{title}</h1>
+      <div class={styles.contentMeta}>
         {author && (
           <>
             <span>作成者: {author}</span>
@@ -70,11 +77,9 @@ const depthClasses: { [key: number]: string } = {
         )}
       </div>
       {tags && tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-6 lg:mb-8 justify-start">
+        <div class={styles.contentTags}>
           {tags.map(tag => (
-            <span class="bg-secondary text-secondary-content text-xs font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl">
-              {tag}
-            </span>
+            <span class={styles.contentTag}>{tag}</span>
           ))}
         </div>
       )}
@@ -85,12 +90,12 @@ const depthClasses: { [key: number]: string } = {
     </article>
 
     {headings && headings.length > 1 && (
-      <aside id="toc-aside-desktop" class="hidden lg:block p-6 bg-base-200 rounded-lg h-full min-w-50">
-        <h2 class="text-2xl font-semibold mb-4 text-base-content">目次</h2>
-        <ul class="space-y-2">
+      <aside id="toc-aside-desktop" class={styles.tocAside}>
+        <h2 class={styles.tocTitle}>目次</h2>
+        <ul class={styles.tocList}>
           {headings.map((heading) => (
-            <li class={`toc-item ${depthClasses[heading.depth] || ''}`}>
-              <a href={`#${heading.slug}`} class="block py-1 text-base text-base-content hover:text-primary hover:underline">
+            <li class={`toc-item ${depthIndent[heading.depth] || ''}`}>
+              <a href={`#${heading.slug}`} class={styles.tocLink}>
                 {heading.text}
               </a>
             </li>

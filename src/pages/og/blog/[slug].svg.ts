@@ -1,5 +1,5 @@
 import { type CollectionEntry, getCollection } from 'astro:content'
-import { buildBlogOgSvg } from '../../../lib/og/blog'
+import { buildBlogOgSvg } from '@/lib/og/blog'
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog')

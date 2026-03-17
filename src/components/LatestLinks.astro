@@ -1,15 +1,15 @@
 ---
 import { getCollection } from 'astro:content'
-import QiitaIcon from '../assets/qiita.png'
-import RealIcon from '../assets/real_icon.webp'
-import ZennIcon from '../assets/zenn.png'
-import { fetchQiitaItems } from '../lib/qiita'
-import { fetchZennItems } from '../lib/zenn'
+import QiitaIcon from '@/assets/qiita.png'
+import RealIcon from '@/assets/real_icon.webp'
+import ZennIcon from '@/assets/zenn.png'
+import { fetchQiitaItems } from '@/lib/qiita'
+import { fetchZennItems } from '@/lib/zenn'
 
-interface Props {
+type Props = {
 	mode: 'product' | 'blog'
 }
-const { mode } = Astro.props as Props
+const { mode } = Astro.props
 
 const [products, blogs] = await Promise.all([
 	getCollection('products'),

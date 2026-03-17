@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets'
-import IconImage2 from '../../assets/figure_1_1.webp'
-import IconImage3 from '../../assets/figure_dots.webp'
-import IconImage from '../../assets/real_icon.webp'
-import IconImage4 from '../../assets/sumatera.webp'
-import DefinitionList from '../../components/DefinitionList.astro'
-import { profile } from '../../data/profile'
-import Layout from '../../layouts/Layout.astro'
+import IconImage2 from '@/assets/figure_1_1.webp'
+import IconImage3 from '@/assets/figure_dots.webp'
+import IconImage from '@/assets/real_icon.webp'
+import IconImage4 from '@/assets/sumatera.webp'
+import DefinitionList from '@/components/DefinitionList.astro'
+import { profile } from '@/data/profile'
+import Layout from '@/layouts/Layout.astro'
 
 const iconObjects = [IconImage, IconImage2, IconImage3, IconImage4]
 
@@ -49,17 +49,19 @@ const programSkills = [
 ---
 
 <Layout title="About | watabeggの個人サイト">
-  <div id="about-content" class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left max-w-3xl space-y-6 md:space-y-8 text-base-content">
-    <div id="about-icon" class="mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative" style="perspective: 1000px; transform-style: preserve-3d;">
+  <div id="about-content" class="page-section max-w-3xl text-center md:text-left">
+    <div id="about-icon" class="icon-stage mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative">
       {iconObjects.map((iconObj, index) => {
         return (
           <Image
             src={iconObj}
             alt={`watabeggのアイコン ${index + 1}`}
-            class={`rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0 ${index !== 0 ? 'opacity-0' : 'opacity-90'}`}
+            class:list={[
+              'rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0',
+              index !== 0 ? 'opacity-0' : 'opacity-90',
+            ]}
             loading="lazy"
             priority={index === 0}
-            style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
             transition:name={index === 0 ? 'icon' : (index === 1 ? 'figure' : '')}
           />
         );
@@ -73,145 +75,65 @@ const programSkills = [
       About
     </h1>
 
-    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+    <section class="hover-section">
       <h2 class="text-2xl md:text-3xl font-semibold mb-3">個人情報</h2>
       <DefinitionList items={personalInfo} />
     </section>
 
-    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+    <section class="hover-section">
       <h2 class="text-2xl md:text-3xl font-semibold mb-3">経歴</h2>
       <DefinitionList items={careerHistory} />
     </section>
 
-    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+    <section class="hover-section">
       <h2 class="text-2xl md:text-3xl font-semibold mb-3">プログラミングスキル</h2>
       <DefinitionList items={programSkills} />
     </section>
 
-    <section class="opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full">
+    <section class="hover-section">
       <h2 class="text-2xl md:text-3xl font-semibold mb-3">趣味</h2>
       <div class="flex flex-col gap-y-8 justify-center items-center">
-        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" height="450" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-11/pl.u-mJy834RCzmbbrEp"></iframe>
-          <div class="aspect-video w-full max-w-[700px] rounded-lg overflow-hidden">
-            <iframe 
-              class="w-full h-full" 
-              src="https://www.youtube.com/embed/n96cgEBWhl8?si=XECNRS89Vz2ehK28" 
-              title="YouTube video player" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerpolicy="strict-origin-when-cross-origin" 
-              allowfullscreen
-            ></iframe>
-          </div>
+        <iframe
+          allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+          height="450"
+          class="apple-music-embed"
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+          src="https://embed.music.apple.com/jp/playlist/%E8%B6%A3%E5%91%B3-2025-11/pl.u-mJy834RCzmbbrEp"
+        ></iframe>
+        <div class="aspect-video w-full max-w-175 rounded-lg overflow-hidden">
+          <iframe
+            class="w-full h-full"
+            src="https://www.youtube.com/embed/n96cgEBWhl8?si=XECNRS89Vz2ehK28"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
     </section>
   </div>
 
   <script>
-    import { gsap } from "gsap";
-
-    function getRandomDelay() {
-      return (Math.random() * 2 + 1) * 1000;
-    }
-
-    let currentIconIndex = 0;
-    let intervalId: ReturnType<typeof setTimeout> | null = null;
-    let isAnimating = false;
-
-    function changeIcon(iconElements: NodeListOf<Element>) {
-      if (isAnimating) return;
-      isAnimating = true;
-
-      if (intervalId) clearTimeout(intervalId);
-      intervalId = null;
-
-      if (!iconElements || iconElements.length <= 1) {
-        isAnimating = false;
-        return;
-      }
-
-      const currentIconElement = iconElements[currentIconIndex];
-
-      let nextIconIndex;
-      do {
-        nextIconIndex = Math.floor(Math.random() * iconElements.length);
-      } while (nextIconIndex === currentIconIndex);
-
-      const nextIconElement = iconElements[nextIconIndex];
-
-      if (!currentIconElement || !nextIconElement) {
-        console.error("Current or next icon element not found during transition.");
-        isAnimating = false;
-        return;
-      }
-
-      const tl = gsap.timeline({
-        onComplete: () => {
-          currentIconIndex = nextIconIndex;
-          isAnimating = false;
-          intervalId = setTimeout(() => changeIcon(iconElements), getRandomDelay());
-        }
-      });
-
-      tl.to(currentIconElement, {
-        duration: 0.4,
-        rotationY: -90,
-        opacity: 0,
-        ease: "power2.in",
-        onComplete: () => {
-          gsap.set(nextIconElement, { rotationY: 90, opacity: 0 });
-        }
-      });
-
-      tl.to(nextIconElement, {
-        duration: 0.4,
-        rotationY: 0,
-        opacity: 0.9,
-        ease: "power2.out"
-      }, ">");
-
-    }
-
-    document.addEventListener("astro:page-load", () => {
-      if (intervalId) clearTimeout(intervalId);
-      intervalId = null;
-      isAnimating = false;
-      gsap.killTweensOf(".rotating-icon-item");
-      gsap.killTweensOf("#about-content > *:not(#about-icon), #about-content > span");
-
-      const iconWrapperElements = document.querySelectorAll(".rotating-icon-item");
-      if (!iconWrapperElements || iconWrapperElements.length === 0) {
-        console.error("Rotating icon wrapper elements not found.");
-        return;
-      }
-
-      gsap.set(iconWrapperElements, { rotationY: 0, opacity: 0, scale: 1 });
-      gsap.set(iconWrapperElements[0], { opacity: 0.9 });
-      currentIconIndex = 0;
-
-      if (iconWrapperElements[0]) {
-          gsap.from(iconWrapperElements[0], {
-            duration: 1,
-            opacity: 0,
-            scale: 0.8,
-            ease: "power3.out",
-            delay: 0.2,
-            onComplete: () => {
-               if (intervalId) clearTimeout(intervalId);
-               intervalId = setTimeout(() => changeIcon(iconWrapperElements), getRandomDelay());
-            }
-          });
-      } else {
-          console.error("First icon wrapper element not found for initial animation.");
-      }
-
-      gsap.from("#about-content > *:not(#about-icon), #about-content > span", {
-        duration: 0.8,
-        opacity: 1,
-        y: 20,
-        stagger: 0.15,
-        ease: "power3.out",
-        delay: 0.4 
-      });
-    });
+    import '@/pages/about/index.client'
   </script>
 </Layout>
+
+<style>
+  .icon-stage {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .rotating-icon-item {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .apple-music-embed {
+    width: 100%;
+    max-width: 660px;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+</style>

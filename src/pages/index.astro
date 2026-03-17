@@ -1,43 +1,32 @@
 ---
-import GithubIcon from '../components/icons/Github.astro'
-import GmailIcon from '../components/icons/Gmail.astro'
-import InstagramIcon from '../components/icons/Instagram.astro'
-import TwitterIcon from '../components/icons/Twitter.astro'
-import LatestLinks from '../components/LatestLinks.astro'
-import { links as pageLinks } from '../data/constant.ts'
-import Layout from '../layouts/Layout.astro'
+import GithubIcon from '@/components/icons/Github.astro'
+import GmailIcon from '@/components/icons/Gmail.astro'
+import InstagramIcon from '@/components/icons/Instagram.astro'
+import TwitterIcon from '@/components/icons/Twitter.astro'
+import LatestLinks from '@/components/LatestLinks.astro'
+import { links as pageLinks, socialLinks } from '@/data/constant'
+import Layout from '@/layouts/Layout.astro'
 
-const socialLinks = [
-	{
-		name: 'Twitter',
-		href: 'https://twitter.com/watabegg',
-		IconComponent: TwitterIcon,
-	},
-	{
-		name: 'GitHub',
-		href: 'https://github.com/watabegg',
-		IconComponent: GithubIcon,
-	},
-	{
-		name: 'Instagram',
-		href: 'https://www.instagram.com/watabegg',
-		IconComponent: InstagramIcon,
-	},
-	{
-		name: 'Gmail',
-		href: 'mailto:watabegg@gmail.com',
-		IconComponent: GmailIcon,
-	},
-]
+type IconKey = 'Twitter' | 'GitHub' | 'Instagram' | 'Gmail'
+const iconMap: Record<IconKey, typeof TwitterIcon> = {
+	Twitter: TwitterIcon,
+	GitHub: GithubIcon,
+	Instagram: InstagramIcon,
+	Gmail: GmailIcon,
+}
 ---
 <Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
   <div class="z-20 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
-    <nav id="page-links-home" class="flex w-full md:w-[60%] flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-8 sm:mt-16 md:mt-0 pointer-events-auto">
+    <nav id="page-links-home" class="flex w-full md:w-3/5 flex-col items-start space-y-4 md:space-y-6 md:-skew-x-6 transform mt-8 sm:mt-16 md:mt-0 pointer-events-auto">
       <h1 class="text-6xl md:text-7xl font-bold mb-8 md:mb-16 text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 text-center md:text-left">
         watabegg
       </h1>
       {pageLinks.map((link, index) => (
-        <div class={`flex flex-nowrap items-center gap-2 ${link.href === '/slide' || link.href === '/skillsheet' ? 'hidden sm:block' : ''} ${link.href === '/' ? 'hidden' : ''}`}>
+        <div class:list={[
+          'flex flex-nowrap items-center gap-2',
+          (link.href === '/slide' || link.href === '/skillsheet') ? 'hidden sm:block' : '',
+          link.href === '/' ? 'hidden' : '',
+        ]}>
           <a
             href={link.href}
             class="page-link text-3xl md:text-5xl font-bold text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-110 hover:underline hover:decoration-4 hover:underline-offset-8"
@@ -52,36 +41,26 @@ const socialLinks = [
       ))}
     </nav>
 
-    <aside id="social-links-home" class="flex w-full md:w-[20%] flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto">
-      {socialLinks.map((link, index) => (
-        <a
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
-          style={`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`}
-        >
-          <link.IconComponent class="w-6 h-6 md:w-5 md:h-5" />
-          <span class="hidden md:block">{link.name}</span>
-        </a>
-      ))}
+    <aside id="social-links-home" class="flex w-full md:w-1/5 flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto">
+      {socialLinks.map((link, index) => {
+        const IconComponent = iconMap[link.name as IconKey]
+        return (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center space-x-2 text-sm md:text-base text-white opacity-15 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
+            style={`transition-delay: ${index * 100 + pageLinks.length * 100}ms;`}
+          >
+            <IconComponent class="w-6 h-6 md:w-5 md:h-5" />
+            <span class="hidden md:block">{link.name}</span>
+          </a>
+        )
+      })}
     </aside>
   </div>
 
   <script>
-    import { gsap } from "gsap";
-
-    const enterTimeline = () => {
-      const tl = gsap.timeline();
-
-      tl.to(
-        "#page-links-home h1, #page-links-home a.page-link , #social-links-home a",
-        { duration: 0.2, opacity: 0.85, x: 0, stagger: 0.1, ease: "power3.out" },
-        "content"
-      );
-    };
-
-    document.addEventListener("astro:page-load", enterTimeline);
-
+    import '@/pages/index.client'
   </script>
 </Layout>

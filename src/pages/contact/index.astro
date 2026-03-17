@@ -1,7 +1,7 @@
 ---
-import pgpKeyText from '../../assets/pgp/public-key.asc?raw'
-import pgpKey from '../../assets/pgp/public-key.asc?url'
-import Layout from '../../layouts/Layout.astro'
+import pgpKeyText from '@/assets/pgp/public-key.asc?raw'
+import pgpKey from '@/assets/pgp/public-key.asc?url'
+import Layout from '@/layouts/Layout.astro'
 
 const pgpKeyTxt = pgpKeyText
 	.replace(/-----BEGIN PGP PUBLIC KEY BLOCK-----/g, '')
