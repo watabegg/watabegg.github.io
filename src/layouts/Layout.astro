@@ -1,18 +1,18 @@
 ---
-import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
-import IconImage from '../assets/real_icon.webp';
-import FigureImage from '../assets/figure_1_1.webp';
-import { ClientRouter, fade } from 'astro:transitions';
+import '../styles/global.css'
+import { Image } from 'astro:assets'
+import { ClientRouter, fade } from 'astro:transitions'
+import FigureImage from '../assets/figure_1_1.webp'
+import IconImage from '../assets/real_icon.webp'
+import Footer from '../components/Footer.astro'
+import Header from '../components/Header.astro'
 
 interface Props {
-	title?: string;
-	description?: string;
-	isFullScreen?: boolean;
-	ogImageUrl?: string;
-	ogType?: 'website' | 'article';
+	title?: string
+	description?: string
+	isFullScreen?: boolean
+	ogImageUrl?: string
+	ogType?: 'website' | 'article'
 }
 
 const {
@@ -21,13 +21,17 @@ const {
 	isFullScreen = false,
 	ogImageUrl,
 	ogType = 'website',
-} = Astro.props;
+} = Astro.props
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
 
-const defaultOgImageUrl = new URL('/images/ogp_default.png', Astro.site).toString();
-const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() : defaultOgImageUrl;
-
+const defaultOgImageUrl = new URL(
+	'/images/ogp_default.png',
+	Astro.site,
+).toString()
+const finalOgImageUrl = ogImageUrl
+	? new URL(ogImageUrl, Astro.site).toString()
+	: defaultOgImageUrl
 ---
 <!doctype html>
 <html lang="ja" prefix="og: http://ogp.me/ns#">
@@ -37,18 +41,6 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/webp" href="/favicon.webp" />
 		<meta name="generator" content={Astro.generator} />
-		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2D4GRWSW25"></script>
-		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'G-2D4GRWSW25');
-		</script>
-
-		<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PGTBZF6M');</script>
-
-		<meta name="google-site-verification" content="rpZl-aR3PveVL3tfGb_qZL_1aiCJfKEUm-AoabDAnwo" />
 
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl.toString()} />
@@ -82,8 +74,7 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
     <script>
       import { gsap } from "gsap";
       import { isTransitionBeforePreparationEvent } from 'astro:transitions/client';
-
-      type PageType = "home" | "inner";
+      import type { PageType } from '../types/page';
 
       const HEADER = "#header-bg";
       const FOOTER = "#footer-bg";
@@ -99,8 +90,8 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
         left?: string;
         right?: string;
         bottom?: string;
-        skewX: string;
-        skewY: string;
+        skewX: number;
+        skewY: number;
         scaleX: number;
         scaleY: number;
         originX: string;
@@ -110,64 +101,45 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
       const presets = {
         mobile: {
           home: {
-            header: { w: "100vw", h: "60vh", top: "0", left: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-            footer: { w: "100vw", h: "40vh", bottom: "-20vh", right: "0", skewX: "0deg", skewY: "-6deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
+            header: { w: "100vw", h: "60vh",  top: "0",     left: "0",     skewX: 0,  skewY: -6, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
+            footer: { w: "100vw", h: "40vh",  bottom: "-20vh", right: "0", skewX: 0,  skewY: -6, scaleX: 1, scaleY: 1, originX: "0%",   originY: "100%" },
           },
           inner: {
-            header: { w: "100vw", h: "66px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-            footer: { w: "100vw", h: "184px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "100%" }
-          }
+            header: { w: "100vw", h: "66px",  top: "0",     left: "0",     skewX: 0,  skewY: -2, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
+            footer: { w: "100vw", h: "184px", bottom: "0",  right: "0",    skewX: 0,  skewY:  0, scaleX: 1, scaleY: 1, originX: "0%",   originY: "100%" },
+          },
         },
         desktop: {
           home: {
-            header: { w: "60vw", h: "100%", top: "0", left: "0", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-            footer: { w: "40vw", h: "100%", bottom: "0", right: "-10vw", skewX: "-6deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
+            header: { w: "60vw",  h: "100%",  top: "0",     left: "0",     skewX: -6, skewY:  0, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
+            footer: { w: "40vw",  h: "100%",  bottom: "0",  right: "-10vw",skewX: -6, skewY:  0, scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" },
           },
           inner: {
-            header: { w: "100vw", h: "72px", top: "0", left: "0", skewX: "0deg", skewY: "-2deg", scaleX: 1, scaleY: 1, originX: "0%", originY: "0%" },
-            footer: { w: "100vw", h: "148px", bottom: "0", right: "0", skewX: "0deg", skewY: "0deg", scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" }
-          }
-        }
+            header: { w: "100vw", h: "72px",  top: "0",     left: "0",     skewX: 0,  skewY: -2, scaleX: 1, scaleY: 1, originX: "0%",   originY: "0%"   },
+            footer: { w: "100vw", h: "148px", bottom: "0",  right: "0",    skewX: 0,  skewY:  0, scaleX: 1, scaleY: 1, originX: "100%", originY: "100%" },
+          },
+        },
       } as const;
 
       const mm = window.matchMedia("(min-width: 768px)");
       const getPreset = (type: PageType) => mm.matches ? presets.desktop[type] : presets.mobile[type];
 
-      const applyShape = (el: HTMLElement, shape: Shape, vars?: gsap.TweenVars) => {
-        const base = {
-          "--w": shape.w,
-          "--h": shape.h,
-          "--top": shape.top ?? "auto",
-          "--left": shape.left ?? "auto",
-          "--right": shape.right ?? "auto",
-          "--bottom": shape.bottom ?? "auto",
-          "--skewX": shape.skewX,
-          "--skewY": shape.skewY,
-          "--scaleX": shape.scaleX,
-          "--scaleY": shape.scaleY,
-          "--originX": shape.originX,
-          "--originY": shape.originY,
-        } as Record<string, string | number>;
+      const buildVars = (shape: Shape): gsap.TweenVars => ({
+        "--w": shape.w,
+        "--h": shape.h,
+        "--top": shape.top ?? "auto",
+        "--left": shape.left ?? "auto",
+        "--right": shape.right ?? "auto",
+        "--bottom": shape.bottom ?? "auto",
+        skewX: shape.skewX,
+        skewY: shape.skewY,
+        scaleX: shape.scaleX,
+        scaleY: shape.scaleY,
+        transformOrigin: `${shape.originX} ${shape.originY}`,
+      });
 
-        gsap.to(el, { ...base, ...vars });
-      };
-
-      const setShape = (el: HTMLElement, shape: Shape) => {
-        gsap.set(el, {
-          "--w": shape.w,
-          "--h": shape.h,
-          "--top": shape.top ?? "auto",
-          "--left": shape.left ?? "auto",
-          "--right": shape.right ?? "auto",
-          "--bottom": shape.bottom ?? "auto",
-          "--skewX": shape.skewX,
-          "--skewY": shape.skewY,
-          "--scaleX": shape.scaleX,
-          "--scaleY": shape.scaleY,
-          "--originX": shape.originX,
-          "--originY": shape.originY,
-        });
-      };
+      const setShape = (el: HTMLElement, shape: Shape) =>
+        gsap.set(el, buildVars(shape));
 
       const prep = (type: PageType) => {
         const preset = getPreset(type);
@@ -177,23 +149,32 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
         if (f) setShape(f, preset.footer);
       };
 
+      let currentTl: gsap.core.Timeline | null = null;
+
       const animateTo = (to: PageType, duration = 0.7) => {
+        currentTl?.kill();
         const preset = getPreset(to);
         const h = $(HEADER);
         const f = $(FOOTER);
-        const common: gsap.TweenVars = { duration, ease: "power3.inOut", overwrite: "auto" };
-        if (h) applyShape(h, preset.header, common);
-        if (f) applyShape(f, preset.footer, common);
+        currentTl = gsap.timeline({ defaults: { duration, ease: "power3.inOut" } });
+        if (h) currentTl.to(h, buildVars(preset.header), 0);
+        if (f) currentTl.to(f, buildVars(preset.footer), 0.06);
       };
+
+      // 2回目以降のナビゲーション: DOMスワップ後に前ページの形状をセット
+      document.addEventListener("astro:after-swap", () => {
+        const prev = window.__lastPageType as PageType ?? "inner";
+        prep(prev);
+      });
 
       document.addEventListener("astro:page-load", () => {
         const current = getType();
-        const prev = (window as any).__lastPageType as PageType | undefined ?? "inner";
-
-        prep(prev);
+        // 初回ロード時は after-swap が発火しないため、ここで初期形状をセット
+        if (window.__lastPageType === undefined) {
+          prep("inner");
+        }
         animateTo(current, 0.8);
-
-        (window as any).__lastPageType = current;
+        window.__lastPageType = current;
       });
 
       document.addEventListener("astro:before-preparation", (event) => {
@@ -201,10 +182,9 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 
         const current = getType();
         const next = nextTypeFrom(event.to);
-        (window as any).__lastPageType = current;
+        window.__lastPageType = current;
 
         const loader = event.loader;
-
         event.loader = async () => {
           if (current !== next) {
             animateTo(next, 0.45);
@@ -226,7 +206,7 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 			<Header />
 		</header>
 		)}
-		<main class="relative flex-grow flex items-center justify-center overflow-hidden">
+		<main class="relative grow flex items-center justify-center overflow-hidden">
 			{ isFullScreen && (
 				<div class="absolute w-full md:w-3/5 lg:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around z-0">
 					<Image
@@ -273,7 +253,6 @@ const finalOgImageUrl = ogImageUrl ? new URL(ogImageUrl, Astro.site).toString() 
 		left: var(--left, auto);
 		right: var(--right, auto);
 		bottom: var(--bottom, auto);
-		transform-origin: var(--originX, 0%) var(--originY, 0%);
-		transform: translate3d(0, 0, 0) skewX(var(--skewX, 0deg)) skewY(var(--skewY, 0deg)) scale(var(--scaleX, 1), var(--scaleY, 1));
+		will-change: transform;
 	}
 </style>

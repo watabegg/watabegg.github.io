@@ -1,44 +1,51 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import IconImage from '../../assets/real_icon.webp';
-import IconImage2 from '../../assets/figure_1_1.webp';
-import IconImage3 from '../../assets/figure_dots.webp';
-import IconImage4 from '../../assets/sumatera.webp';
-import DefinitionList from '../../components/DefinitionList.astro';
-import { profile } from '../../data/profile';
+import { Image } from 'astro:assets'
+import IconImage2 from '../../assets/figure_1_1.webp'
+import IconImage3 from '../../assets/figure_dots.webp'
+import IconImage from '../../assets/real_icon.webp'
+import IconImage4 from '../../assets/sumatera.webp'
+import DefinitionList from '../../components/DefinitionList.astro'
+import { profile } from '../../data/profile'
+import Layout from '../../layouts/Layout.astro'
 
-const iconObjects = [
-  IconImage,
-  IconImage2,
-  IconImage3,
-  IconImage4,
-];
+const iconObjects = [IconImage, IconImage2, IconImage3, IconImage4]
 
-const birthDate = new Date(profile.head.birthDate);
+const birthDate = new Date(profile.head.birthDate)
 const personalInfo = [
-  { term: '本名', description: `${profile.head.name} (${profile.head.furigana})` },
-  { term: '住所', description: profile.head.address },
-  { term: 'メールアドレス', description: profile.head.email },
-  { term: '性別', description: profile.head.gender },
-  { term: '生年月日(ISO8601)', description: `${birthDate.toISOString()} (±12h)` },
-  { term: '生年月日(UNIX)', description: `${Math.floor(birthDate.getTime() / 1000)} (±43200)` },
-];
+	{
+		term: '本名',
+		description: `${profile.head.name} (${profile.head.furigana})`,
+	},
+	{ term: '住所', description: profile.head.address },
+	{ term: 'メールアドレス', description: profile.head.email },
+	{ term: '性別', description: profile.head.gender },
+	{
+		term: '生年月日(ISO8601)',
+		description: `${birthDate.toISOString()} (±12h)`,
+	},
+	{
+		term: '生年月日(UNIX)',
+		description: `${Math.floor(birthDate.getTime() / 1000)} (±43200)`,
+	},
+]
 
 const careerHistory = profile.education.map((item) => ({
-  term: item.period,
-  description: item.description,
-}));
+	term: item.period,
+	description: item.description,
+}))
 
 const programSkills = [
-  { term: '言語', description: profile.skills.languages.join(', ') },
-  { term: 'フレームワーク', description: [...profile.skills.frameworks].join(', ') },
-  { term: 'ライブラリ', description: profile.skills.libraries.join(', ') },
-  { term: 'OS', description: profile.skills.os.join(', ') },
-  { term: 'DB', description: profile.skills.db.join(', ') },
-  { term: 'PaaS', description: profile.skills.paas.join(', ') },
-  { term: 'その他関連ツール', description: profile.skills.tools.join(', ') },
-];
+	{ term: '言語', description: profile.skills.languages.join(', ') },
+	{
+		term: 'フレームワーク',
+		description: [...profile.skills.frameworks].join(', '),
+	},
+	{ term: 'ライブラリ', description: profile.skills.libraries.join(', ') },
+	{ term: 'OS', description: profile.skills.os.join(', ') },
+	{ term: 'DB', description: profile.skills.db.join(', ') },
+	{ term: 'PaaS', description: profile.skills.paas.join(', ') },
+	{ term: 'その他関連ツール', description: profile.skills.tools.join(', ') },
+]
 ---
 
 <Layout title="About | watabeggの個人サイト">

@@ -1,28 +1,30 @@
 ---
-import Layout from './Layout.astro';
-import TableOfContents from '../components/TableOfContents.astro';
+import TableOfContents from '../components/TableOfContents.astro'
+import Layout from './Layout.astro'
 
 interface Props {
-  title: string;
-  publishDate?: Date;
-  author?: string;
-  tags?: string[];
-  imageUrl?: string;
-  description?: string;
-  headings: { depth: number; slug: string; text: string }[];
+	title: string
+	publishDate?: Date
+	author?: string
+	tags?: string[]
+	imageUrl?: string
+	description?: string
+	headings: { depth: number; slug: string; text: string }[]
 }
 
-const { title, publishDate, author, tags, imageUrl, description, headings } = Astro.props as Props;
-const placeholderImageUrl = '/images/placeholder.svg';
-const displayImageUrl = imageUrl || placeholderImageUrl;
+const { title, publishDate, author, tags, imageUrl, description, headings } =
+	Astro.props as Props
+const placeholderImageUrl = '/images/placeholder.svg'
+const displayImageUrl = imageUrl || placeholderImageUrl
 
-const isBlog = Astro.url.pathname.startsWith('/blog/');
-const articleType = isBlog ? 'BlogPosting' : 'Article';
+const isBlog = Astro.url.pathname.startsWith('/blog/')
+const articleType = isBlog ? 'BlogPosting' : 'Article'
 
-const structuredDataImageUrl = imageUrl ? new URL(imageUrl, Astro.site).toString() : undefined;
-const isSvgImage = displayImageUrl.endsWith('.svg');
-const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`;
-
+const structuredDataImageUrl = imageUrl
+	? new URL(imageUrl, Astro.site).toString()
+	: undefined
+const isSvgImage = displayImageUrl.endsWith('.svg')
+const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`
 ---
 <Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={imageUrl} ogType="article">
   <script type="application/ld+json" set:html={JSON.stringify({

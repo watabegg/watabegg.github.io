@@ -1,17 +1,17 @@
 ---
 export interface Props {
-  headings: { depth: number; slug: string; text: string }[];
+	headings: { depth: number; slug: string; text: string }[]
 }
 
-const { headings } = Astro.props as Props;
-const shouldShowToc = headings && headings.length > 1;
+const { headings } = Astro.props as Props
+const shouldShowToc = headings && headings.length > 1
 
 const depthClasses: { [key: number]: string } = {
-  1: "font-semibold",
-  2: "pl-5",
-  3: "pl-10",
-  4: "pl-[3.75em]",
-};
+	1: 'font-semibold',
+	2: 'pl-5',
+	3: 'pl-10',
+	4: 'pl-[3.75em]',
+}
 ---
 
 {shouldShowToc && (

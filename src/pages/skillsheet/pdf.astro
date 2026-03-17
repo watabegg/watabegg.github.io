@@ -1,34 +1,34 @@
 ---
-import { getCollection } from 'astro:content';
-import { profile } from '../../data/profile';
-import { calculateAge } from '../../lib/time';
-import { buildProductExperience } from '../../lib/product';
+import { getCollection } from 'astro:content'
+import { profile } from '../../data/profile'
+import { buildProductExperience } from '../../lib/product'
+import { calculateAge } from '../../lib/time'
 
-const referenceDate = new Date();
-const age = calculateAge(new Date(profile.head.birthDate), referenceDate);
+const referenceDate = new Date()
+const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
 
 const experiences = (await getCollection('products'))
-  .map((entry) => buildProductExperience(entry, referenceDate))
-  .filter((experience) => experience.includeInSkillsheet)
-  .sort((a, b) => a.sortKey - b.sortKey);
+	.map((entry) => buildProductExperience(entry, referenceDate))
+	.filter((experience) => experience.includeInSkillsheet)
+	.sort((a, b) => a.sortKey - b.sortKey)
 
 const definitionItems = [
-  ['氏名', `${profile.head.name} (${profile.head.furigana})`],
-  ['性別', profile.head.gender],
-  ['生年月日', `${profile.head.birthDate} (${age}歳)`],
-  ['現住所', profile.head.address],
-  ['メールアドレス', profile.head.email],
-];
+	['氏名', `${profile.head.name} (${profile.head.furigana})`],
+	['性別', profile.head.gender],
+	['生年月日', `${profile.head.birthDate} (${age}歳)`],
+	['現住所', profile.head.address],
+	['メールアドレス', profile.head.email],
+]
 
 const skillItems = [
-  ['言語', profile.skills.languages.join(', ')],
-  ['フレームワーク', profile.skills.frameworks.join(', ')],
-  ['ライブラリ', profile.skills.libraries.join(', ')],
-  ['OS', profile.skills.os.join(', ')],
-  ['DB', profile.skills.db.join(', ')],
-  ['PaaS', profile.skills.paas.join(', ')],
-  ['その他関連ツール', profile.skills.tools.join(', ')],
-];
+	['言語', profile.skills.languages.join(', ')],
+	['フレームワーク', profile.skills.frameworks.join(', ')],
+	['ライブラリ', profile.skills.libraries.join(', ')],
+	['OS', profile.skills.os.join(', ')],
+	['DB', profile.skills.db.join(', ')],
+	['PaaS', profile.skills.paas.join(', ')],
+	['その他関連ツール', profile.skills.tools.join(', ')],
+]
 ---
 
 <!doctype html>

@@ -1,15 +1,15 @@
 ---
 interface Item {
-  term: string;
-  description: string;
+	term: string
+	description: string
 }
 
 interface Props {
-  items: Item[];
-  termWidthClass?: string;
+	items: Item[]
+	termWidthClass?: string
 }
 
-const { items, termWidthClass = 'md:w-60' } = Astro.props as Props;
+const { items, termWidthClass = 'md:w-60' } = Astro.props as Props
 ---
 
 <dl class="space-y-2 text-base md:text-lg text-left">

@@ -1,35 +1,50 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import { fetchQiitaItems } from '../../lib/qiita';
-import QiitaIcon from '../../assets/qiita.png';
+import { getCollection } from 'astro:content'
+import QiitaIcon from '../../assets/qiita.png'
+import Layout from '../../layouts/Layout.astro'
+import { fetchQiitaItems } from '../../lib/qiita'
 
 const localPosts = (await getCollection('blog')).sort(
-  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-);
+	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+)
 
-const qiitaItems = await fetchQiitaItems(10);
+const qiitaItems = await fetchQiitaItems(10)
 
 type BlendItem =
-  | { kind: 'local'; slug: string; title: string; description: string; author: string; publishDate: Date; tags?: string[] }
-  | { kind: 'qiita'; title: string; url: string; createdAt: Date };
+	| {
+			kind: 'local'
+			slug: string
+			title: string
+			description: string
+			author: string
+			publishDate: Date
+			tags?: string[]
+	  }
+	| { kind: 'qiita'; title: string; url: string; createdAt: Date }
 
 const blended: BlendItem[] = [
-  ...localPosts.map(p => ({
-    kind: 'local' as const,
-    slug: p.slug,
-    title: p.data.title,
-    description: p.data.description,
-    author: p.data.author,
-    publishDate: p.data.publishDate,
-    tags: p.data.tags,
-  })),
-  ...qiitaItems.map(q => ({ kind: 'qiita' as const, title: q.title, url: q.url, createdAt: q.createdAt })),
+	...localPosts.map((p) => ({
+		kind: 'local' as const,
+		slug: p.id,
+		title: p.data.title,
+		description: p.data.description,
+		author: p.data.author,
+		publishDate: p.data.publishDate,
+		tags: p.data.tags,
+	})),
+	...qiitaItems.map((q) => ({
+		kind: 'qiita' as const,
+		title: q.title,
+		url: q.url,
+		createdAt: q.createdAt,
+	})),
 ].sort((a, b) => {
-  const ad = a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf();
-  const bd = b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf();
-  return bd - ad;
-});
+	const ad =
+		a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf()
+	const bd =
+		b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf()
+	return bd - ad
+})
 ---
 <Layout title="Blog | watabeggの個人サイト">
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">

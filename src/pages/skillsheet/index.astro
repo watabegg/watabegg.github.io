@@ -1,38 +1,44 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import DefinitionList from '../../components/DefinitionList.astro';
-import { profile } from '../../data/profile';
-import { getCollection } from 'astro:content';
-import { calculateAge } from '../../lib/time';
-import { buildProductExperience } from '../../lib/product';
+import { getCollection } from 'astro:content'
+import DefinitionList from '../../components/DefinitionList.astro'
+import { profile } from '../../data/profile'
+import Layout from '../../layouts/Layout.astro'
+import { buildProductExperience } from '../../lib/product'
+import { calculateAge } from '../../lib/time'
 
-const referenceDate = new Date();
-const age = calculateAge(new Date(profile.head.birthDate), referenceDate);
+const referenceDate = new Date()
+const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
 
-const products = await getCollection('products');
+const products = await getCollection('products')
 
 const experiences = products
-  .map((product) => buildProductExperience(product, referenceDate))
-  .filter((experience) => experience.includeInSkillsheet)
-  .sort((a, b) => a.sortKey - b.sortKey);
+	.map((product) => buildProductExperience(product, referenceDate))
+	.filter((experience) => experience.includeInSkillsheet)
+	.sort((a, b) => a.sortKey - b.sortKey)
 
 const headList = [
-  { term: '氏名', description: `${profile.head.name} (${profile.head.furigana})` },
-  { term: '性別', description: profile.head.gender },
-  { term: '生年月日', description: `${profile.head.birthDate} (${age}歳)` },
-  { term: '現住所', description: profile.head.address },
-  { term: 'メールアドレス', description: profile.head.email },
-];
+	{
+		term: '氏名',
+		description: `${profile.head.name} (${profile.head.furigana})`,
+	},
+	{ term: '性別', description: profile.head.gender },
+	{ term: '生年月日', description: `${profile.head.birthDate} (${age}歳)` },
+	{ term: '現住所', description: profile.head.address },
+	{ term: 'メールアドレス', description: profile.head.email },
+]
 
 const skillList = [
-  { term: '言語', description: profile.skills.languages.join(', ') },
-  { term: 'フレームワーク', description: [...profile.skills.frameworks].join(', ') },
-  { term: 'ライブラリ', description: profile.skills.libraries.join(', ') },
-  { term: 'OS', description: profile.skills.os.join(', ') },
-  { term: 'DB', description: profile.skills.db.join(', ') },
-  { term: 'PaaS', description: profile.skills.paas.join(', ') },
-  { term: 'その他関連ツール', description: profile.skills.tools.join(', ') },
-];
+	{ term: '言語', description: profile.skills.languages.join(', ') },
+	{
+		term: 'フレームワーク',
+		description: [...profile.skills.frameworks].join(', '),
+	},
+	{ term: 'ライブラリ', description: profile.skills.libraries.join(', ') },
+	{ term: 'OS', description: profile.skills.os.join(', ') },
+	{ term: 'DB', description: profile.skills.db.join(', ') },
+	{ term: 'PaaS', description: profile.skills.paas.join(', ') },
+	{ term: 'その他関連ツール', description: profile.skills.tools.join(', ') },
+]
 ---
 
 <Layout title="Skill Sheet | watabeggの個人サイト">

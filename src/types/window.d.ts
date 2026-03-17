@@ -1,5 +1,7 @@
 declare global {
-  interface Window {
-    __lastPageType?: "home" | "inner";
-  }
+	interface Window {
+		__lastPageType?: 'home' | 'inner'
+	}
 }
+
+export {}

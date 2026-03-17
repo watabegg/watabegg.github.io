@@ -8,22 +8,24 @@
     "preview": "astro preview",
     "astro": "astro",
     "ts": "tsc --noEmit",
+    "check:fix": "biome check --fix",
     "skillsheet:pdf": "node scripts/generate-skillsheet.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/sitemap": "^3.3.1",
-    "@tailwindcss/vite": "^4.1.5",
-    "astro": "^5.7.10",
+    "@tailwindcss/vite": "^4.2.1",
+    "astro": "^6.0.5",
     "daisyui": "^5.5.5",
     "gsap": "^3.13.0",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.5",
+    "@biomejs/biome": "2.4.7",
+    "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.21",
     "playwright": "^1.48.2",
-    "tailwindcss": "^4.1.5"
+    "tailwindcss": "^4.2.1"
   }
 }

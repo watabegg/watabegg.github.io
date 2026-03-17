@@ -1,19 +1,19 @@
 ---
-import type { ProductContentSections } from '../lib/product';
+import type { ProductContentSections } from '../lib/product'
 import {
-  calculateDurationMonths,
-  formatPeriodLabel,
-  parsePeriodRange,
-} from '../lib/product';
+	calculateDurationMonths,
+	formatPeriodLabel,
+	parsePeriodRange,
+} from '../lib/product'
 
 interface Props {
-  content: ProductContentSections;
+	content: ProductContentSections
 }
 
-const { content } = Astro.props as Props;
-const periodRange = parsePeriodRange(content.period);
-const periodLabel = formatPeriodLabel(periodRange);
-const durationMonths = calculateDurationMonths(periodRange);
+const { content } = Astro.props as Props
+const periodRange = parsePeriodRange(content.period)
+const periodLabel = formatPeriodLabel(periodRange)
+const durationMonths = calculateDurationMonths(periodRange)
 ---
 
 <section class="space-y-10">

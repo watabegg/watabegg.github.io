@@ -1,13 +1,13 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import pgpKey from '../../assets/pgp/public-key.asc?url';
-import pgpKeyText from '../../assets/pgp/public-key.asc?raw';
+import pgpKeyText from '../../assets/pgp/public-key.asc?raw'
+import pgpKey from '../../assets/pgp/public-key.asc?url'
+import Layout from '../../layouts/Layout.astro'
 
 const pgpKeyTxt = pgpKeyText
-  .replace(/-----BEGIN PGP PUBLIC KEY BLOCK-----/g, '')
-  .replace(/-----END PGP PUBLIC KEY BLOCK-----/g, '')
-  .replace(/\s+/g, ' ')
-  .trim();
+	.replace(/-----BEGIN PGP PUBLIC KEY BLOCK-----/g, '')
+	.replace(/-----END PGP PUBLIC KEY BLOCK-----/g, '')
+	.replace(/\s+/g, ' ')
+	.trim()
 ---
 <Layout title="Contact | watabeggの個人サイト">
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left">

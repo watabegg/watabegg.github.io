@@ -1,18 +1,34 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import InstagramIcon from '../components/icons/Instagram.astro';
-import TwitterIcon from '../components/icons/Twitter.astro';
-import GithubIcon from '../components/icons/Github.astro';
-import GmailIcon from '../components/icons/Gmail.astro';
-import LatestLinks from '../components/LatestLinks.astro';
-import { links as pageLinks } from '../data/constant.ts';
+import GithubIcon from '../components/icons/Github.astro'
+import GmailIcon from '../components/icons/Gmail.astro'
+import InstagramIcon from '../components/icons/Instagram.astro'
+import TwitterIcon from '../components/icons/Twitter.astro'
+import LatestLinks from '../components/LatestLinks.astro'
+import { links as pageLinks } from '../data/constant.ts'
+import Layout from '../layouts/Layout.astro'
 
 const socialLinks = [
-  { name: 'Twitter', href: 'https://twitter.com/watabegg', IconComponent: TwitterIcon },
-  { name: 'GitHub', href: 'https://github.com/watabegg', IconComponent: GithubIcon },
-  { name: 'Instagram', href: 'https://www.instagram.com/watabegg', IconComponent: InstagramIcon },
-  { name: 'Gmail', href: 'mailto:watabegg@gmail.com', IconComponent: GmailIcon },
-];
+	{
+		name: 'Twitter',
+		href: 'https://twitter.com/watabegg',
+		IconComponent: TwitterIcon,
+	},
+	{
+		name: 'GitHub',
+		href: 'https://github.com/watabegg',
+		IconComponent: GithubIcon,
+	},
+	{
+		name: 'Instagram',
+		href: 'https://www.instagram.com/watabegg',
+		IconComponent: InstagramIcon,
+	},
+	{
+		name: 'Gmail',
+		href: 'mailto:watabegg@gmail.com',
+		IconComponent: GmailIcon,
+	},
+]
 ---
 <Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
   <div class="z-20 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">

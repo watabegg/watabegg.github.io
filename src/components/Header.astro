@@ -1,10 +1,10 @@
 ---
-import { links } from '../data/constant';
+import { links } from '../data/constant'
 
-const currentPath = Astro.url.pathname;
-const maxVisibleMobileLinks = 4;
-const visibleLinks = links.slice(0, maxVisibleMobileLinks);
-const overflowLinks = links.slice(maxVisibleMobileLinks);
+const currentPath = Astro.url.pathname
+const maxVisibleMobileLinks = 4
+const visibleLinks = links.slice(0, maxVisibleMobileLinks)
+const overflowLinks = links.slice(maxVisibleMobileLinks)
 ---
 <nav class="relative z-10 container mx-auto flex items-center p-4 text-lg md:text-xl">
   <ul class="hidden md:flex items-center space-x-4 md:space-x-6">
