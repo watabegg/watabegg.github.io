@@ -1,68 +1,73 @@
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content'
 
-const OG_WIDTH = 1200;
-const OG_HEIGHT = 630;
-const COLOR_PRIMARY = '#008033';
-const COLOR_PRIMARY_DEEP = '#006828';
-const COLOR_BASE = '#f8f8f8';
-const COLOR_BASE_SOFT = '#f2f2f2';
-const COLOR_TEXT = '#18181b';
-const COLOR_TEXT_MUTED = '#4b5563';
+const OG_WIDTH = 1200
+const OG_HEIGHT = 630
+const COLOR_PRIMARY = '#008033'
+const COLOR_PRIMARY_DEEP = '#006828'
+const COLOR_BASE = '#f8f8f8'
+const COLOR_BASE_SOFT = '#f2f2f2'
+const COLOR_TEXT = '#18181b'
+const COLOR_TEXT_MUTED = '#4b5563'
 
-const escapeXml = (value: string) => value
-  .replace(/&/g, '&amp;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;')
-  .replace(/'/g, '&#39;');
+const escapeXml = (value: string) =>
+	value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
 
-const splitTitle = (title: string, maxLineLength = 18, maxLines = 2): string[] => {
-  const chars = Array.from(title);
-  const lines: string[] = [];
-  let current = '';
-  let consumed = 0;
+const splitTitle = (
+	title: string,
+	maxLineLength = 18,
+	maxLines = 2,
+): string[] => {
+	const chars = Array.from(title)
+	const lines: string[] = []
+	let current = ''
+	let consumed = 0
 
-  for (const char of chars) {
-    if (lines.length >= maxLines) break;
-    if (current.length >= maxLineLength) {
-      lines.push(current);
-      current = '';
-    }
-    if (lines.length >= maxLines) break;
-    current += char;
-    consumed += 1;
-  }
+	for (const char of chars) {
+		if (lines.length >= maxLines) break
+		if (current.length >= maxLineLength) {
+			lines.push(current)
+			current = ''
+		}
+		if (lines.length >= maxLines) break
+		current += char
+		consumed += 1
+	}
 
-  if (current && lines.length < maxLines) {
-    lines.push(current);
-  }
+	if (current && lines.length < maxLines) {
+		lines.push(current)
+	}
 
-  if (consumed < chars.length && lines.length > 0) {
-    const lastIndex = lines.length - 1;
-    const trimmed = lines[lastIndex].slice(0, Math.max(1, maxLineLength - 1));
-    lines[lastIndex] = `${trimmed}…`;
-  }
+	if (consumed < chars.length && lines.length > 0) {
+		const lastIndex = lines.length - 1
+		const trimmed = lines[lastIndex].slice(0, Math.max(1, maxLineLength - 1))
+		lines[lastIndex] = `${trimmed}…`
+	}
 
-  return lines;
-};
+	return lines
+}
 
 const clampText = (value: string, maxLength: number) => {
-  if (value.length <= maxLength) return value;
-  return `${value.slice(0, Math.max(1, maxLength - 1))}…`;
-};
+	if (value.length <= maxLength) return value
+	return `${value.slice(0, Math.max(1, maxLength - 1))}…`
+}
 
 export function buildBlogOgSvg(entry: CollectionEntry<'blog'>): string {
-  const title = entry.data.title;
-  const dateLabel = entry.data.publishDate.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+	const title = entry.data.title
+	const dateLabel = entry.data.publishDate.toLocaleDateString('ja-JP', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	})
 
-  const lines = splitTitle(title);
-  const dateLineText = clampText(dateLabel, 56);
+	const lines = splitTitle(title)
+	const dateLineText = clampText(dateLabel, 56)
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
+	return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${OG_WIDTH}" height="${OG_HEIGHT}" viewBox="0 0 ${OG_WIDTH} ${OG_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
@@ -90,13 +95,15 @@ export function buildBlogOgSvg(entry: CollectionEntry<'blog'>): string {
 
   <rect x="40" y="60" width="1120" height="510" rx="26" fill="#ffffff" stroke="#e5e7eb" filter="url(#card-shadow)" />
 
-  ${lines.map((line, index) => {
-    const y = 200 + index * 88;
-    return `<text x="110" y="${y}" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="64" font-weight="700" fill="${COLOR_TEXT}">${escapeXml(line)}</text>`;
-  }).join('')}
+  ${lines
+		.map((line, index) => {
+			const y = 200 + index * 88
+			return `<text x="110" y="${y}" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="64" font-weight="700" fill="${COLOR_TEXT}">${escapeXml(line)}</text>`
+		})
+		.join('')}
 
   <text x="110" y="500" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="30" font-weight="700" fill="${COLOR_PRIMARY}" letter-spacing="1">watabegg / blog</text>
 
   <text x="940" y="500" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="23" fill="${COLOR_TEXT_MUTED}">${escapeXml(dateLineText)}</text>
-</svg>`;
+</svg>`
 }

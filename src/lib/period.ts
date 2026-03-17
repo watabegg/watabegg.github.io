@@ -1,42 +1,45 @@
-import { differenceInMonths, formatYearMonth } from './time';
+import { differenceInMonths, formatYearMonth } from './time'
 
 export type PeriodRange = {
-  start: Date;
-  end: Date | null;
-};
+	start: Date
+	end: Date | null
+}
 
 export function parsePeriodRange(period: string): PeriodRange {
-  const [startRaw, endRaw] = period.replace(/\s+/g, '').split('/');
+	const [startRaw, endRaw] = period.replace(/\s+/g, '').split('/')
 
-  const start = new Date(startRaw);
-  if (Number.isNaN(start.valueOf())) {
-    throw new Error(`Invalid start date in period: ${period}`);
-  }
+	const start = new Date(startRaw)
+	if (Number.isNaN(start.valueOf())) {
+		throw new Error(`Invalid start date in period: ${period}`)
+	}
 
-  if (!endRaw || endRaw.toLowerCase() === 'present') {
-    return { start, end: null };
-  }
+	if (!endRaw || endRaw.toLowerCase() === 'present') {
+		return { start, end: null }
+	}
 
-  const end = new Date(endRaw);
-  if (Number.isNaN(end.valueOf())) {
-    throw new Error(`Invalid end date in period: ${period}`);
-  }
+	const end = new Date(endRaw)
+	if (Number.isNaN(end.valueOf())) {
+		throw new Error(`Invalid end date in period: ${period}`)
+	}
 
-  return { start, end };
+	return { start, end }
 }
 
 export function formatPeriodLabel(range: PeriodRange): string {
-  const startLabel = formatYearMonth(range.start);
+	const startLabel = formatYearMonth(range.start)
 
-  if (!range.end) {
-    return `${startLabel}-現在`;
-  }
+	if (!range.end) {
+		return `${startLabel}-現在`
+	}
 
-  const endLabel = formatYearMonth(range.end);
-  return `${startLabel}-${endLabel}`;
+	const endLabel = formatYearMonth(range.end)
+	return `${startLabel}-${endLabel}`
 }
 
-export function calculateDurationMonths(range: PeriodRange, referenceDate = new Date()): number {
-  const endDate = range.end ?? referenceDate;
-  return Math.max(1, differenceInMonths(range.start, endDate));
+export function calculateDurationMonths(
+	range: PeriodRange,
+	referenceDate = new Date(),
+): number {
+	const endDate = range.end ?? referenceDate
+	return Math.max(1, differenceInMonths(range.start, endDate))
 }

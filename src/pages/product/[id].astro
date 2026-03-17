@@ -1,8 +1,6 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content'
-import ProductArticle from '../../components/ProductArticle.astro'
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 import ContentLayout from '../../layouts/ContentLayout.astro'
-import { parseProductBody } from '../../lib/product'
 
 export async function getStaticPaths() {
 	const products = await getCollection('products')
@@ -17,21 +15,7 @@ type Props = {
 }
 
 const { entry } = Astro.props
-const content = parseProductBody(entry.body ?? '', entry.id)
-
-const headings = [
-	{ depth: 2, slug: 'overview', text: '概要' },
-	{ depth: 2, slug: 'period', text: '期間' },
-	{ depth: 2, slug: 'tech-stack', text: '使用技術' },
-	{ depth: 2, slug: 'responsibilities', text: '業務領域' },
-	...(content.improvements.length > 0
-		? [{ depth: 2, slug: 'improvements', text: '工夫点' }]
-		: []),
-	...(content.deliverables.length > 0
-		? [{ depth: 2, slug: 'deliverables', text: '成果物' }]
-		: []),
-	...(content.extra ? [{ depth: 2, slug: 'extra', text: '余談' }] : []),
-]
+const { Content, headings } = await render(entry)
 ---
 <ContentLayout
   title={entry.data.title}
@@ -40,5 +24,5 @@ const headings = [
   imageUrl={entry.data.imageUrl}
   headings={headings}
 >
-  <ProductArticle content={content} />
+  <Content />
 </ContentLayout>

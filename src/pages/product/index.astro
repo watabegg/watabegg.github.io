@@ -7,8 +7,12 @@ const now = new Date()
 const allProducts = await getCollection('products')
 
 const products = allProducts
-  .filter(product => !product.data.draft && product.data.publishDate.valueOf() <= now.valueOf())
-  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+	.filter(
+		(product) =>
+			!product.data.draft &&
+			product.data.publishDate.valueOf() <= now.valueOf(),
+	)
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 ---
 <Layout title="Products | watabeggの個人サイト">
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left max-w-5xl space-y-6 md:space-y-8 text-base-content">
@@ -25,13 +29,13 @@ const products = allProducts
           ) : (
             <div class="aspect-2/1 bg-base-300 flex items-center justify-center text-base-content opacity-50">No Image</div>
           )}
-          <div class="p-5 flex flex-col flex-grow">
+          <div class="p-5 flex flex-col grow">
             <h2 class="text-xl font-semibold mb-2 text-base-content line-clamp-1">
               <a href={`/product/${product.id}`} class="hover:text-primary">
                 {product.data.title}
               </a>
             </h2>
-            <p class="text-base-content opacity-80 mb-4 flex-grow line-clamp-2">{product.data.description}</p>
+            <p class="text-base-content opacity-80 mb-4 grow line-clamp-2">{product.data.description}</p>
             <p class="text-sm text-base-content opacity-60 mb-4">
               公開日: {product.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>

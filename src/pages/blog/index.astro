@@ -1,58 +1,78 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import { fetchQiitaItems } from '../../lib/qiita';
-import { fetchZennItems } from '../../lib/zenn';
-import QiitaIcon from '../../assets/qiita.png';
-import ZennIcon from '../../assets/zenn.png';
+import { getCollection } from 'astro:content'
+import QiitaIcon from '../../assets/qiita.png'
+import ZennIcon from '../../assets/zenn.png'
+import Layout from '../../layouts/Layout.astro'
+import { fetchQiitaItems } from '../../lib/qiita'
+import { fetchZennItems } from '../../lib/zenn'
 
-const MAX_EXTERNAL_ITEMS = 100;
+const MAX_EXTERNAL_ITEMS = 100
 
 const [localPostsRaw, qiitaResult, zennResult] = await Promise.all([
-  getCollection('blog'),
-  fetchQiitaItems(MAX_EXTERNAL_ITEMS),
-  fetchZennItems(MAX_EXTERNAL_ITEMS),
-]);
+	getCollection('blog'),
+	fetchQiitaItems(MAX_EXTERNAL_ITEMS),
+	fetchZennItems(MAX_EXTERNAL_ITEMS),
+])
 
 const localPosts = localPostsRaw.sort(
-  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-);
+	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+)
 
 type BlendItem =
-  | { kind: 'local'; slug: string; title: string; description: string; author: string; publishDate: Date; tags?: string[] }
-  | { kind: 'qiita'; title: string; url: string; createdAt: Date }
-  | { kind: 'zenn'; title: string; url: string; createdAt: Date };
+	| {
+			kind: 'local'
+			slug: string
+			title: string
+			description: string
+			author: string
+			publishDate: Date
+			tags?: string[]
+	  }
+	| { kind: 'qiita'; title: string; url: string; createdAt: Date }
+	| { kind: 'zenn'; title: string; url: string; createdAt: Date }
 
 const blended: BlendItem[] = [
-  ...localPosts.map(p => ({
-    kind: 'local' as const,
-    slug: p.id,
-    title: p.data.title,
-    description: p.data.description,
-    author: p.data.author,
-    publishDate: p.data.publishDate,
-    tags: p.data.tags,
-  })),
-  ...qiitaResult.items.map(q => ({ kind: 'qiita' as const, title: q.title, url: q.url, createdAt: q.createdAt })),
-  ...zennResult.items.map(z => ({ kind: 'zenn' as const, title: z.title, url: z.url, createdAt: z.createdAt })),
+	...localPosts.map((p) => ({
+		kind: 'local' as const,
+		slug: p.id,
+		title: p.data.title,
+		description: p.data.description,
+		author: p.data.author,
+		publishDate: p.data.publishDate,
+		tags: p.data.tags,
+	})),
+	...qiitaResult.items.map((q) => ({
+		kind: 'qiita' as const,
+		title: q.title,
+		url: q.url,
+		createdAt: q.createdAt,
+	})),
+	...zennResult.items.map((z) => ({
+		kind: 'zenn' as const,
+		title: z.title,
+		url: z.url,
+		createdAt: z.createdAt,
+	})),
 ].sort((a, b) => {
-  const ad = a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf();
-  const bd = b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf();
-  return bd - ad;
-});
+	const ad =
+		a.kind === 'local' ? a.publishDate.valueOf() : a.createdAt.valueOf()
+	const bd =
+		b.kind === 'local' ? b.publishDate.valueOf() : b.createdAt.valueOf()
+	return bd - ad
+})
 
 const externalMeta = {
-  qiita: {
-    label: 'Qiita',
-    icon: QiitaIcon,
-    badgeClass: 'bg-emerald-500/15 text-emerald-600',
-  },
-  zenn: {
-    label: 'Zenn',
-    icon: ZennIcon,
-    badgeClass: 'bg-sky-500/15 text-sky-600',
-  },
-} as const;
+	qiita: {
+		label: 'Qiita',
+		icon: QiitaIcon,
+		badgeClass: 'bg-emerald-500/15 text-emerald-600',
+	},
+	zenn: {
+		label: 'Zenn',
+		icon: ZennIcon,
+		badgeClass: 'bg-sky-500/15 text-sky-600',
+	},
+} as const
 ---
 <Layout title="Blog | watabeggの個人サイト">
   <div class="container mx-auto max-w-3xl px-6 py-16 flex flex-col items-center text-center md:text-left space-y-6 md:space-y-8 text-base-content">

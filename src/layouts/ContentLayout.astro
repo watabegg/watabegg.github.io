@@ -1,34 +1,45 @@
 ---
-import Layout from './Layout.astro';
+import Layout from './Layout.astro'
 
 interface Props {
-  title: string;
-  publishDate?: Date;
-  author?: string;
-  tags?: string[];
-  imageUrl?: string;
-  description?: string;
-  ogImageUrl?: string;
-  headings: { depth: number; slug: string; text: string }[];
+	title: string
+	publishDate?: Date
+	author?: string
+	tags?: string[]
+	imageUrl?: string
+	description?: string
+	ogImageUrl?: string
+	headings: { depth: number; slug: string; text: string }[]
 }
 
-const { title, publishDate, author, tags, imageUrl, description, ogImageUrl, headings } = Astro.props as Props;
-const displayImageUrl = imageUrl || ogImageUrl || '/images/ogp_default.png';
+const {
+	title,
+	publishDate,
+	author,
+	tags,
+	imageUrl,
+	description,
+	ogImageUrl,
+	headings,
+} = Astro.props as Props
+const displayImageUrl = imageUrl || ogImageUrl || '/images/ogp_default.png'
 
 const isBlog = Astro.url.pathname.startsWith('/blog/')
 const articleType = isBlog ? 'BlogPosting' : 'Article'
 
-const structuredDataImageUrl = (ogImageUrl ?? imageUrl) ? new URL(ogImageUrl ?? imageUrl ?? '', Astro.site).toString() : undefined;
-const isSvgImage = displayImageUrl.endsWith('.svg');
-const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`;
+const structuredDataImageUrl =
+	(ogImageUrl ?? imageUrl)
+		? new URL(ogImageUrl ?? imageUrl ?? '', Astro.site).toString()
+		: undefined
+const isSvgImage = displayImageUrl.endsWith('.svg')
+const imageClasses = `w-full h-auto rounded-md mb-6 lg:mb-8 shadow-md ${isSvgImage ? 'object-contain bg-base-200' : 'object-cover'}`
 
 const depthClasses: { [key: number]: string } = {
-  1: "font-semibold",
-  2: "pl-5",
-  3: "pl-10",
-  4: "pl-[3.75em]",
-};
-
+	1: 'font-semibold',
+	2: 'pl-5',
+	3: 'pl-10',
+	4: 'pl-[3.75em]',
+}
 ---
 <Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={ogImageUrl ?? imageUrl} ogType="article">
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -44,7 +55,7 @@ const depthClasses: { [key: number]: string } = {
   })} />
 
   <div class="content-wrapper container mx-auto px-4 sm:px-6 py-12 lg:py-16 flex flex-col lg:flex-row lg:gap-8 max-w-5xl">
-    <article class="main-content flex-grow lg:w-3/4 flex flex-col items-start">
+    <article class="main-content grow lg:w-3/4 flex flex-col items-start">
       <img src={displayImageUrl} alt={`Image for ${title}`} class={imageClasses} />
       <h1 class="text-3xl sm:text-4xl font-bold mb-3 lg:mb-4 text-base-content text-left">{title}</h1>
       <div class="text-sm text-base-content/70 mb-4 lg:mb-6 flex items-center gap-2 flex-wrap justify-start">

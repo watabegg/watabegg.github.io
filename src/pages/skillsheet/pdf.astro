@@ -1,29 +1,36 @@
 ---
-import { getCollection } from 'astro:content';
-import { profile } from '../../data/profile';
-import { calculateAge } from '../../lib/time';
-import { calculateDurationMonths, formatPeriodLabel, parsePeriodRange } from '../../lib/period';
+import { getCollection } from 'astro:content'
+import { profile } from '../../data/profile'
+import {
+	calculateDurationMonths,
+	formatPeriodLabel,
+	parsePeriodRange,
+} from '../../lib/period'
+import { calculateAge } from '../../lib/time'
 
 const referenceDate = new Date()
 const age = calculateAge(new Date(profile.head.birthDate), referenceDate)
 
 const experiences = (await getCollection('products'))
-  .filter((product) => !product.data.draft && product.data.includeInSkillsheet && product.data.skillsheet)
-  .map((product) => {
-    const skillsheet = product.data.skillsheet!;
-    const range = parsePeriodRange(skillsheet.period);
-    return {
-      title: product.data.title,
-      summary: skillsheet.summary,
-      periodLabel: formatPeriodLabel(range),
-      durationMonths: calculateDurationMonths(range, referenceDate),
-      responsibilities: skillsheet.responsibilities ?? [],
-      techStack: skillsheet.techStack ?? [],
-      deliverables: skillsheet.deliverables ?? [],
-      sortKey: range.start.valueOf(),
-    };
-  })
-  .sort((a, b) => a.sortKey - b.sortKey);
+	.flatMap((product) => {
+		const skillsheet = product.data.skillsheet
+		if (product.data.draft || !product.data.includeInSkillsheet || !skillsheet)
+			return []
+		const range = parsePeriodRange(skillsheet.period)
+		return [
+			{
+				title: product.data.title,
+				summary: skillsheet.summary,
+				periodLabel: formatPeriodLabel(range),
+				durationMonths: calculateDurationMonths(range, referenceDate),
+				responsibilities: skillsheet.responsibilities ?? [],
+				techStack: skillsheet.techStack ?? [],
+				deliverables: skillsheet.deliverables ?? [],
+				sortKey: range.start.valueOf(),
+			},
+		]
+	})
+	.sort((a, b) => a.sortKey - b.sortKey)
 
 const definitionItems = [
 	['氏名', `${profile.head.name} (${profile.head.furigana})`],
@@ -55,7 +62,7 @@ const skillItems = [
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
     />
   </head>
-  <body class="m-0 bg-white text-slate-800 font-['Noto_Sans_JP',_sans-serif] antialiased" style="font-feature-settings:'palt' 1;">
+  <body class="m-0 bg-white text-slate-800 font-['Noto_Sans_JP',sans-serif] antialiased" style="font-feature-settings:'palt' 1;">
     <main class="flex flex-col gap-[18mm] px-[12mm] py-[16mm] text-[12px] leading-[1.55] print:px-[10mm] print:py-[12mm] print:gap-[14mm]">
       <header class="flex items-start justify-between">
         <div>
@@ -66,7 +73,7 @@ const skillItems = [
 
       <section class="space-y-3">
         <h2 class="text-[16px] font-semibold border-b border-slate-300 pb-1 mb-2">基本情報</h2>
-        <dl class="grid grid-cols-[32mm_1fr] gap-y-[6px] gap-x-[10px]">
+        <dl class="grid grid-cols-[32mm_1fr] gap-y-1.5 gap-x-2.5">
           {definitionItems.map((item) => {
             const [term, description] = item;
             return (
@@ -79,7 +86,7 @@ const skillItems = [
         </dl>
         
         <h3 class="text-[14px] font-semibold mt-4 mb-1.5">学歴・職歴</h3>
-        <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+        <ul class="list-disc pl-3.5 space-y-0.5 m-0">
           {profile.education.map((item) => (
             <li>{item.period} — {item.description}</li>
           ))}
@@ -88,7 +95,7 @@ const skillItems = [
 
       <section class="space-y-3">
         <h2 class="text-[16px] font-semibold border-b border-slate-300 pb-1 mb-2">スキル</h2>
-        <dl class="grid grid-cols-[32mm_1fr] gap-y-[6px] gap-x-[10px]">
+        <dl class="grid grid-cols-[32mm_1fr] gap-y-1.5 gap-x-2.5">
           {skillItems.map((item) => {
             const [term, description] = item;
             return (
@@ -121,25 +128,25 @@ const skillItems = [
                   <div class="text-[10px] text-slate-500">{experience.durationMonths}カ月</div>
                 </td>
                 <td class="border border-slate-300 p-2 align-top">
-                  <div class="font-semibold mb-[2px]">{experience.title}</div>
+                  <div class="font-semibold mb-0.5">{experience.title}</div>
                   <p class="m-0 whitespace-pre-line">{experience.summary}</p>
                 </td>
                 <td class="border border-slate-300 p-2 align-top">
-                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                  <ul class="list-disc pl-3.5 space-y-0.5 m-0">
                     {experience.responsibilities.map((item) => (
                       <li>{item}</li>
                     ))}
                   </ul>
                 </td>
                 <td class="border border-slate-300 p-2 align-top">
-                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                  <ul class="list-disc pl-3.5 space-y-0.5 m-0">
                     {experience.techStack.map((tech) => (
                       <li>{tech}</li>
                     ))}
                   </ul>
                 </td>
                 <td class="border border-slate-300 p-2 align-top">
-                  <ul class="list-disc pl-[14px] space-y-[2px] m-0">
+                  <ul class="list-disc pl-3.5 space-y-0.5 m-0">
                     {experience.deliverables.map((deliverable) => (
                       <li>
                         <span class="block font-semibold">{deliverable.label}</span>

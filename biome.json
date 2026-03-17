@@ -6,6 +6,7 @@
       "postcss.config.mjs",
       "tailwind.config.ts",
       "tsconfig.json",
+      "astro.config.mjs",
       "package.json",
       "!dist"
     ]
