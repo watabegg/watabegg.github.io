@@ -167,17 +167,28 @@ const prep = (type: PageType) => {
 
 let currentTl: gsap.core.Timeline | null = null
 
-const animateTo = (to: PageType, duration = 0.7) => {
+const animateTo = (to: PageType, duration = 0.7, emitReady = false) => {
 	currentTl?.kill()
 	const preset = getPreset(to)
 	const h = $(HEADER)
 	const f = $(FOOTER)
-	currentTl = gsap.timeline({ defaults: { duration, ease: 'power3.inOut' } })
+	currentTl = gsap.timeline({
+		defaults: { duration, ease: 'power3.inOut' },
+		onComplete: () => {
+			if (emitReady && to === 'home') {
+				document.dispatchEvent(new CustomEvent('app:bg-ready'))
+			}
+		},
+	})
 	if (h) currentTl.to(h, buildVars(preset.header), 0)
 	if (f) currentTl.to(f, buildVars(preset.footer), 0.06)
 }
 
 document.addEventListener('astro:after-swap', () => {
+	// home に来るときは prep しない（即座リセットが白フラッシュの原因になる）
+	// page-load の animateTo が現在位置からスムーズにアニメーションする
+	const next = getType()
+	if (next === 'home') return
 	const prev = (window.__lastPageType as PageType) ?? 'inner'
 	prep(prev)
 })
@@ -187,7 +198,7 @@ document.addEventListener('astro:page-load', () => {
 	if (window.__lastPageType === undefined) {
 		prep('inner')
 	}
-	animateTo(current, 0.8)
+	animateTo(current, 0.8, true)
 	window.__lastPageType = current
 })
 
@@ -199,7 +210,9 @@ document.addEventListener('astro:before-preparation', (event) => {
 
 	const loader = prepEvent.loader
 	prepEvent.loader = async () => {
-		if (current !== next) {
+		// home への遷移では事前アニメーション不要（after-swap で prep しないため）
+		// home からの遷移時のみ事前アニメーションでページ読み込み中の視覚フィードバックを出す
+		if (current === 'home' && next !== 'home') {
 			animateTo(next, 0.45)
 		}
 		await loader()

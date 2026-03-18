@@ -22,7 +22,7 @@ const {
 	description,
 	ogImageUrl,
 	headings,
-} = Astro.props as Props
+} = Astro.props
 const displayImageUrl = imageUrl || ogImageUrl || '/images/ogp_default.png'
 
 const isBlog = Astro.url.pathname.startsWith('/blog/')

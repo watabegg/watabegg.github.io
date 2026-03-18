@@ -23,6 +23,7 @@ const { Content, headings } = await render(entry)
   author={entry.data.author}
   tags={entry.data.tags}
   imageUrl={entry.data.imageUrl}
+  ogImageUrl={`/og/blog/${entry.id}.png`}
   headings={headings}
 >
   <Content />

@@ -76,7 +76,7 @@ const finalOgImageUrl = ogImageUrl
     </script>
 		<ClientRouter />
 	</head>
-	<body class={`flex flex-col min-h-screen bg-base-100 text-base-content ${isFullScreen ? 'is-home' : ''}`}>
+	<body class:list={["flex flex-col min-h-screen bg-base-100 text-base-content", {'is-home' : isFullScreen}]}>
 		<div id="bg-layer" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden z-5">
 			<div id="header-bg" class="bg-panel bg-primary"></div>
 			<div id="footer-bg" class="bg-panel bg-primary"></div>
@@ -89,7 +89,7 @@ const finalOgImageUrl = ogImageUrl
 		)}
 		<main class="relative grow flex items-center justify-center overflow-hidden">
 			{ isFullScreen && (
-				<div class="absolute w-full md:w-3/5 lg:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around z-0">
+				<div class="absolute w-full md:w-3/5 lg:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around z-0 opacity-0" id="home-images">
 					<Image
 						src={IconImage}
 						alt="watabeggのアイコン"

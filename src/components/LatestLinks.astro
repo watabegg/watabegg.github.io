@@ -9,6 +9,7 @@ import { fetchZennItems } from '@/lib/zenn'
 type Props = {
 	mode: 'product' | 'blog'
 }
+
 const { mode } = Astro.props
 
 const [products, blogs] = await Promise.all([

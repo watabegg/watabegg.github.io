@@ -21,27 +21,74 @@ body {
 @layer components {
   /* ページ共通のセクションラッパー */
   .page-section {
-    @apply container mx-auto px-6 py-16 flex flex-col items-center text-base-content space-y-6 md:space-y-8;
+    width: 100%;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-base-content);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .page-section {
+      gap: 2rem;
+    }
   }
 
   /* タグバッジ（blog・product 共通） */
   .tag-badge {
-    @apply bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full;
+    background-color: color-mix(
+      in oklab,
+      var(--color-primary) 10%,
+      transparent
+    );
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
   }
 
   /* コンテンツカード（blog・product 共通） */
   .content-card {
-    @apply bg-base-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300;
+    background-color: var(--color-base-100);
+    border-radius: var(--radius-box);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: box-shadow 300ms;
+  }
+
+  .content-card:hover {
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
 
   /* 続きを読む・詳細を見る リンク */
   .read-more-link {
-    @apply text-primary hover:text-primary/80 font-medium;
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  .read-more-link:hover {
+    color: color-mix(in oklab, var(--color-primary) 80%, transparent);
   }
 
   /* about ページのセクション hover エフェクト */
   .hover-section {
-    @apply opacity-85 transition duration-300 ease-in-out hover:opacity-100 w-full;
+    opacity: 0.85;
+    transition: opacity 300ms ease-in-out;
+    width: 100%;
+  }
+
+  .hover-section:hover {
+    opacity: 1;
   }
 }
 @plugin "@tailwindcss/typography";
