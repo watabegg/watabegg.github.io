@@ -55,6 +55,7 @@ export const profile: ProfileData = {
 			description: 'ASUNA Frontier株式会社: 業務委託契約',
 		},
 		{ period: '2025年06月 - 現在', description: 'ラムダ技術部: 業務委託契約' },
+		{ period: '2026年03月 - 現在', description: '非公開企業: 業務委託契約' },
 		{
 			period: '2027年03月 (予定)',
 			description: '信州大学 工学部 電子情報システム工学科: 卒業見込',
@@ -72,9 +73,8 @@ export const profile: ProfileData = {
 			'Ruby on Rails',
 		],
 		libraries: [
-			'Prisma',
+			'daisyUI',
 			'GSAP',
-			'Three.js',
 			'Tailwind CSS',
 			'Drizzle',
 			'shadcn/ui',

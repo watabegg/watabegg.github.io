@@ -1,0 +1,78 @@
+---
+title: 'watabegg.github.ioで遊ぶ | ホームのアニメーション改良'
+description: 'Part 2: ホームのアニメーション改良'
+publishDate: 2026-04-20
+tags: ['ブログ運営', 'GSAP', 'Astro', 'Webアニメーション']
+---
+
+import Figure from '@/components/ui/Figure.astro'
+
+## 経緯
+前回に引き続き、`watabegg.github.ioで遊ぶ` シリーズの第2弾として、ホームページのGSAPアニメーションを改良しました。
+
+以前のアニメーションには「初期描画時、テキストや画像が先に描画され、のちにその背景となる要素のアニメーションが開始される」問題があり、アニメーション導入当時は直そうにもうまくいかなかったので、今回はその問題を解決しつつ、より滑らかで魅力的なアニメーションに仕上げました。
+
+<Figure src="/images/blog/old_home_animation.gif" alt="旧式のアニメーション、アニメーションが開始される前に要素が表示される" />
+
+## 改良点
+
+まず大きく変更した点は、`Layout.client.ts`ファイルを新たに作成し、クライアントサイドでのみアニメーションを制御するようにしたことです。
+
+GSAPでのアニメーションはクライアントサイドでのみ動作するため、GSAPの処理は完全に別ファイルとして切り出しました。
+これにより、SSGで生成されたHTMLにアニメーションの影響が及ぶことがなくなり、初期描画時の問題を解消しました。
+
+```ts
+// src/layouts/Layout.client.ts
+import { gsap } from 'gsap'
+import type { PageType } from '@/types/page'
+
+const HEADER = '#header-bg'
+const FOOTER = '#footer-bg'
+// 良く言えば古き良きjQueryスタイルのセレクタ関数もある
+const $ = (sel: string) => document.querySelector<HTMLElement>(sel)
+
+const getType = (): PageType =>
+	document.body.classList.contains('is-home') ? 'home' : 'inner'
+const nextTypeFrom = (url: URL): PageType =>
+	url.pathname === '/' ? 'home' : 'inner'
+  ...
+```
+
+```tsx
+// src/layouts/Layout.astro
+<!doctype html>
+<html lang="ja">
+	<head>
+		...
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // ここでクライアントサイドのアニメーション制御を行うスクリプトを読み込む
+      import '@/layouts/Layout.client'
+    </script>
+		<ClientRouter />
+  </head>
+  ...
+</html>
+```
+
+またAstroのViewTransitionsのイベントを監視して、ページ遷移の際にスムーズなアニメーションを実現するようにしました。
+```ts
+document.addEventListener('astro:page-load', () => {
+	const current = getType()
+	if (window.__lastPageType === undefined) {
+		prep('inner')
+	}
+	animateTo(current, 0.8, true)
+	window.__lastPageType = current
+})
+```
+以上のコードは、ページが読み込まれた際に`window`オブジェクトから現在のページタイプを取得し、初回ロード時には`prep('inner')`でアニメーションの準備を行い、その後`animateTo`関数でアニメーションを実行するという流れになっています。
+
+実際に大きなアニメーションを行うHeaderとFooterの背景素材はmobile, desktop両方でwidth, heightや座標情報を定数で用意し、画面サイズに応じて切り替えるようにしました。
+
+## 結果
+これらの改良により、ホームページのアニメーションは初期描画時の問題が解消され、より滑らかで魅力的なものになりました。
+特に、ページ遷移の際のアニメーションは、結構満足のいく仕上がりになりました。
+
+GSAPは流行りの宣言的なUIフレームワークとは異なり、命令的なスタイルでアニメーションを制御するため、AstroのようなSSGと組み合わせる際には特に工夫が必要ですが、今回の改良でその問題をうまく解決できたと思います。
+Reactに慣れすぎている身としては不慣れな操作ですがJavaScriptのクライアントサイドへの理解が深まりました。

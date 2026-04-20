@@ -7,8 +7,6 @@ const $ = (sel: string) => document.querySelector<HTMLElement>(sel)
 
 const getType = (): PageType =>
 	document.body.classList.contains('is-home') ? 'home' : 'inner'
-const nextTypeFrom = (url: URL): PageType =>
-	url.pathname === '/' ? 'home' : 'inner'
 
 type Shape = {
 	w: string
@@ -200,21 +198,4 @@ document.addEventListener('astro:page-load', () => {
 	}
 	animateTo(current, 0.8, true)
 	window.__lastPageType = current
-})
-
-document.addEventListener('astro:before-preparation', (event) => {
-	const prepEvent = event
-	const current = getType()
-	const next = nextTypeFrom(prepEvent.to)
-	window.__lastPageType = current
-
-	const loader = prepEvent.loader
-	prepEvent.loader = async () => {
-		// home への遷移では事前アニメーション不要（after-swap で prep しないため）
-		// home からの遷移時のみ事前アニメーションでページ読み込み中の視覚フィードバックを出す
-		if (current === 'home' && next !== 'home') {
-			animateTo(next, 0.45)
-		}
-		await loader()
-	}
 })

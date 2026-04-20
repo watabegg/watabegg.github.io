@@ -1,0 +1,35 @@
+---
+
+type Props = {
+	src: string
+	alt?: string
+}
+
+const { src, alt } = Astro.props
+---
+<figure>
+  <img src={src} alt={alt ? alt : 'Figure'} />
+  {alt && <figcaption>{alt}</figcaption>}
+</figure>
+
+<style lang="css">
+figure {
+  counter-increment: fig;
+}
+figure img {
+  display: block;
+  margin: 0 auto;
+  min-width: 60%;
+  max-width: 100%;
+}
+
+figcaption {
+  text-align: center;
+}
+
+figcaption::before {
+  content: "図 " counter(fig) ": ";
+  font-weight: bold;
+  color: var(--ifm-color-primary);
+}
+</style>
