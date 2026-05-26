@@ -28,7 +28,7 @@ import type { PageType } from '@/types/page'
 
 const HEADER = '#header-bg'
 const FOOTER = '#footer-bg'
-// 良く言えば古き良きjQueryスタイルのセレクタ関数もある
+// 良く言えば古き良きjQueryスタイルのセレクタ関数も用意
 const $ = (sel: string) => document.querySelector<HTMLElement>(sel)
 
 const getType = (): PageType =>
@@ -46,7 +46,7 @@ const nextTypeFrom = (url: URL): PageType =>
 		...
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // ここでクライアントサイドのアニメーション制御を行うスクリプトを読み込む
+      // ここでクライアントサイドのアニメーション制御を行うスクリプトを読み込む、こんなことしていいんや
       import '@/layouts/Layout.client'
     </script>
 		<ClientRouter />
@@ -74,5 +74,5 @@ document.addEventListener('astro:page-load', () => {
 これらの改良により、ホームページのアニメーションは初期描画時の問題が解消され、より滑らかで魅力的なものになりました。
 特に、ページ遷移の際のアニメーションは、結構満足のいく仕上がりになりました。
 
-GSAPは流行りの宣言的なUIフレームワークとは異なり、命令的なスタイルでアニメーションを制御するため、AstroのようなSSGと組み合わせる際には特に工夫が必要ですが、今回の改良でその問題をうまく解決できたと思います。
+GSAPは流行りの宣言的なUIフレームワークと違って、命令的なスタイルでアニメーションを制御するため、AstroのようなSSGと組み合わせる際には特に工夫が必要ですが、今回の改良でその問題をうまく解決できたと思います。
 Reactに慣れすぎている身としては不慣れな操作ですがJavaScriptのクライアントサイドへの理解が深まりました。

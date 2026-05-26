@@ -17,9 +17,9 @@ const enterTimeline = () => {
 			if (getComputedStyle(div).display !== 'none') visibleNavDivs.push(div)
 		})
 
-	const socialAs = [
-		...document.querySelectorAll<HTMLElement>('#social-links-home a'),
-	]
+	const socialAs = Array.from(
+		document.querySelectorAll<HTMLElement>('#social-links-home a'),
+	)
 
 	const allTargets = [...(h1 ? [h1] : []), ...visibleNavDivs, ...socialAs]
 
