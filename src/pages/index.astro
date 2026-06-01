@@ -1,19 +1,9 @@
 ---
-import GithubIcon from '@/components/icons/Github.astro'
-import GmailIcon from '@/components/icons/Gmail.astro'
-import InstagramIcon from '@/components/icons/Instagram.astro'
-import TwitterIcon from '@/components/icons/Twitter.astro'
 import LatestLinks from '@/components/LatestLinks.astro'
 import { links as pageLinks, socialLinks } from '@/data/constant'
 import Layout from '@/layouts/Layout.astro'
 
-type IconKey = 'Twitter' | 'GitHub' | 'Instagram' | 'Gmail'
-const iconMap: Record<IconKey, typeof TwitterIcon> = {
-	Twitter: TwitterIcon,
-	GitHub: GithubIcon,
-	Instagram: InstagramIcon,
-	Gmail: GmailIcon,
-}
+const socialIconSpritePath = '/icons/social.svg'
 ---
 <Layout title="Home | watabeggの個人サイト" isFullScreen={true}>
   <div class="z-20 flex flex-col md:flex-row w-full h-screen items-center pt-[5%] pb-[10%] justify-between px-8 md:px-16">
@@ -45,7 +35,6 @@ const iconMap: Record<IconKey, typeof TwitterIcon> = {
 
     <aside id="social-links-home" class="flex w-full md:w-1/5 flex-row md:flex-col justify-center md:items-end items-center space-x-6 md:space-x-0 md:space-y-4 md:-skew-x-6 transform pointer-events-auto">
       {socialLinks.map((link, index) => {
-        const IconComponent = iconMap[link.name as IconKey]
         return (
           <a
             href={link.href}
@@ -54,7 +43,14 @@ const iconMap: Record<IconKey, typeof TwitterIcon> = {
             class="flex items-center space-x-2 text-sm md:text-base text-white opacity-0 transition duration-300 ease-in-out hover:opacity-100 hover:scale-105"
             style={`transition-delay: ${index * 100}ms;`}
           >
-            <IconComponent class="w-6 h-6 md:w-5 md:h-5" />
+            <svg
+              class="w-6 h-6 md:w-5 md:h-5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <use href={`${socialIconSpritePath}#${link.iconId}`} />
+            </svg>
             <span class="hidden md:block">{link.name}</span>
           </a>
         )

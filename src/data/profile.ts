@@ -66,14 +66,16 @@ export const profile: ProfileData = {
 	],
 	skills: {
 		languages: ['TypeScript', 'JavaScript', 'Python', 'PHP', 'Go', 'Ruby'],
-		frameworks: [
-			'Next.js',
-			'Astro',
-			'Hono',
-			'WordPress',
-			'Ruby on Rails',
+		frameworks: ['Next.js', 'Astro', 'Hono', 'WordPress', 'Ruby on Rails'],
+		libraries: [
+			'React',
+			'daisyUI',
+			'GSAP',
+			'Tailwind CSS',
+			'Drizzle',
+			'shadcn/ui',
+			'vue.js',
 		],
-		libraries: ['React', 'daisyUI', 'GSAP', 'Tailwind CSS', 'Drizzle', 'shadcn/ui', 'vue.js'],
 		os: ['Linux (Ubuntu)', 'macOS', 'Windows'],
 		db: ['PostgreSQL', 'MySQL'],
 		paas: ['Vercel', 'Cloudflare', 'Google Cloud', 'AWS'],

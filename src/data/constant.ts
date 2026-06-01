@@ -1,5 +1,6 @@
 export type NavLink = { name: string; href: string }
-export type SocialLink = { name: string; href: string }
+export type SocialIconId = 'twitter' | 'github' | 'instagram' | 'gmail'
+export type SocialLink = { name: string; href: string; iconId: SocialIconId }
 
 export const links = [
 	{ name: 'Home', href: '/' },
@@ -12,8 +13,16 @@ export const links = [
 ] satisfies NavLink[]
 
 export const socialLinks: SocialLink[] = [
-	{ name: 'Twitter', href: 'https://twitter.com/watabegg' },
-	{ name: 'GitHub', href: 'https://github.com/watabegg' },
-	{ name: 'Instagram', href: 'https://www.instagram.com/watabegg' },
-	{ name: 'Gmail', href: 'mailto:watabegg@gmail.com' },
+	{
+		name: 'Twitter',
+		href: 'https://twitter.com/watabegg',
+		iconId: 'twitter',
+	},
+	{ name: 'GitHub', href: 'https://github.com/watabegg', iconId: 'github' },
+	{
+		name: 'Instagram',
+		href: 'https://www.instagram.com/watabegg',
+		iconId: 'instagram',
+	},
+	{ name: 'Gmail', href: 'mailto:watabegg@gmail.com', iconId: 'gmail' },
 ]

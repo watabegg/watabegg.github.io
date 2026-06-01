@@ -24,6 +24,7 @@ const {
 } = Astro.props
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const rssFeedUrl = new URL('/rss.xml', canonicalUrl).toString()
 
 const defaultOgImageUrl = new URL(
 	'/images/ogp_default.png',
@@ -44,6 +45,12 @@ const finalOgImageUrl = ogImageUrl
 
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl.toString()} />
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="watabegg Blog RSS"
+			href={rssFeedUrl}
+		/>
 
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalUrl.toString()} />

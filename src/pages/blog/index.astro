@@ -8,6 +8,7 @@ import { fetchZennItems } from '@/lib/zenn'
 import type { BlendItem } from '@/types/blog'
 
 const MAX_EXTERNAL_ITEMS = 100
+const socialIconSpritePath = '/icons/social.svg'
 
 const [localPostsRaw, qiitaResult, zennResult] = await Promise.all([
 	getCollection('blog'),
@@ -64,9 +65,29 @@ const externalMeta = {
 ---
 <Layout title="Blog | watabeggの個人サイト">
   <div class="page-section max-w-3xl text-center md:text-left w-full">
-    <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
-      ブログ
-    </h1>
+    <div class="flex flex-row justify-between items-center w-full">
+      <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
+        ブログ
+      </h1>
+      <a
+        href="/rss.xml"
+        class="self-center md:self-auto opacity-75 transition-opacity duration-300 hover:opacity-100 mr-4"
+        aria-label="RSSを購読"
+      >
+        <svg
+          class="w-7 h-7"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <use href={`${socialIconSpritePath}#rss`} />
+        </svg>
+      </a>
+    </div>
     <div class="space-y-10 w-full">
       {blended.map(item => {
         if (item.kind === 'local') {
