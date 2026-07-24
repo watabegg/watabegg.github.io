@@ -40,7 +40,6 @@ const FORBIDDEN_SOURCE_EXTENSIONS = new Set([
 	'.tsx',
 ])
 const FORBIDDEN_SECRET_EXTENSIONS = new Set(['.key', '.p12', '.pem', '.pfx'])
-const FORBIDDEN_PUBLIC_ASSETS = new Set(['images/product/private-project.png'])
 
 function parseArgs(argv) {
 	const options = {
@@ -131,10 +130,6 @@ function validatePublishedPath(relativePath) {
 	const segments = lowerPath.split('/')
 	const fileName = basename(lowerPath)
 	const extension = extname(fileName)
-
-	if (FORBIDDEN_PUBLIC_ASSETS.has(lowerPath)) {
-		errors.push(`${relativePath}: private-onlyプロジェクトの資産です`)
-	}
 
 	if (
 		/(?:^|\/)(?:skillsheet|resume|work-history|work_history|documents)(?:[/._-]|$)/i.test(
@@ -370,12 +365,22 @@ async function readPublicContent(publicContentDir) {
 		throw new Error(`公開コンテンツを検査できません:\n${errors.join('\n')}`)
 	}
 
-	const contents = await Promise.all(
-		files
-			.filter((file) => ['.md', '.mdx'].includes(extname(file.relativePath)))
-			.map((file) => readFile(file.fullPath, 'utf8')),
+	const contentFiles = files.filter((file) =>
+		['.md', '.mdx'].includes(extname(file.relativePath)),
 	)
-	return normalizeWhitespace(contents.join('\n'))
+	const contents = await Promise.all(
+		contentFiles.map((file) => readFile(file.fullPath, 'utf8')),
+	)
+	const productSlugs = new Set(
+		contentFiles
+			.map((file) => basename(file.relativePath, extname(file.relativePath)))
+			.filter((slug) => !slug.startsWith('_')),
+	)
+
+	return {
+		content: normalizeWhitespace(contents.join('\n')),
+		productSlugs,
+	}
 }
 
 async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
@@ -385,11 +390,13 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 	}
 
 	const privateValues = []
+	const privateProjectSlugs = new Set()
 	const publicValues = new Set()
 	const errors = []
 	let profileDefinitionCount = 0
 	let experienceDefinitionCount = 0
-	const publicContent = await readPublicContent(publicContentDir)
+	const { content: publicContent, productSlugs: publicProductSlugs } =
+		await readPublicContent(publicContentDir)
 
 	for (const sourcePath of sourcePaths) {
 		const sourceText = await readFile(sourcePath, 'utf8')
@@ -435,6 +442,22 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 							)
 						} else if (exposure.initializer.text === 'documents-only') {
 							privateRoots.add(root)
+
+							const kind = getObjectProperty(root, 'kind')
+							const id = getObjectProperty(root, 'id')
+							if (
+								kind &&
+								ts.isPropertyAssignment(kind) &&
+								ts.isStringLiteralLike(kind.initializer) &&
+								kind.initializer.text === 'project' &&
+								id &&
+								ts.isPropertyAssignment(id) &&
+								ts.isStringLiteralLike(id.initializer)
+							) {
+								privateProjectSlugs.add(
+									id.initializer.text.replace(/^project-/, ''),
+								)
+							}
 						}
 					}
 				}
@@ -550,7 +573,12 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 		if (!tokens.has(value)) tokens.set(value, { ...candidate, value })
 	}
 
-	return [...tokens.values()]
+	return {
+		privateProjectSlugs: new Set(
+			[...privateProjectSlugs].filter((slug) => !publicProductSlugs.has(slug)),
+		),
+		privateTokens: [...tokens.values()],
+	}
 }
 
 function tokenFingerprint(value) {
@@ -586,10 +614,6 @@ async function verifyPublicDist(options) {
 		errors.push('dist直下にindex.htmlがありません')
 	}
 
-	for (const file of files) {
-		errors.push(...validatePublishedPath(file.relativePath))
-	}
-
 	const cnameFile = files.find((file) => file.relativePath === 'CNAME')
 	if (!cnameFile) {
 		errors.push('dist直下にCNAMEがありません')
@@ -605,10 +629,23 @@ async function verifyPublicDist(options) {
 		errors.push('dist直下に.nojekyllがありません')
 	}
 
-	const privateTokens = await collectPrivateOnlyTokens(
+	const { privateProjectSlugs, privateTokens } = await collectPrivateOnlyTokens(
 		identityDir,
 		publicContentDir,
 	)
+
+	for (const file of files) {
+		errors.push(...validatePublishedPath(file.relativePath))
+
+		const lowerPath = file.relativePath.toLowerCase()
+		if (!lowerPath.startsWith('images/product/')) continue
+		const assetPath = lowerPath.slice('images/product/'.length)
+		if (assetPath.includes('/')) continue
+		const assetSlug = basename(assetPath, extname(assetPath))
+		if (privateProjectSlugs.has(assetSlug)) {
+			errors.push(`${file.relativePath}: private-onlyプロジェクトの資産です`)
+		}
+	}
 	const identityRelativePath = toPosixPath(relative(process.cwd(), identityDir))
 	const identityMarkers = [
 		toPosixPath(identityDir),

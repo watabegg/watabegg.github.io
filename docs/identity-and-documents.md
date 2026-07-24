@@ -53,13 +53,13 @@ pnpm identity:new -- --id=project-example --kind=project
 
 現在のプロジェクトは次の規則で配置します。
 
-- **職務経歴だけ**：`private-project`
+- **職務経歴だけ**：未追跡Identity内で `documents-only` にしたプロジェクト
 - **Product記事だけ**：`no-smoking`、`ashitabo`、`ashitabo-v1`、`watabegg`
 - **両方に独立して配置**：`asuna-hp`、`makasete-lp`、`remove-ads`、`slidev-theme`
 
 「両方に独立して配置」は共通データへの参照を意味しません。公開記事は `src/content/products/<slug>.md`、職務経歴は `identity/experiences/project-<slug>.ts` にそれぞれ完全な文章を持ちます。
 
-この分類が制御するのは現在のtreeと今後の公開成果物です。`private-project` の旧Markdownと画像は既存の公開Git履歴に残っているため、過去のcommitからは取得できます。過去履歴からも除去する場合は、対象branchとtag、共同作業者への影響、バックアップを確認したうえで、別作業として履歴の書き換えとforce pushを行います。
+非公開プロジェクトのIDや本文は、この追跡されるドキュメントへ列挙しません。分類の正本は未追跡Identityだけに置き、公開成果物の検査もそこから対象を導出します。
 
 Product記事の雛形は `src/content/products/_template.md` です。記事を追加した後、`draft: false` にするか `draft` を削除すると、公開日を過ぎた記事がProduct一覧と詳細ページへ生成されます。
 
