@@ -5,19 +5,7 @@ description: "ここに短い説明"
 tags:
   - "タグ1"
   - "タグ2"
-imageUrl: "/images/product/placeholder.png"
 draft: true
-includeInSkillsheet: false
-skillsheet:
-  summary: "スキルシート用の一文サマリ"
-  period: "YYYY-MM-DD/YYYY-MM-DD"
-  responsibilities:
-    - "担当した業務を箇条書きで記載"
-  techStack:
-    - "技術名 | 役割やポイント"
-  deliverables:
-    - label: "成果物名"
-      url: "https://example.com"
 ---
 
 ## 概要

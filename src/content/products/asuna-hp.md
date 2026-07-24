@@ -10,22 +10,6 @@ tags:
   - "WordPress"
   - "React"
 imageUrl: "/images/product/asuna-hp.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "ASUNA Frontierのブランドトーンを定義し、FigmaデザインとWordPress実装を連携させたコーポレートサイト制作をリード。"
-  period: "2025-02-01/2025-05-31"
-  responsibilities:
-    - "ブランドアイデンティティの定義とビジュアルデザイン"
-    - "CMS要件の整理とエディターフローの設計"
-    - "WordPressテーマおよびReactプラグインの実装"
-    - "公開後の運用ドキュメント作成とレクチャー"
-  techStack:
-    - "Figma | ロゴ設計とスタイルガイド、UIキットを共同作成"
-    - "WordPress | 運用負荷を抑えるカスタムテーマ構築"
-    - "TypeScript + React | 共通コンポーネントをプラグイン化し再利用性を向上"
-  deliverables:
-    - label: "ASUNA Frontier公式サイト"
-      url: "https://asuna-ac.net/"
 ---
 
 ## 概要

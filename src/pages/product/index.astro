@@ -1,18 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
+import { getPublicIdentity } from '@/identity/load'
 import Layout from '@/layouts/Layout.astro'
+import { getPublishedProducts } from '@/lib/products'
 
-const now = new Date()
-
-const products = (await getCollection('products'))
-	.filter(
-		(product) =>
-			!product.data.draft &&
-			product.data.publishDate.valueOf() <= now.valueOf(),
-	)
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+const products = await getPublishedProducts()
+const { profile } = getPublicIdentity()
 ---
-<Layout title="Products | watabeggの個人サイト">
+<Layout title={`Products | ${profile.site.title}`}>
   <div class="page-section max-w-5xl text-center md:text-left w-full">
     <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
       作ったやつ
@@ -35,7 +29,7 @@ const products = (await getCollection('products'))
             <p class="text-sm text-base-content opacity-60 mb-4">
               公開日: {product.data.publishDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-            {product.data.tags && (
+            {product.data.tags.length > 0 && (
               <div class="flex flex-wrap gap-2 mb-4">
                 {product.data.tags.map(tag => (
                   <span class="tag-badge">{tag}</span>

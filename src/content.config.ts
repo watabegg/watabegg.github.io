@@ -7,26 +7,16 @@ const productsCollection = defineCollection({
 		pattern: '**/[^_]*.{md,mdx}',
 		base: './src/content/products',
 	}),
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		publishDate: z.date(),
-		tags: z.array(z.string()).default([]),
-		imageUrl: z.string().optional(),
-		draft: z.boolean().default(false),
-		includeInSkillsheet: z.boolean().default(true),
-		skillsheet: z
-			.object({
-				period: z.string(),
-				summary: z.string(),
-				responsibilities: z.array(z.string()).optional(),
-				techStack: z.array(z.string()).optional(),
-				deliverables: z
-					.array(z.object({ label: z.string(), url: z.string() }))
-					.optional(),
-			})
-			.optional(),
-	}),
+	schema: z
+		.object({
+			title: z.string(),
+			description: z.string(),
+			publishDate: z.date(),
+			tags: z.array(z.string()).default([]),
+			imageUrl: z.string().optional(),
+			draft: z.boolean().default(false),
+		})
+		.strict(),
 })
 
 const blogCollection = defineCollection({
@@ -35,7 +25,7 @@ const blogCollection = defineCollection({
 		title: z.string(),
 		description: z.string(),
 		publishDate: z.date(),
-		author: z.string().default('watabegg'),
+		author: z.string().optional(),
 		tags: z.array(z.string()).optional(),
 		imageUrl: z.string().optional(),
 	}),

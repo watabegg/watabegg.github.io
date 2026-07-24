@@ -9,22 +9,6 @@ tags:
   - "daisyUI"
   - "ポートフォリオ"
 imageUrl: "/images/product/watabegg-hp.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "Astroで構築したポートフォリオサイトを運用し、ブログとプロダクト情報を一元管理。"
-  period: "2025-04-01/present"
-  responsibilities:
-    - "サイト情報アーキテクチャの設計"
-    - "UIデザインとテーマの策定"
-    - "コンテンツコレクションとビルドパイプライン整備"
-    - "GitHub Pagesへのデプロイ構成構築"
-  techStack:
-    - "Astro | 静的生成と部分的なインタラクションを両立"
-    - "Tailwind CSS + daisyUI | デザインシステムをユーティリティで管理"
-    - "TypeScript | コンポーネントとスクリプトの型安全性を担保"
-  deliverables:
-    - label: "watabeggの個人サイト"
-      url: "https://watabegg.github.io"
 ---
 
 ## 概要
@@ -56,7 +40,7 @@ skillsheet:
 
 ## 成果物
 
-- [watabeggの個人サイト](https://watabegg.github.io)
+- [watabeggの個人サイト](https://watabe.gg)
 
 ## 余談
 

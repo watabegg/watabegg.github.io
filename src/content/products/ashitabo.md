@@ -10,22 +10,6 @@ tags:
   - "Auth.js"
   - "チーム開発"
 imageUrl: "/images/product/ashitabo.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "軽音サークル公式サイト兼会員向けWebアプリをNext.jsフルスタック構成で刷新し、部内業務のオンライン化を実現。"
-  period: "2024-07-01/2025-08-01"
-  responsibilities:
-    - "旧サイトの現状調査と情報設計の立案"
-    - "UI/UX要件の整理とReactコンポーネント実装"
-    - "データベース/認証を含むバックエンド開発と運用"
-  techStack:
-    - "Next.js 15 + TypeScript | App Routerとcache戦略を活用したフルスタック構成"
-    - "Prisma + PostgreSQL | 本番DB設計とマイグレーション管理"
-    - "Auth.js (LINE OAuth) | LINE認証で部員限定機能にアクセス制御"
-    - "Vercel | 高速デプロイとプレビュー環境の整備"
-  deliverables:
-    - label: "あしたぼホームページ"
-      url: "https://www.ashitabo.net"
 ---
 
 ## 概要
@@ -66,4 +50,4 @@ skillsheet:
 
 ## 余談その2
 
-現在は [あしたぼホームページv1](https://watabegg.github.io/product/ashitabo-v1/) の技術スタックに移行しています。
+現在は [あしたぼホームページv1](https://watabe.gg/product/ashitabo-v1/) の技術スタックに移行しています。

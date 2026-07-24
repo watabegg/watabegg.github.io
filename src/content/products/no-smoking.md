@@ -10,23 +10,6 @@ tags:
   - "Vercel"
   - "Cline"
 imageUrl: "/images/product/no-smoking.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "禁煙記録と可視化のためのNext.jsアプリを開発し、個人習慣改善に活用。"
-  period: "2025-03-01/2025-04-30"
-  responsibilities:
-    - "禁煙計画に沿ったトラッキング要件定義"
-    - "UI/UX設計とReactコンポーネント実装"
-    - "データスキーマ設計とグラフ描画"
-    - "デプロイとモニタリング"
-  techStack:
-    - "Next.js + TypeScript | フロントとAPIを統合したシンプルな構成"
-    - "PostgreSQL + Prisma | 計測データの正規化とクエリ最適化"
-    - "Chart.js | 喫煙本数推移を可視化"
-    - "Vercel | 高速デプロイと環境変数管理"
-  deliverables:
-    - label: "No Smoking アプリ"
-      url: "https://no-smoke-nine.vercel.app"
 ---
 
 ## 概要

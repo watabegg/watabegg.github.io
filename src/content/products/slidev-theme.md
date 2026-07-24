@@ -10,22 +10,6 @@ tags:
   - "CSS"
   - "npm"
 imageUrl: "https://raw.githubusercontent.com/watabegg/slidev-theme-watabegg/refs/heads/main/example/0.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "Slidevによるスライド制作をテンプレート化し、日本語対応と授業でも使いやすいコンポーネントをセットにしたテーマをnpmで公開。"
-  period: "2025-08-01/present"
-  responsibilities:
-    - "テーマ開発とコンポーネント設計、スタイルガイド作成"
-    - "npm公開フローの構築とドキュメント執筆"
-  techStack:
-    - "Slidev | テーマスキャフォールドとレイアウトのカスタマイズ"
-    - "Vue 3 + TypeScript | 授業用コンポーネントとアニメーションを実装"
-    - "npm workspace | テーマの配布とバージョニングを整備"
-  deliverables:
-    - label: "GitHub - slidev-theme-watabegg"
-      url: "https://github.com/watabegg/slidev-theme-watabegg"
-    - label: "npm - slidev-theme-watabegg"
-      url: "https://www.npmjs.com/package/slidev-theme-watabegg"
 ---
 
 ## 概要

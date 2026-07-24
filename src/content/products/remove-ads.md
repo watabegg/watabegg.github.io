@@ -9,23 +9,6 @@ tags:
   - "ラムダ技術部"
   - "レスポンシブ"
 imageUrl: "/images/product/remove-ads.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "Youtubeチャンネル『ラムダ技術部』のラムダ氏開発の既存ゲームをNext.jsでレスポンシブ対応へ再構築し、保守性と体験を改善。"
-  period: "2025-06-01/2025-06-30"
-  responsibilities:
-    - "既存コードの解析と改善方針の策定"
-    - "レスポンシブ対応とスタイルガイド再構築"
-    - "状態管理およびテスト実装の整備"
-  techStack:
-    - "Next.js | ビルドとルーティングの共通化"
-    - "TypeScript | UIロジックの型安全性を確保"
-    - "Tailwind CSS | レスポンシブデザインとアニメーション調整"
-  deliverables:
-    - label: "GitHub Pull Request"
-      url: "https://github.com/yoidea/remove-ads-game/pull/2"
-    - label: "ポップアップ広告消し"
-      url: "https://remove-ads-game.vercel.app"
 ---
 
 ## 概要

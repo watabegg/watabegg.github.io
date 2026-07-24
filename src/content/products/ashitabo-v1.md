@@ -8,20 +8,6 @@ tags:
   - "Hono"
   - "Cloudflare"
 imageUrl: "/images/product/ashitabo-v1.png"
-includeInSkillsheet: true
-skillsheet:
-  summary: "Next.jsとHonoを用いて軽音サークル公式サイト兼会員向けWebアプリを再構築し、Next.jsのヘッドロックを解消。"
-  period: "2025-11-01/2026-01-04"
-  responsibilities:
-    - "Next.jsからの技術移行計画と情報設計の立案"
-    - "a11y/UI/UXの改善を目的としReactコンポーネントを再実装"
-    - "バックエンドをHonoに移行しAPI開発と運用"
-  techStack:
-    - "Next.js 16 + TypeScript | Server ActionsをBFFとして活用した構成"
-    - "Hono + Workers | 軽量かつ高速なバックエンドAPIサーバー構築"
-  deliverables:
-    - label: "あしたぼホームページ"
-      url: "https://www.ashitabo.net"
 ---
 
 ## 概要
@@ -54,7 +40,6 @@ skillsheet:
 ## 成果物
 
 - [あしたぼホームページ](https://www.ashitabo.net)
-- [GitHub - ashitaboliff/frontend](https://github.com/ashitaboliff/frontend)
 
 ## 余談
 

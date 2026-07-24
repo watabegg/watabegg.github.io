@@ -1,28 +1,22 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { type CollectionEntry, render } from 'astro:content'
 import ContentLayout from '@/layouts/ContentLayout.astro'
+import { getPublishedProducts } from '@/lib/products'
 
 export async function getStaticPaths() {
-	const products = await getCollection('products')
-	return products.map((entry) => ({
-		params: { id: entry.id },
-		props: { entry },
+	const products = await getPublishedProducts()
+	return products.map((product) => ({
+		params: { id: product.id },
+		props: { product },
 	}))
 }
 
-type Props = {
-	entry: CollectionEntry<'products'>
-}
+type Props = { product: CollectionEntry<'products'> }
 
-const { entry } = Astro.props
-const { Content, headings } = await render(entry)
+const { product } = Astro.props
+const { Content, headings } = await render(product)
 ---
-<ContentLayout
-  title={entry.data.title}
-  publishDate={entry.data.publishDate}
-  tags={entry.data.tags}
-  imageUrl={entry.data.imageUrl}
-  headings={headings}
->
+
+<ContentLayout {...product.data} {headings}>
   <Content />
 </ContentLayout>
