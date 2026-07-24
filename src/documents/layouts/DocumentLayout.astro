@@ -1,0 +1,30 @@
+---
+import '../styles/document.css'
+import PreviewToolbar from '../components/PreviewToolbar.astro'
+
+type Props = {
+	title: string
+	documentLabel: string
+}
+
+const { title, documentLabel } = Astro.props
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex, nofollow, noarchive" />
+		<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" />
+		<title>{title}</title>
+	</head>
+	<body class="document-preview">
+		<PreviewToolbar documentLabel={documentLabel} />
+		<main class="document-stage">
+			<article class="document-sheet">
+				<slot />
+			</article>
+		</main>
+	</body>
+</html>

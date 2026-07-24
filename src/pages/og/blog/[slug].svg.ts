@@ -1,4 +1,5 @@
 import { type CollectionEntry, getCollection } from 'astro:content'
+import { getPublicIdentity } from '@/identity/load'
 import { buildBlogOgSvg } from '@/lib/og/blog'
 
 export async function getStaticPaths() {
@@ -14,7 +15,8 @@ type Props = {
 }
 
 export async function GET({ props }: { props: Props }) {
-	const svg = buildBlogOgSvg(props.entry)
+	const { profile } = getPublicIdentity()
+	const svg = buildBlogOgSvg(props.entry, profile.site.brand)
 
 	return new Response(svg, {
 		headers: {

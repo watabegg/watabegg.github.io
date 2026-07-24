@@ -1,0 +1,15 @@
+---
+type Props = { documentLabel: string }
+const { documentLabel } = Astro.props
+---
+
+<nav class="preview-toolbar" aria-label="文書プレビュー操作">
+	<a class="toolbar-link" href="/documents/">← 文書ハブ</a>
+	<p><strong>{documentLabel}</strong><span>印刷プレビュー</span></p>
+	<button class="toolbar-button" type="button" data-print-button>印刷 / PDF保存</button>
+</nav>
+
+<script>
+	const printButton = document.querySelector<HTMLButtonElement>('[data-print-button]')
+	printButton?.addEventListener('click', () => window.print())
+</script>

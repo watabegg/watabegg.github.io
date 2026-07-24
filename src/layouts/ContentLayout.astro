@@ -1,4 +1,5 @@
 ---
+import { getPublicIdentity } from '@/identity/load'
 import Layout from '@/layouts/Layout.astro'
 import styles from './ContentLayout.module.css'
 
@@ -24,13 +25,16 @@ const {
 	headings,
 } = Astro.props
 const displayImageUrl = imageUrl || ogImageUrl || '/images/ogp_default.png'
+const { profile } = getPublicIdentity()
+const siteUrl = new URL(profile.site.url)
+const displayAuthor = author ?? profile.person.handle
 
 const isBlog = Astro.url.pathname.startsWith('/blog/')
 const articleType = isBlog ? 'BlogPosting' : 'Article'
 
 const structuredDataImageUrl =
 	(ogImageUrl ?? imageUrl)
-		? new URL(ogImageUrl ?? imageUrl ?? '', Astro.site).toString()
+		? new URL(ogImageUrl ?? imageUrl ?? '', siteUrl).toString()
 		: undefined
 const isSvgImage = displayImageUrl.endsWith('.svg')
 
@@ -41,7 +45,7 @@ const depthIndent: { [key: number]: string } = {
 	4: 'pl-[3.75em]',
 }
 ---
-<Layout title={title + ' | watabeggの個人サイト'} {description} ogImageUrl={ogImageUrl ?? imageUrl} ogType="article">
+<Layout title={`${title} | ${profile.site.title}`} {description} ogImageUrl={ogImageUrl ?? imageUrl} ogType="article">
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": articleType,
@@ -49,9 +53,9 @@ const depthIndent: { [key: number]: string } = {
     "description": description,
     "image": structuredDataImageUrl,
     "datePublished": publishDate?.toISOString(),
-    "author": author ? { "@type": "Person", "name": author } : undefined,
-    "publisher": { "@type": "Organization", "name": "watabegg", "logo": { "@type": "ImageObject", "url": new URL('/images/ogp_default.png', Astro.site).toString() } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": Astro.url.toString() }
+    "author": { "@type": "Person", "name": displayAuthor },
+    "publisher": { "@type": "Organization", "name": profile.site.brand, "logo": { "@type": "ImageObject", "url": new URL('/images/ogp_default.png', siteUrl).toString() } },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": new URL(Astro.url.pathname, siteUrl).toString() }
   })} />
 
   <div class={styles.contentWrapper}>
@@ -66,12 +70,8 @@ const depthIndent: { [key: number]: string } = {
       />
       <h1 class={styles.contentTitle}>{title}</h1>
       <div class={styles.contentMeta}>
-        {author && (
-          <>
-            <span>作成者: {author}</span>
-            <span class="text-base-content/50">|</span>
-          </>
-        )}
+					<span>作成者: {displayAuthor}</span>
+					<span class="text-base-content/50">|</span>
         {publishDate && (
           <span>公開日: {publishDate.toLocaleDateString('ja-JP')}</span>
         )}

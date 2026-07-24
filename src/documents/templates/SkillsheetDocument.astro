@@ -1,0 +1,37 @@
+---
+import DocumentHeader from '../components/DocumentHeader.astro'
+import DocumentSection from '../components/DocumentSection.astro'
+import ExperienceEntry from '../components/ExperienceEntry.astro'
+import IdentityGrid from '../components/IdentityGrid.astro'
+import SkillGroups from '../components/SkillGroups.astro'
+import type { SkillsheetViewModel } from '../view-models/documents'
+
+type Props = { model: SkillsheetViewModel; asOf: string }
+const { model, asOf } = Astro.props
+---
+
+<DocumentHeader title="スキルシート" name={model.person.name} asOf={asOf} />
+
+<DocumentSection title="プロフィール" compact>
+	<IdentityGrid items={[
+		{ label: '氏名', value: `${model.person.name}（${model.person.nameKana}）` },
+		{ label: '所在地', value: model.person.location },
+		{ label: 'Email', value: model.person.email },
+		{ label: 'Web', value: model.person.website },
+	]} />
+	{model.professionalSummary && <p class="lead-copy">{model.professionalSummary}</p>}
+</DocumentSection>
+
+<DocumentSection title="スキル">
+	<SkillGroups groups={model.skills} />
+</DocumentSection>
+
+<DocumentSection title="プロジェクト経験">
+	{model.projects.length > 0 ? (
+		<div class="experience-list">
+			{model.projects.map((project) => <ExperienceEntry project={project} />)}
+		</div>
+	) : (
+		<p class="empty-note">記載対象のプロジェクトはありません。</p>
+	)}
+</DocumentSection>

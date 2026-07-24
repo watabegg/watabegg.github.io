@@ -1,0 +1,54 @@
+---
+import ChronologyTable from '../components/ChronologyTable.astro'
+import DocumentHeader from '../components/DocumentHeader.astro'
+import DocumentSection from '../components/DocumentSection.astro'
+import IdentityGrid from '../components/IdentityGrid.astro'
+import type { ResumeViewModel } from '../view-models/documents'
+
+type Props = { model: ResumeViewModel; asOf: string }
+const { model, asOf } = Astro.props
+---
+
+<DocumentHeader title="履歴書" name={model.person.name} asOf={asOf} showName={false} />
+
+<DocumentSection title="基本情報" compact>
+	<p class="resume-name-kana">ふりがな　{model.person.nameKana}</p>
+	<p class="resume-name">{model.person.name}</p>
+	<IdentityGrid items={[
+		{ label: '生年月日', value: `${model.person.birthDate}（満${model.person.age}歳）` },
+		{ label: '性別', value: model.person.gender },
+		{ label: '現住所', value: model.person.location },
+		{ label: '電話', value: model.person.phone },
+		{ label: 'Email', value: model.person.email },
+		{ label: 'Web', value: model.person.website },
+	]} />
+</DocumentSection>
+
+<DocumentSection title="学歴">
+	<ChronologyTable items={model.education} />
+</DocumentSection>
+
+<DocumentSection title="職歴">
+	<ChronologyTable items={model.employment} />
+</DocumentSection>
+
+<DocumentSection title="免許・資格">
+	{model.qualifications.length > 0 ? (
+		<table class="chronology-table">
+			<thead><tr><th scope="col">年月</th><th scope="col">免許・資格</th></tr></thead>
+			<tbody>
+				{model.qualifications.map((qualification) => (
+					<tr><td>{qualification.date}</td><td>{qualification.name}</td></tr>
+				))}
+			</tbody>
+		</table>
+	) : <p class="empty-note">記載事項なし</p>}
+</DocumentSection>
+
+{model.selfPromotion.length > 0 && (
+	<DocumentSection title="自己PR">
+		<div class="prose-block">
+			{model.selfPromotion.map((paragraph) => <p>{paragraph}</p>)}
+		</div>
+	</DocumentSection>
+)}

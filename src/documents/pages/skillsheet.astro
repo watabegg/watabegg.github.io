@@ -1,0 +1,19 @@
+---
+import { getDocumentIdentity } from '@/identity/load'
+import DocumentLayout from '../layouts/DocumentLayout.astro'
+import SkillsheetDocument from '../templates/SkillsheetDocument.astro'
+import {
+	createSkillsheetViewModel,
+	formatDocumentDate,
+	getDocumentReferenceDate,
+} from '../view-models/documents'
+
+const identity = getDocumentIdentity()
+const referenceDate = getDocumentReferenceDate(identity.profile.updatedAt)
+const asOf = formatDocumentDate(referenceDate)
+const model = createSkillsheetViewModel(identity, referenceDate)
+---
+
+<DocumentLayout title="Skill Sheet | Local Documents" documentLabel="Skill Sheet">
+	<SkillsheetDocument model={model} asOf={asOf} />
+</DocumentLayout>

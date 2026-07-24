@@ -3,6 +3,9 @@
   "files": {
     "includes": [
       "src/**",
+      "scripts/**",
+      "identity/**",
+      "identity.example/**",
       "postcss.config.mjs",
       "tailwind.config.ts",
       "tsconfig.json",

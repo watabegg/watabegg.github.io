@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import QiitaIcon from '@/assets/qiita.png'
 import ZennIcon from '@/assets/zenn.png'
+import { getPublicIdentity } from '@/identity/load'
 import Layout from '@/layouts/Layout.astro'
 import { fetchQiitaItems } from '@/lib/qiita'
 import { fetchZennItems } from '@/lib/zenn'
@@ -9,11 +10,12 @@ import type { BlendItem } from '@/types/blog'
 
 const MAX_EXTERNAL_ITEMS = 100
 const socialIconSpritePath = '/icons/social.svg'
+const { profile } = getPublicIdentity()
 
 const [localPostsRaw, qiitaResult, zennResult] = await Promise.all([
 	getCollection('blog'),
-	fetchQiitaItems(MAX_EXTERNAL_ITEMS),
-	fetchZennItems(MAX_EXTERNAL_ITEMS),
+	fetchQiitaItems(profile.externalProfiles.qiitaUsername, MAX_EXTERNAL_ITEMS),
+	fetchZennItems(profile.externalProfiles.zennUsername, MAX_EXTERNAL_ITEMS),
 ])
 
 const localPosts = localPostsRaw.sort(
@@ -26,7 +28,7 @@ const blended: BlendItem[] = [
 		slug: p.id,
 		title: p.data.title,
 		description: p.data.description,
-		author: p.data.author,
+		author: p.data.author ?? profile.person.handle,
 		publishDate: p.data.publishDate,
 		tags: p.data.tags,
 	})),
@@ -63,7 +65,7 @@ const externalMeta = {
 	},
 } as const
 ---
-<Layout title="Blog | watabeggの個人サイト">
+<Layout title={`Blog | ${profile.site.title}`}>
   <div class="page-section max-w-3xl text-center md:text-left w-full">
     <div class="flex flex-row justify-between items-center w-full">
       <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">

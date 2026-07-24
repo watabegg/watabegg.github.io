@@ -2,6 +2,7 @@ import { type CollectionEntry, getCollection } from 'astro:content'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { Resvg } from '@resvg/resvg-js'
+import { getPublicIdentity } from '@/identity/load'
 import { buildBlogOgSvg } from '@/lib/og/blog'
 
 export async function getStaticPaths() {
@@ -17,7 +18,8 @@ type Props = {
 }
 
 export async function GET({ props }: { props: Props }) {
-	const svg = buildBlogOgSvg(props.entry)
+	const { profile } = getPublicIdentity()
+	const svg = buildBlogOgSvg(props.entry, profile.site.brand)
 	const fontPath = resolve(
 		process.cwd(),
 		'src/assets/fonts/NotoSansJP-Bold.ttf',

@@ -1,0 +1,19 @@
+---
+import { getDocumentIdentity } from '@/identity/load'
+import DocumentLayout from '../layouts/DocumentLayout.astro'
+import ResumeDocument from '../templates/ResumeDocument.astro'
+import {
+	createResumeViewModel,
+	formatDocumentDate,
+	getDocumentReferenceDate,
+} from '../view-models/documents'
+
+const identity = getDocumentIdentity()
+const referenceDate = getDocumentReferenceDate(identity.profile.updatedAt)
+const asOf = formatDocumentDate(referenceDate)
+const model = createResumeViewModel(identity, referenceDate)
+---
+
+<DocumentLayout title="履歴書 | Local Documents" documentLabel="履歴書">
+	<ResumeDocument model={model} asOf={asOf} />
+</DocumentLayout>

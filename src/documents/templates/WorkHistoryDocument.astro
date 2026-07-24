@@ -1,0 +1,70 @@
+---
+import DocumentHeader from '../components/DocumentHeader.astro'
+import DocumentSection from '../components/DocumentSection.astro'
+import ExperienceEntry from '../components/ExperienceEntry.astro'
+import IdentityGrid from '../components/IdentityGrid.astro'
+import SkillGroups from '../components/SkillGroups.astro'
+import type { WorkHistoryViewModel } from '../view-models/documents'
+
+type Props = { model: WorkHistoryViewModel; asOf: string }
+const { model, asOf } = Astro.props
+---
+
+<DocumentHeader title="職務経歴書" name={model.person.name} asOf={asOf} />
+
+<div class="work-history-contact">
+	<IdentityGrid items={[
+		{ label: 'Email', value: model.person.email },
+		{ label: '電話', value: model.person.phone },
+		{ label: 'Web', value: model.person.website },
+	]} />
+</div>
+
+{model.professionalSummary && (
+	<DocumentSection title="職務要約" compact>
+		<p class="lead-copy">{model.professionalSummary}</p>
+	</DocumentSection>
+)}
+
+<DocumentSection title="職歴">
+	{model.employment.length > 0 ? (
+		<table class="employment-overview-table">
+			<thead>
+				<tr>
+					<th scope="col" class="employment-period">期間</th>
+					<th scope="col" class="employment-description">所属・契約先</th>
+					<th scope="col">職務概要</th>
+				</tr>
+			</thead>
+			<tbody>
+				{model.employment.map((employment) => (
+					<tr>
+						<td>{employment.period}</td>
+						<td><strong>{employment.description}</strong></td>
+						<td><p class="employment-summary">{employment.summary}</p></td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+	) : <p class="empty-note">記載対象の職歴はありません。</p>}
+</DocumentSection>
+
+<DocumentSection title="主なプロジェクト">
+	{model.projects.length > 0 ? (
+		<div class="experience-list">
+			{model.projects.map((project) => <ExperienceEntry project={project} />)}
+		</div>
+	) : <p class="empty-note">記載対象のプロジェクトはありません。</p>}
+</DocumentSection>
+
+<DocumentSection title="活かせる技術・知識">
+	<SkillGroups groups={model.skills} />
+</DocumentSection>
+
+{model.selfPromotion.length > 0 && (
+	<DocumentSection title="自己PR">
+		<div class="prose-block">
+			{model.selfPromotion.map((paragraph) => <p>{paragraph}</p>)}
+		</div>
+	</DocumentSection>
+)}

@@ -11,8 +11,6 @@ export type ZennResponse = {
 	total: number | null
 }
 
-const ZENN_USERNAME = 'watabegg'
-
 const ZennArticleSchema = z.object({
 	title: z.string(),
 	path: z.string().nullable().optional(),
@@ -26,10 +24,12 @@ const ZennApiSchema = z.object({
 })
 
 export async function fetchZennItems(
+	username: string | undefined,
 	perPage: number = 20,
 ): Promise<ZennResponse> {
+	if (!username) return { items: [], total: null }
 	const safePerPage = Math.max(1, Math.min(perPage, 100))
-	const url = `https://zenn.dev/api/articles?username=${encodeURIComponent(ZENN_USERNAME)}&order=latest&count=${safePerPage}`
+	const url = `https://zenn.dev/api/articles?username=${encodeURIComponent(username)}&order=latest&count=${safePerPage}`
 
 	try {
 		const res = await fetch(url, { cache: 'force-cache' })

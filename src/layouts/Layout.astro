@@ -6,6 +6,7 @@ import FigureImage from '@/assets/figure_1_1.webp'
 import IconImage from '@/assets/real_icon.webp'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
+import { getPublicIdentity } from '@/identity/load'
 
 interface Props {
 	title?: string
@@ -16,65 +17,66 @@ interface Props {
 }
 
 const {
-	title = 'watabegg',
-	description = 'watabeggの個人サイト',
+	title,
+	description,
 	isFullScreen = false,
 	ogImageUrl,
 	ogType = 'website',
 } = Astro.props
+const { profile } = getPublicIdentity()
+const finalTitle = title ?? profile.site.title
+const finalDescription = description ?? profile.site.description
+const siteUrl = new URL(profile.site.url)
 
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl)
 const rssFeedUrl = new URL('/rss.xml', canonicalUrl).toString()
 
-const defaultOgImageUrl = new URL(
-	'/images/ogp_default.png',
-	Astro.site,
-).toString()
+const defaultOgImageUrl = new URL('/images/ogp_default.png', siteUrl).toString()
 const finalOgImageUrl = ogImageUrl
-	? new URL(ogImageUrl, Astro.site).toString()
+	? new URL(ogImageUrl, siteUrl).toString()
 	: defaultOgImageUrl
 ---
 <!doctype html>
 <html lang="ja" prefix="og: http://ogp.me/ns#">
 	<head>
 		<meta charset="UTF-8" />
-		<title>{title}</title>
+		<title>{finalTitle}</title>
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/webp" href="/favicon.webp" />
 		<meta name="generator" content={Astro.generator} />
 
-		<meta name="description" content={description} />
+		<meta name="description" content={finalDescription} />
 		<link rel="canonical" href={canonicalUrl.toString()} />
 		<link
 			rel="alternate"
 			type="application/rss+xml"
-			title="watabegg Blog RSS"
+			title={`${profile.site.brand} Blog RSS`}
 			href={rssFeedUrl}
 		/>
 
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalUrl.toString()} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={finalTitle} />
+		<meta property="og:description" content={finalDescription} />
 		<meta property="og:image" content={finalOgImageUrl} />
-		<meta property="og:site_name" content="watabegg" />
+		<meta property="og:site_name" content={profile.site.brand} />
 		<meta property="og:locale" content="ja_JP" />
 
 		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:url" content={canonicalUrl.toString()} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
+		<meta property="twitter:title" content={finalTitle} />
+		<meta property="twitter:description" content={finalDescription} />
 		<meta property="twitter:image" content={finalOgImageUrl} />
 
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "url": Astro.site?.toString(),
-      "name": "watabegg",
-      "description": description,
+      "url": siteUrl.toString(),
+      "name": profile.site.brand,
+      "description": finalDescription,
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `${Astro.site?.toString()}search?q={search_term_string}`,
+        "target": new URL('/search?q={search_term_string}', siteUrl).toString(),
         "query-input": "required name=search_term_string"
       }
     })} />
@@ -99,7 +101,7 @@ const finalOgImageUrl = ogImageUrl
 				<div class="absolute w-full md:w-3/5 lg:w-2/5 h-2/5 md:h-full bottom-[20%] md:bottom-0 md:right-[20%] flex flex-row md:flex-col justify-around z-0 opacity-0" id="home-images">
 					<Image
 						src={IconImage}
-						alt="watabeggのアイコン"
+						alt={`${profile.site.brand}のアイコン`}
 						class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
 						loading="lazy"
 						priority
@@ -108,7 +110,7 @@ const finalOgImageUrl = ogImageUrl
 					/>
 					<Image
 						src={FigureImage}
-						alt="watabeggのフィギュア"
+						alt={`${profile.site.brand}のフィギュア`}
 						class="w-3/5 md:w-full mt-auto md:m-auto opacity-80"
 						loading="lazy"
 						priority

@@ -1,0 +1,19 @@
+---
+type Item = { label: string; value?: string | number }
+type Props = { items: Item[] }
+
+const { items } = Astro.props
+const visibleItems = items.filter(
+	(item): item is Item & { value: string | number } =>
+		item.value !== undefined && item.value !== '',
+)
+---
+
+<dl class="identity-grid">
+	{visibleItems.map((item, index) => (
+		<div class:list={{ 'identity-item--wide': visibleItems.length % 2 === 1 && index === visibleItems.length - 1 }}>
+			<dt>{item.label}</dt>
+			<dd>{item.value}</dd>
+		</div>
+	))}
+</dl>

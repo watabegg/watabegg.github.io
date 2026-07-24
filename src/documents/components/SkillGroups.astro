@@ -1,0 +1,15 @@
+---
+import type { SkillGroup } from '@/identity/schema'
+
+type Props = { groups: SkillGroup[] }
+const { groups } = Astro.props
+---
+
+<dl class="skill-groups">
+	{groups.map((group) => (
+		<div>
+			<dt>{group.label}</dt>
+			<dd>{group.values.join(' / ')}</dd>
+		</div>
+	))}
+</dl>

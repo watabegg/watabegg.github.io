@@ -1,10 +1,11 @@
 import { getCollection } from 'astro:content'
 import rss from '@astrojs/rss'
-import type { APIContext } from 'astro'
+import { getPublicIdentity } from '@/identity/load'
 
-export async function GET(context: APIContext) {
+export async function GET() {
 	const posts = await getCollection('blog')
-	const site = context.site ?? 'https://watabegg.github.io'
+	const { profile } = getPublicIdentity()
+	const site = profile.site.url
 
 	const items = posts
 		.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
@@ -16,8 +17,8 @@ export async function GET(context: APIContext) {
 		}))
 
 	return rss({
-		title: 'watabegg Blog',
-		description: 'watabeggのローカルブログ記事を配信するRSSフィード',
+		title: `${profile.site.brand} Blog`,
+		description: `${profile.site.brand}のブログ記事を配信するRSSフィード`,
 		site,
 		items,
 		customData: '<language>ja-JP</language>',

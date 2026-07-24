@@ -1,0 +1,75 @@
+---
+import type { ProjectItem } from '../view-models/documents'
+
+type Props = { project: ProjectItem }
+const { project } = Astro.props
+---
+
+<article class="experience-entry">
+	<table class="experience-table">
+		<thead>
+			<tr>
+				<th colspan="2">
+					<div class="experience-heading">
+						<p class="experience-period">{project.period}</p>
+						<h3>{project.title}</h3>
+					</div>
+					{project.organization && <p class="experience-organization">{project.organization}</p>}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row">概要</th>
+				<td><p class="experience-summary">{project.summary}</p></td>
+			</tr>
+			{project.responsibilities.length > 0 && (
+				<tr>
+					<th scope="row">担当業務</th>
+					<td>
+						<ul>
+							{project.responsibilities.map((item) => <li>{item}</li>)}
+						</ul>
+					</td>
+				</tr>
+			)}
+			{project.achievements.length > 0 && (
+				<tr>
+					<th scope="row">実績・工夫</th>
+					<td>
+						<ul>
+							{project.achievements.map((item) => <li>{item}</li>)}
+						</ul>
+					</td>
+				</tr>
+			)}
+			{project.technologies.length > 0 && (
+				<tr>
+					<th scope="row">使用技術</th>
+					<td>
+						<dl class="technology-list">
+							{project.technologies.map((technology) => (
+								<div>
+									<dt>{technology.name}</dt>
+									{technology.description && <dd>{technology.description}</dd>}
+								</div>
+							))}
+						</dl>
+					</td>
+				</tr>
+			)}
+			{project.deliverables.length > 0 && (
+				<tr>
+					<th scope="row">成果物</th>
+					<td>
+						<ul class="deliverable-list">
+							{project.deliverables.map((deliverable) => (
+								<li><a href={deliverable.url}>{deliverable.label}</a></li>
+							))}
+						</ul>
+					</td>
+				</tr>
+			)}
+		</tbody>
+	</table>
+</article>

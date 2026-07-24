@@ -3,13 +3,22 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && cd slide && pnpm i && pnpm run build",
+    "dev": "IDENTITY_SOURCE=local LOCAL_DOCUMENTS=0 astro dev",
+    "build": "pnpm build:public",
+    "build:public": "IDENTITY_SOURCE=local LOCAL_DOCUMENTS=0 astro build && pnpm --dir slide install --frozen-lockfile && pnpm --dir slide build",
+    "build:example": "IDENTITY_SOURCE=example LOCAL_DOCUMENTS=0 astro build && pnpm --dir slide install --frozen-lockfile && pnpm --dir slide build",
     "preview": "astro preview",
     "astro": "astro",
     "ts": "tsc --noEmit",
+    "check": "pnpm ts && pnpm exec astro check && pnpm exec biome check .",
     "check:fix": "biome check --fix",
-    "skillsheet:pdf": "node scripts/generate-skillsheet.mjs"
+    "identity:check": "IDENTITY_SOURCE=local pnpm ts && IDENTITY_SOURCE=local pnpm exec astro check",
+    "identity:new": "node scripts/create-experience.mjs",
+    "documents:dev": "IDENTITY_SOURCE=local LOCAL_DOCUMENTS=1 astro dev --host 127.0.0.1",
+    "documents:build": "IDENTITY_SOURCE=local LOCAL_DOCUMENTS=1 astro build --outDir .documents-dist",
+    "documents:pdf": "IDENTITY_SOURCE=local node scripts/generate-documents.mjs",
+    "verify:public": "node scripts/verify-public-dist.mjs",
+    "deploy": "IDENTITY_SOURCE=local PUBLIC_DIST_DIR=dist node scripts/deploy-pages.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

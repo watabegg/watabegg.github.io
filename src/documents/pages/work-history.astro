@@ -1,0 +1,19 @@
+---
+import { getDocumentIdentity } from '@/identity/load'
+import DocumentLayout from '../layouts/DocumentLayout.astro'
+import WorkHistoryDocument from '../templates/WorkHistoryDocument.astro'
+import {
+	createWorkHistoryViewModel,
+	formatDocumentDate,
+	getDocumentReferenceDate,
+} from '../view-models/documents'
+
+const identity = getDocumentIdentity()
+const referenceDate = getDocumentReferenceDate(identity.profile.updatedAt)
+const asOf = formatDocumentDate(referenceDate)
+const model = createWorkHistoryViewModel(identity, referenceDate)
+---
+
+<DocumentLayout title="職務経歴書 | Local Documents" documentLabel="職務経歴書">
+	<WorkHistoryDocument model={model} asOf={asOf} />
+</DocumentLayout>

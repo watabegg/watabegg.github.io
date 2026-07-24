@@ -7,9 +7,11 @@ dist/
 # dependencies
 node_modules/
 
-# generated assets
-pdf/
-public/skillsheet.pdf
+# local identity SSoT and private document artifacts
+/identity/
+.documents-dist/
+.example-dist/
+documents/output/
 
 # logs
 npm-debug.log*

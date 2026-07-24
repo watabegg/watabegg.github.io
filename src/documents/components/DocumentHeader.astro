@@ -1,0 +1,22 @@
+---
+type Props = {
+	title: string
+	name: string
+	asOf: string
+	subtitle?: string
+	showName?: boolean
+}
+
+const { title, name, asOf, subtitle, showName = true } = Astro.props
+---
+
+<header class="document-header">
+	<div class="document-title-block">
+		{subtitle && <p class="document-kicker">{subtitle}</p>}
+		<h1>{title}</h1>
+	</div>
+	<div class="document-byline">
+		<p>{asOf} 現在</p>
+		{showName && <p class="document-person-name">{name}</p>}
+	</div>
+</header>

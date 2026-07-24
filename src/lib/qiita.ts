@@ -11,8 +11,6 @@ export type QiitaResponse = {
 	total: number | null
 }
 
-const QIITA_USERNAME = 'watabegg'
-
 const QiitaItemSchema = z.object({
 	title: z.string(),
 	url: z.string(),
@@ -22,10 +20,12 @@ const QiitaItemSchema = z.object({
 const QiitaItemsSchema = z.array(QiitaItemSchema)
 
 export async function fetchQiitaItems(
+	username: string | undefined,
 	perPage: number = 20,
 ): Promise<QiitaResponse> {
+	if (!username) return { items: [], total: null }
 	const safePerPage = Math.max(1, Math.min(perPage, 100))
-	const url = `https://qiita.com/api/v2/users/${encodeURIComponent(QIITA_USERNAME)}/items?page=1&per_page=${safePerPage}`
+	const url = `https://qiita.com/api/v2/users/${encodeURIComponent(username)}/items?page=1&per_page=${safePerPage}`
 	const headers: Record<string, string> = { Accept: 'application/json' }
 	const token = import.meta.env.QIITA_TOKEN as string | undefined
 	if (token) headers.Authorization = `Bearer ${token}`

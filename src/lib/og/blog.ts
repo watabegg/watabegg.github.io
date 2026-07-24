@@ -56,7 +56,10 @@ const clampText = (value: string, maxLength: number) => {
 	return `${value.slice(0, Math.max(1, maxLength - 1))}…`
 }
 
-export function buildBlogOgSvg(entry: CollectionEntry<'blog'>): string {
+export function buildBlogOgSvg(
+	entry: CollectionEntry<'blog'>,
+	brand: string,
+): string {
 	const title = entry.data.title
 	const dateLabel = entry.data.publishDate.toLocaleDateString('ja-JP', {
 		year: 'numeric',
@@ -102,7 +105,7 @@ export function buildBlogOgSvg(entry: CollectionEntry<'blog'>): string {
 		})
 		.join('')}
 
-  <text x="110" y="500" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="30" font-weight="700" fill="${COLOR_PRIMARY}" letter-spacing="1">watabegg / blog</text>
+  <text x="110" y="500" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="30" font-weight="700" fill="${COLOR_PRIMARY}" letter-spacing="1">${escapeXml(brand)} / blog</text>
 
   <text x="940" y="500" font-family="'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" font-size="23" fill="${COLOR_TEXT_MUTED}">${escapeXml(dateLineText)}</text>
 </svg>`

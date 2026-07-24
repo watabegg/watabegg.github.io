@@ -1,15 +1,18 @@
 ---
 import pgpKeyText from '@/assets/pgp/public-key.asc?raw'
 import pgpKey from '@/assets/pgp/public-key.asc?url'
+import { getPublicIdentity } from '@/identity/load'
 import Layout from '@/layouts/Layout.astro'
 
+const { profile } = getPublicIdentity()
+const twitter = profile.socialLinks.find((link) => link.iconId === 'twitter')
 const pgpKeyTxt = pgpKeyText
 	.replace(/-----BEGIN PGP PUBLIC KEY BLOCK-----/g, '')
 	.replace(/-----END PGP PUBLIC KEY BLOCK-----/g, '')
 	.replace(/\s+/g, ' ')
 	.trim()
 ---
-<Layout title="Contact | watabeggの個人サイト">
+<Layout title={`Contact | ${profile.site.title}`}>
   <div class="container mx-auto px-6 py-16 flex flex-col items-center text-center md:text-left max-w-3xl space-y-6 md:space-y-8 text-base-content">
     <h1 class="text-4xl md:text-5xl font-bold opacity-90 self-center md:self-start">
       お問い合わせ
@@ -21,12 +24,14 @@ const pgpKeyTxt = pgpKeyText
       <dl class="space-y-2 text-base md:text-lg text-left">
         <div class="flex flex-col md:flex-row">
           <dt class="w-full md:w-24 font-medium text-gray-500 shrink-0">Gmail:</dt>
-          <dd class="flex-1"><a href="mailto:watabegg@gmail.com" class="text-primary hover:text-primary/80 hover:underline">watabegg@gmail.com</a></dd>
+          <dd class="flex-1"><a href={`mailto:${profile.person.email}`} class="text-primary hover:text-primary/80 hover:underline">{profile.person.email}</a></dd>
         </div>
-        <div class="flex flex-col md:flex-row">
-          <dt class="w-full md:w-24 font-medium text-gray-500 shrink-0">Twitter:</dt>
-          <dd class="flex-1"><a href="https://twitter.com/watabegg" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 hover:underline">@watabegg</a></dd>
-        </div>
+        {twitter && (
+          <div class="flex flex-col md:flex-row">
+            <dt class="w-full md:w-24 font-medium text-gray-500 shrink-0">Twitter:</dt>
+            <dd class="flex-1"><a href={twitter.href} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 hover:underline">@{profile.person.handle}</a></dd>
+          </div>
+        )}
       </dl>
     </section>
     

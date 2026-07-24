@@ -1,0 +1,58 @@
+---
+import { getDocumentIdentity } from '@/identity/load'
+import DocumentsHubLayout from '../layouts/DocumentsHubLayout.astro'
+
+const { profile } = getDocumentIdentity()
+
+const documents = [
+	{
+		href: '/documents/skillsheet/',
+		label: 'スキルシート',
+		meta: '技術とプロジェクト経験',
+		description:
+			'スキルと担当領域を俯瞰し、プロジェクトごとの役割と成果を読みやすくまとめます。',
+	},
+	{
+		href: '/documents/resume/',
+		label: '履歴書',
+		meta: '顔写真なし',
+		description: '基本情報、学歴、職歴、資格を時系列で確認できる履歴書です。',
+	},
+	{
+		href: '/documents/work-history/',
+		label: '職務経歴書',
+		meta: '要約、職歴、プロジェクト',
+		description:
+			'職務要約を起点に、契約・勤務歴と主なプロジェクトを詳しく記載します。',
+	},
+]
+---
+
+	<DocumentsHubLayout title={`Local Documents | ${profile.site.brand}`}>
+	<header class="hub-header">
+		<div>
+			<h1>文書ハブ</h1>
+			<p class="hub-lead">Identity SSoTから生成した応募・経歴文書を、localhost上で確認します。</p>
+		</div>
+		<div class="hub-status" aria-label="公開状態">
+			公開build対象外
+		</div>
+	</header>
+
+	<section class="document-cards" aria-label="生成可能な文書">
+		{documents.map((document) => (
+			<a class="document-card" href={document.href}>
+				<p class="card-meta">{document.meta}</p>
+				<div>
+					<h2>{document.label}</h2>
+					<p>{document.description}</p>
+				</div>
+			</a>
+		))}
+	</section>
+
+	<aside class="hub-note">
+		<strong>PDF生成</strong>
+		<p>各プレビューの「印刷 / PDF保存」、またはプロジェクトの文書生成コマンドを利用してください。</p>
+	</aside>
+</DocumentsHubLayout>

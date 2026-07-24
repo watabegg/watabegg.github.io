@@ -5,20 +5,23 @@ import IconImage3 from '@/assets/figure_dots.webp'
 import IconImage from '@/assets/real_icon.webp'
 import IconImage4 from '@/assets/sumatera.webp'
 import DefinitionList from '@/components/DefinitionList.astro'
-import { profile } from '@/data/profile'
+import { formatIdentityPeriod } from '@/identity/format'
+import { getPublicIdentity } from '@/identity/load'
 import Layout from '@/layouts/Layout.astro'
 
 const iconObjects = [IconImage, IconImage2, IconImage3, IconImage4]
+const { profile, experiences } = getPublicIdentity()
+const { person } = profile
 
-const birthDate = new Date(profile.head.birthDate)
+const birthDate = new Date(person.birthDate)
 const personalInfo = [
 	{
 		term: '本名',
-		description: `${profile.head.name} (${profile.head.furigana})`,
+		description: `${person.name} (${person.nameKana})`,
 	},
-	{ term: '住所', description: profile.head.address },
-	{ term: 'メールアドレス', description: profile.head.email },
-	{ term: '性別', description: profile.head.gender },
+	{ term: '住所', description: person.location },
+	{ term: 'メールアドレス', description: person.email },
+	...(person.gender ? [{ term: '性別', description: person.gender }] : []),
 	{
 		term: '生年月日(ISO8601)',
 		description: `${birthDate.toISOString()} (±12h)`,
@@ -29,33 +32,30 @@ const personalInfo = [
 	},
 ]
 
-const careerHistory = profile.education.map((item) => ({
-	term: item.period,
-	description: item.description,
-}))
+const careerHistory = experiences
+	.filter(
+		(experience) =>
+			experience.kind === 'education' || experience.kind === 'employment',
+	)
+	.map((experience) => ({
+		term: formatIdentityPeriod(experience.period),
+		description: `${experience.content.title}: ${experience.content.summary}`,
+	}))
 
-const programSkills = [
-	{ term: '言語', description: profile.skills.languages.join(', ') },
-	{
-		term: 'フレームワーク',
-		description: [...profile.skills.frameworks].join(', '),
-	},
-	{ term: 'ライブラリ', description: profile.skills.libraries.join(', ') },
-	{ term: 'OS', description: profile.skills.os.join(', ') },
-	{ term: 'DB', description: profile.skills.db.join(', ') },
-	{ term: 'PaaS', description: profile.skills.paas.join(', ') },
-	{ term: 'その他関連ツール', description: profile.skills.tools.join(', ') },
-]
+const programSkills = profile.skills.map((group) => ({
+	term: group.label,
+	description: group.values.join(', '),
+}))
 ---
 
-<Layout title="About | watabeggの個人サイト">
+<Layout title={`About | ${profile.site.title}`}>
   <div id="about-content" class="page-section max-w-3xl text-center md:text-left">
     <div id="about-icon" class="icon-stage mb-12 mx-auto w-40 h-40 md:w-48 md:h-48 relative">
       {iconObjects.map((iconObj, index) => {
         return (
           <Image
             src={iconObj}
-            alt={`watabeggのアイコン ${index + 1}`}
+            alt={`${profile.site.brand}のアイコン ${index + 1}`}
             class:list={[
               'rotating-icon-item w-full h-full rounded-full object-cover shadow-lg absolute inset-0',
               index !== 0 ? 'opacity-0' : 'opacity-90',
@@ -68,7 +68,7 @@ const programSkills = [
       })}
     </div>
     <span class="text-lg md:text-xl w-full font-semibold text-center text-base-content mb-4 self-center md:self-start">
-      @watabegg
+      @{person.handle}
     </span>
 
     <h1 class="text-4xl md:text-5xl w-full font-bold opacity-90 text-center md:self-start">
