@@ -5,7 +5,7 @@ import { join, relative, resolve } from 'node:path'
 import process from 'node:process'
 
 const DEPLOY_BRANCH = 'gh-pages'
-const DEFAULT_EXPECTED_REPOSITORY = 'github.com/watabegg/watabegg-hp'
+const DEFAULT_EXPECTED_REPOSITORY = 'github.com/watabegg/watabegg.github.io'
 
 function parseArgs(argv) {
 	const options = {

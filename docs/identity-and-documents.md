@@ -102,7 +102,7 @@ pnpm verify:public
 
 `pnpm deploy` は公開ビルドと検査を完了してから、`dist/` のスナップショットだけをGitHub Pages用ブランチへ送ります。実データのある作業ツリーや文書用ビルド成果物は送信しません。
 
-デプロイ時は、CI検証用の `IDENTITY_SOURCE=example` がshellに残っていても実データを使用します。また、push先が既定の `github.com/watabegg/watabegg-hp` と一致しない場合は停止します。移転などで意図的に変更する場合だけ、`PAGES_EXPECTED_REPOSITORY` または `--expected-repository` で新しい `host/owner/repository` を明示してください。
+デプロイ時は、CI検証用の `IDENTITY_SOURCE=example` がshellに残っていても実データを使用します。また、push先が既定の `github.com/watabegg/watabegg.github.io` と一致しない場合は停止します。移転などで意図的に変更する場合だけ、`PAGES_EXPECTED_REPOSITORY` または `--expected-repository` で新しい `host/owner/repository` を明示してください。
 
 ```bash
 pnpm deploy
