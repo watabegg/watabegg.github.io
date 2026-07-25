@@ -45,9 +45,11 @@ pnpm identity:new -- --id=project-example --kind=project
 - **`public`**：Aboutと採用文書で使用します。現在のAboutは、このうち学歴と職歴だけを表示します。
 - **`documents-only`**：スキルシート、履歴書、職務経歴書だけで使用します。
 
-プロフィールの `person.documentOverride` は、氏名や連絡先だけを採用文書向けに差し替えます。`profile.documents` と電話番号は文書projectionだけへ渡します。公開ページ向けの `getPublicIdentity()` からは型と実値の両方を除外し、公開成果物の検査でもprivate値として扱います。
+`public` の経歴で会社名や説明を匿名化する場合は、文書用の `organization` と `content` を正本として残し、完全な公開用データを `publicProjection` に記述します。`publicProjection` は部分mergeを行わないため、`content` の未指定項目が文書用データから公開側へ流れることはありません。`documents-only` の経歴には指定できません。
 
-プロジェクト本文には用途別のoverrideを設けません。Product記事と職務経歴を別々に書くことで、一方の文章変更がもう一方へ波及しないようにしています。
+プロフィールの `person.documentOverride` は、氏名や連絡先だけを採用文書向けに差し替えます。`profile.documents` と電話番号は文書用データだけへ渡します。公開ページ向けの `getPublicIdentity()` からは型と実値の両方を除外し、公開成果物の検査でもprivate値として扱います。
+
+Product記事と職務経歴は別々に書き、一方の文章変更がもう一方へ波及しないようにしています。`publicProjection` はIdentityを参照する画面の匿名化にだけ使用し、Product記事とのデータ共有には使用しません。
 
 ## Product記事と職務経歴の分類
 
@@ -91,7 +93,7 @@ pnpm documents:pdf -- --only=resume
 
 ## 公開ビルドとデプロイ
 
-`pnpm build:public` は実データを明示的に選び、文書ルートを登録せず、公開サイトだけを `dist/` に生成します。`pnpm verify:public` は文書ルート、PDF、文書専用文字列、Identityファイルのパスが成果物へ混入していないか検査します。公開Product記事にも現れる完全一致の文字列は、公開済みの値として扱います。CIだけは `pnpm build:example` で架空データを使います。
+`pnpm build:public` は実データを明示的に選び、文書ルートを登録せず、公開サイトだけを `dist/` に生成します。`pnpm verify:public` は文書ルート、PDF、文書専用文字列、Identityファイルのパスが成果物へ混入していないか検査します。公開Product記事にも現れる一般的な値は公開済みとして扱いますが、`publicProjection` で置き換えた元の会社名、見出し、要約は常にprivate値として検査します。CIだけは `pnpm build:example` で架空データを使います。
 
 ```bash
 pnpm build:public

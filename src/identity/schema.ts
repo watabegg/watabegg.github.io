@@ -178,6 +178,13 @@ export const experienceContentSchema = z
 	})
 	.strict()
 
+const publicExperienceProjectionSchema = z
+	.object({
+		organization: z.string().min(1).optional(),
+		content: experienceContentSchema,
+	})
+	.strict()
+
 export const experienceSchema = z
 	.object({
 		id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -186,8 +193,21 @@ export const experienceSchema = z
 		period: periodSchema,
 		organization: z.string().min(1).optional(),
 		content: experienceContentSchema,
+		publicProjection: publicExperienceProjectionSchema.optional(),
 	})
 	.strict()
+	.superRefine((experience, context) => {
+		if (
+			experience.exposure === 'documents-only' &&
+			experience.publicProjection
+		) {
+			context.addIssue({
+				code: 'custom',
+				message: 'documents-onlyの経歴にはpublicProjectionを指定できません',
+				path: ['publicProjection'],
+			})
+		}
+	})
 
 export type IdentityProfile = z.infer<typeof profileSchema>
 export type IdentityProfileInput = z.input<typeof profileSchema>
@@ -197,7 +217,7 @@ export type Experience = z.infer<typeof experienceSchema>
 export type ExperienceInput = z.input<typeof experienceSchema>
 export type ExperienceContent = z.infer<typeof experienceContentSchema>
 export type ExperienceKind = Experience['kind']
-export type ResolvedExperience = Experience
+export type ResolvedExperience = Omit<Experience, 'publicProjection'>
 
 export function defineProfile(profile: IdentityProfileInput): IdentityProfile {
 	return profileSchema.parse(profile)

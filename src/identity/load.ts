@@ -129,18 +129,36 @@ function resolveDocumentProfile(): DocumentIdentity['profile'] {
 	return { ...identity.profile, person: resolvePerson(true) }
 }
 
+function resolveCanonicalExperience(
+	experience: Experience,
+): ResolvedExperience {
+	const { publicProjection: _publicProjection, ...canonical } = experience
+	return canonical
+}
+
+function resolvePublicExperience(experience: Experience): ResolvedExperience {
+	const canonical = resolveCanonicalExperience(experience)
+	if (!experience.publicProjection) return canonical
+
+	return {
+		...canonical,
+		organization: experience.publicProjection.organization,
+		content: experience.publicProjection.content,
+	}
+}
+
 export function getPublicIdentity(): PublicIdentity {
 	return {
 		profile: resolvePublicProfile(),
-		experiences: identity.experiences.filter(
-			(experience) => experience.exposure === 'public',
-		),
+		experiences: identity.experiences
+			.filter((experience) => experience.exposure === 'public')
+			.map(resolvePublicExperience),
 	}
 }
 
 export function getDocumentIdentity(): DocumentIdentity {
 	return {
 		profile: resolveDocumentProfile(),
-		experiences: identity.experiences,
+		experiences: identity.experiences.map(resolveCanonicalExperience),
 	}
 }

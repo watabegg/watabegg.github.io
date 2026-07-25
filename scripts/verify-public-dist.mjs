@@ -220,8 +220,19 @@ function escapeHtml(text) {
 
 function propertyNameText(property) {
 	if (!property.name) return undefined
-	if (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) {
+	if (
+		ts.isIdentifier(property.name) ||
+		ts.isStringLiteral(property.name) ||
+		ts.isNoSubstitutionTemplateLiteral(property.name)
+	) {
 		return property.name.text
+	}
+	if (
+		ts.isComputedPropertyName(property.name) &&
+		(ts.isStringLiteral(property.name.expression) ||
+			ts.isNoSubstitutionTemplateLiteral(property.name.expression))
+	) {
+		return property.name.expression.text
 	}
 	return undefined
 }
@@ -245,6 +256,42 @@ function sourceLocation(sourceFile, node, rootDir) {
 	return {
 		file: toPosixPath(relative(rootDir, sourceFile.fileName)),
 		line: location.line + 1,
+	}
+}
+
+function assertInspectableObjectProperties(
+	object,
+	sourceFile,
+	rootDir,
+	errors,
+	label,
+) {
+	const seenNames = new Set()
+	for (const property of object.properties) {
+		if (ts.isSpreadAssignment(property)) {
+			const location = sourceLocation(sourceFile, property, rootDir)
+			errors.push(
+				`${location.file}:${location.line}: ${label}内のspreadは漏洩検査できません`,
+			)
+			continue
+		}
+
+		const name = propertyNameText(property)
+		if (!name) {
+			const location = sourceLocation(sourceFile, property, rootDir)
+			errors.push(
+				`${location.file}:${location.line}: ${label}のproperty名は静的な文字列で記述してください`,
+			)
+			continue
+		}
+		if (seenNames.has(name)) {
+			const location = sourceLocation(sourceFile, property, rootDir)
+			errors.push(
+				`${location.file}:${location.line}: ${label}に重複したpropertyがあります: ${name}`,
+			)
+			continue
+		}
+		seenNames.add(name)
 	}
 }
 
@@ -309,11 +356,22 @@ function assertStaticPrivateValue(node, sourceFile, rootDir, errors) {
 }
 
 function isPropertyNameLiteral(node) {
-	return (
+	if (
 		(ts.isPropertyAssignment(node.parent) ||
 			ts.isMethodDeclaration(node.parent) ||
 			ts.isPropertySignature(node.parent)) &&
 		node.parent.name === node
+	) {
+		return true
+	}
+
+	if (!ts.isComputedPropertyName(node.parent)) return false
+	const property = node.parent.parent
+	return (
+		(ts.isPropertyAssignment(property) ||
+			ts.isMethodDeclaration(property) ||
+			ts.isPropertySignature(property)) &&
+		property.name === node.parent
 	)
 }
 
@@ -390,6 +448,7 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 	}
 
 	const privateValues = []
+	const strictPrivateValues = []
 	const privateProjectSlugs = new Set()
 	const publicValues = new Set()
 	const errors = []
@@ -417,6 +476,7 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 		}
 
 		const privateRoots = new Set()
+		const strictPrivateRoots = new Set()
 
 		function inspectDefinitions(node) {
 			if (ts.isCallExpression(node)) {
@@ -430,6 +490,13 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 							`${location.file}:${location.line}: defineExperienceにはobject literalを直接渡してください`,
 						)
 					} else {
+						assertInspectableObjectProperties(
+							root,
+							sourceFile,
+							identityDir,
+							errors,
+							'defineExperience',
+						)
 						const exposure = getObjectProperty(root, 'exposure')
 						if (
 							!exposure ||
@@ -457,6 +524,70 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 								privateProjectSlugs.add(
 									id.initializer.text.replace(/^project-/, ''),
 								)
+							}
+						}
+
+						const publicProjection = getObjectProperty(root, 'publicProjection')
+						if (publicProjection) {
+							if (
+								!ts.isPropertyAssignment(publicProjection) ||
+								!ts.isObjectLiteralExpression(publicProjection.initializer)
+							) {
+								const location = sourceLocation(
+									sourceFile,
+									publicProjection,
+									identityDir,
+								)
+								errors.push(
+									`${location.file}:${location.line}: publicProjectionはobject literalで記述してください`,
+								)
+							} else {
+								const organization = getObjectProperty(root, 'organization')
+								if (organization) {
+									if (!ts.isPropertyAssignment(organization)) {
+										const location = sourceLocation(
+											sourceFile,
+											organization,
+											identityDir,
+										)
+										errors.push(
+											`${location.file}:${location.line}: publicProjectionを使う経歴のorganizationはproperty assignmentで記述してください`,
+										)
+									} else {
+										privateRoots.add(organization.initializer)
+										strictPrivateRoots.add(organization.initializer)
+									}
+								}
+
+								const content = getObjectProperty(root, 'content')
+								if (
+									!content ||
+									!ts.isPropertyAssignment(content) ||
+									!ts.isObjectLiteralExpression(content.initializer)
+								) {
+									const location = sourceLocation(sourceFile, root, identityDir)
+									errors.push(
+										`${location.file}:${location.line}: publicProjectionを使う経歴のcontentはobject literalで記述してください`,
+									)
+								} else {
+									assertInspectableObjectProperties(
+										content.initializer,
+										sourceFile,
+										identityDir,
+										errors,
+										'publicProjectionを使う経歴のcontent',
+									)
+									privateRoots.add(content.initializer)
+									for (const propertyName of ['title', 'summary']) {
+										const property = getObjectProperty(
+											content.initializer,
+											propertyName,
+										)
+										if (property && ts.isPropertyAssignment(property)) {
+											strictPrivateRoots.add(property.initializer)
+										}
+									}
+								}
 							}
 						}
 					}
@@ -531,6 +662,11 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 				...collectStringLiterals(root, sourceFile, identityDir),
 			)
 		}
+		for (const root of strictPrivateRoots) {
+			strictPrivateValues.push(
+				...collectStringLiterals(root, sourceFile, identityDir),
+			)
+		}
 
 		function collectPublicValues(node, withinPrivateRoot = false) {
 			const isPrivate = withinPrivateRoot || privateRoots.has(node)
@@ -561,16 +697,24 @@ async function collectPrivateOnlyTokens(identityDir, publicContentDir) {
 	}
 
 	const tokens = new Map()
-	for (const candidate of privateValues) {
+	for (const candidate of [
+		...privateValues.map((value) => ({ ...value, strict: false })),
+		...strictPrivateValues.map((value) => ({ ...value, strict: true })),
+	]) {
 		const value = normalizeWhitespace(candidate.value)
+		if (value.length === 0 || (!candidate.strict && value.length < 4)) {
+			continue
+		}
 		if (
-			value.length < 4 ||
-			publicValues.has(value) ||
-			publicContent.includes(value)
+			!candidate.strict &&
+			(publicValues.has(value) || publicContent.includes(value))
 		) {
 			continue
 		}
-		if (!tokens.has(value)) tokens.set(value, { ...candidate, value })
+		const existing = tokens.get(value)
+		if (!existing || (candidate.strict && !existing.strict)) {
+			tokens.set(value, { ...candidate, value })
+		}
 	}
 
 	return {
