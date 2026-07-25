@@ -1,76 +1,55 @@
-# watabegg 個人サイト
+# watabe.gg
 
-[![Deploy to GitHub Pages](https://github.com/watabegg/watabegg.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/watabegg/watabegg.github.io/actions/workflows/deploy.yml)
+[watabe.gg](https://watabe.gg/) のソースコードです。Astroで構築した、ポートフォリオ兼技術ブログです。
 
-[watabegg.github.io](https://watabegg.github.io/) のソースコードリポジトリです。Astro を使用して構築された、ポートフォリオ兼技術ブログサイトです。
+[![Verify public site](https://github.com/watabegg/watabegg.github.io/actions/workflows/astro.yml/badge.svg)](https://github.com/watabegg/watabegg.github.io/actions/workflows/astro.yml)
 
-## ✨ 特徴
+## このリポジトリの構成
 
-*   **高速パフォーマンス**: Astro による静的サイト生成と最適化。
-*   **モダンな技術スタック**: Astro, Tailwind CSS, daisyUI, TypeScript を活用。
-*   **コンテンツ駆動**: Markdown (`src/content/`) でブログ記事や製品紹介を管理。
-*   **スムーズなページ遷移**: View Transitions API を利用 (Astro 経由)。
-*   **SEO対策**: OGP, Twitter Card, サイトマップ, 構造化データ (JSON-LD) を実装。
-*   **GitHub Pages への自動デプロイ**: GitHub Actions による CI/CD。
+- `src/content/blog/`：技術記事
+- `src/content/products/`：公開用の制作物記事
+- `identity/`：プロフィール・経歴・採用文書のローカルSSoT（Git管理外）
+- `src/documents/`：スキルシート、履歴書、職務経歴書
+- `slide/`：Slidev製の自己紹介資料
 
-## 🛠️ 使用技術
+公開用のProduct記事と採用文書用の職務経歴は、同じ制作物を扱う場合も別々に管理します。実際の個人情報・経歴を含むIdentityと生成PDFは、公開ビルドにもGitにも含めません。
 
-*   **フレームワーク**: [Astro](https://astro.build/)
-*   **スタイリング**: [Tailwind CSS](https://tailwindcss.com/), [daisyUI](https://daisyui.com/), [@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)
-*   **言語**: TypeScript
-*   **パッケージマネージャー**: npm
-*   **デプロイ**: GitHub Pages via GitHub Actions
+## 技術スタック
 
-## 🚀 セットアップとローカル開発
+Astro 6 / TypeScript / Tailwind CSS 4 / daisyUI / pnpm / Slidev
 
-1.  **リポジトリをクローン**:
-    ```bash
-    git clone https://github.com/watabegg/watabegg.github.io.git
-    cd watabegg.github.io
-    ```
-
-2.  **依存関係をインストール**:
-    ```bash
-    npm install
-    ```
-
-3.  **開発サーバーを起動**:
-    ```bash
-    npm run dev
-    ```
-    開発サーバーが起動し、`http://localhost:4321` (または利用可能なポート) でサイトにアクセスできます。
-
-## 📝 コンテンツの追加・編集
-
-ブログ記事や製品紹介は `src/content/` ディレクトリ内の Markdown ファイルで管理されています。
-
-*   **ブログ記事**: `src/content/blog/`
-*   **製品紹介**: `src/content/products/`
-
-新しいコンテンツを追加するには、対応するディレクトリに新しい `.md` ファイルを作成し、Frontmatter (タイトル、公開日、タグなど) と本文を記述してください。スキーマは `src/content/config.ts` で定義されています。
-
-## ⚙️ ビルド
-
-静的なサイトファイルを生成するには:
+## セットアップ
 
 ```bash
-npm run build
+pnpm install --frozen-lockfile
+pnpm --dir slide install --frozen-lockfile
+cp -R identity.example identity
+pnpm dev
 ```
 
-ビルドされたファイルは `dist/` ディレクトリに出力されます。
+開発サーバーは通常 `http://localhost:4321` で起動します。`identity.example/` は架空データです。自身のデータへ置き換える場合は、Git管理外の `identity/` だけを編集します。
 
-## 🌐 デプロイ
+## よく使うコマンド
 
-このリポジトリは、`main` ブランチへのプッシュ時に GitHub Actions を使用して GitHub Pages (`https://watabegg.github.io/`) に自動的にデプロイされるように設定されています。
+```bash
+pnpm dev             # 公開サイトの開発サーバー
+pnpm check           # 型・Astro・Biomeの検査
+pnpm identity:check  # ローカルIdentityを含む検査
+pnpm build:public    # 公開サイトをdist/へ生成
+pnpm verify:public   # 公開成果物への非公開情報混入を検査
+pnpm documents:dev   # ローカル文書プレビュー
+pnpm documents:pdf   # 3種類のPDFを生成
+```
 
-ワークフローの設定は `.github/workflows/deploy.yml` を参照してください。
+文書プレビューは `http://127.0.0.1:4321/documents/`、PDFの出力先はGit管理外の `documents/output/` です。詳しいIdentity・文書運用は [docs/identity-and-documents.md](docs/identity-and-documents.md) を参照してください。
 
-## 🙏 謝辞
+## デプロイ
 
-*   [Astro Documentation](https://docs.astro.build/)
-*   [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-*   [daisyUI Documentation](https://daisyui.com/)
+GitHub Actionsは架空Identityを使った公開ビルドの検証だけを行います。本番公開はローカルで漏えい検査まで通し、成果物のスナップショットだけを `gh-pages` ブランチへ送ります。
 
----
+```bash
+pnpm deploy -- --dry-run
+pnpm deploy
+```
 
-*この README は AI (gemini - 2.5) によって生成されました。*
+`pnpm deploy` は送信先リモートを検証し、`gh-pages` の更新にはforce-with-leaseを使用します。
