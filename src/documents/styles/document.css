@@ -1,5 +1,13 @@
 @font-face {
   font-family: "Watabegg Document Sans";
+  src: url("../../assets/fonts/NotoSansJP-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Watabegg Document Sans";
   src: url("../../assets/fonts/NotoSansJP-Bold.ttf") format("truetype");
   font-style: normal;
   font-weight: 700;
@@ -8,7 +16,9 @@
 
 :root {
   font-family:
-    "Noto Serif CJK JP", "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
+    "Watabegg Document Sans", "Noto Sans JP", "Noto Sans CJK JP",
+    "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  font-weight: 400;
   color: #171717;
   background: #e5e5e5;
   font-synthesis: none;
@@ -327,8 +337,6 @@ a {
 
 .experience-organization {
   margin: 0.8mm 0 0 38mm;
-  font-family:
-    "Noto Serif CJK JP", "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
   font-size: 8pt;
   font-weight: 400;
   color: #555;

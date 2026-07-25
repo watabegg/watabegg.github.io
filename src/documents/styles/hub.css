@@ -1,5 +1,13 @@
 @font-face {
   font-family: "Watabegg Document Sans";
+  src: url("../../assets/fonts/NotoSansJP-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Watabegg Document Sans";
   src: url("../../assets/fonts/NotoSansJP-Bold.ttf") format("truetype");
   font-style: normal;
   font-weight: 700;
@@ -8,8 +16,8 @@
 
 :root {
   font-family:
-    "Noto Sans CJK JP", "Hiragino Sans", "Yu Gothic", "YuGothic", Meiryo,
-    sans-serif;
+    "Watabegg Document Sans", "Noto Sans JP", "Noto Sans CJK JP",
+    "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
   color: #1b1b1b;
   background: #ededed;
   font-synthesis: none;
