@@ -4,7 +4,7 @@ title: 自己紹介
 subtitle: 
 author: 渡辺 大樹
 date: '2025/11/17'
-link: https://watabegg.github.io/
+link: https://watabe.gg/
 transition: fade
 color: blue
 ---
@@ -116,8 +116,8 @@ title: 制作物 - Slidevのテーマ
 
 # 制作物 - その他
 
-- **個人サイト**: [watabegg.github.io](https://watabegg.github.io/), Astroを採用
-- 一覧は[ポートフォリオサイト](https://watabegg.github.io/product)から
+- **個人サイト**: [watabe.gg](https://watabe.gg/), Astroを採用
+- 一覧は[ポートフォリオサイト](https://watabe.gg/product)から
 
 ---
 

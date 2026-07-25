@@ -8,10 +8,10 @@ publishDate: 2025-08-21
 ## 概要
 就活などで自己紹介をする場面がそこそこありそうなので、自己紹介用のスライドを作成し、このサイトに公開しました。
 
-URLは[こちら](https://watabegg.github.io/slide/)です。
+URLは[こちら](https://watabe.gg/slide/)です。
 
 ## 使用技術
-- **Slidev**: [この記事で書いたテーマ](https://watabegg.github.io/product/exam-prep/)をもとに改変して作成しました。
+- **Slidev**: [この記事で書いたテーマ](https://watabe.gg/product/slidev-theme/)をもとに改変して作成しました。
 
 ## 余談
 別に書くことないよな、自己紹介とか

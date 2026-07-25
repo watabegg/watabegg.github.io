@@ -1,5 +1,5 @@
 ---
-title: 'watabegg.github.ioで遊ぶ | OGP画像自動生成機能の実装'
+title: 'watabe.ggで遊ぶ | OGP画像自動生成機能の実装'
 description: 'Part 1: OGP画像自動生成機能の実装'
 publishDate: 2026-01-04
 tags: ['ブログ運営', 'OGP画像', 'Astro', 'SVG']
