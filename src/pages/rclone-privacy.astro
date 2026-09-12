@@ -1,0 +1,55 @@
+---
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout
+	title="rclone Privacy Policy"
+	description="Personal rclone integration privacy policy"
+>
+	<main class="container mx-auto max-w-3xl px-6 py-16 text-base-content">
+		<article class="rounded-lg bg-base-100 p-6 shadow-md md:p-10">
+			<h1 class="mb-8 text-3xl font-bold md:text-4xl">rclone Privacy Policy</h1>
+
+			<div class="prose max-w-none lg:prose-lg">
+				<p>
+					This OAuth application is used only by the site owner for personal file
+					management with rclone.
+				</p>
+
+				<h2>Data accessed</h2>
+				<p>
+					The application can access Google Drive files and file metadata as required
+					to mount and manage the owner's Drive from their personal computer.
+				</p>
+
+				<h2>Data use and storage</h2>
+				<p>
+					Google Drive data is processed only for file operations initiated by the
+					owner. OAuth credentials are stored locally in the owner's rclone
+					configuration. This application does not operate an independent server that
+					collects or stores Google Drive data.
+				</p>
+
+				<h2>Sharing</h2>
+				<p>
+					Google user data is not sold or shared with third parties. rclone and Google
+					process data as necessary to provide their respective services.
+				</p>
+
+				<h2>Revoking access</h2>
+				<p>
+					Access can be revoked at any time from the Google Account connections page
+					or by removing the OAuth credentials from the local rclone configuration.
+				</p>
+
+				<h2>Contact</h2>
+				<p>
+					Questions about this application can be sent through the
+					<a href="/contact">contact page</a>.
+				</p>
+
+				<p><small>Last updated: September 13, 2026</small></p>
+			</div>
+		</article>
+	</main>
+</Layout>
