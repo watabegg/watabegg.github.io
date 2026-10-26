@@ -38,6 +38,9 @@ jobs:
       - name: Install Slidev dependencies
         run: pnpm --dir slide install --frozen-lockfile
 
+      - name: Generate Astro types
+        run: pnpm exec astro sync
+
       - name: Type check
         run: pnpm ts
 
