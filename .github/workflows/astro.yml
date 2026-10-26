@@ -25,13 +25,11 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version-file: .node-version
           cache: "pnpm"
 
       - name: Install Astro dependencies
@@ -39,6 +37,9 @@ jobs:
 
       - name: Install Slidev dependencies
         run: pnpm --dir slide install --frozen-lockfile
+
+      - name: Generate Astro types
+        run: pnpm exec astro sync
 
       - name: Type check
         run: pnpm ts
